@@ -26,14 +26,23 @@
     <style>
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .form-input-focus:focus { outline: none; border-color: #002753; box-shadow: 0 0 0 1px #002753; }
-        body { background-color: #f8f9ff; color: #0b1c30; min-height: 100vh; display: flex; flex-col: column; }
+        body { background-color: #f8f9ff; color: #0b1c30; min-height: 100vh; display: flex; flex-direction: column; }
         .page-content { display: none; }
         .page-content.active { display: block; }
+        /* ข้อ 5: สไตล์แต่งพื้นหลังหัวข้อให้น่าสนใจและเข้าธีม */
+        .header-banner {
+            background: linear-gradient(135deg, #002753 0%, #1b3d6d 100%);
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 39, 83, 0.15);
+            margin-bottom: 24px;
+        }
     </style>
 </head>
 <body class="font-body-md text-body-md pb-24 md:pb-6 md:pt-16">
 
-    <!-- ส่วนหัว TopAppBar (ปรับให้เต็มหน้าจอขอบถึงขอบทุกอุปกรณ์) -->
+    <!-- ส่วนหัว TopAppBar -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-surface shadow-sm flex items-center justify-between px-4 md:px-6 h-16 w-full">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -47,14 +56,15 @@
         <button class="material-symbols-outlined text-primary p-2 hover:bg-surface-container-high rounded-full flex-shrink-0">account_circle</button>
     </header>
 
-    <!-- คอนเทนเนอร์หลัก แก้สัดส่วนขยายเต็มจอตามสรีระจอของทุกแพลตฟอร์ม -->
+    <!-- คอนเทนเนอร์หลัก ขยายเต็มจอทุกแพลตฟอร์ม -->
     <main class="w-full flex-1 px-4 md:px-6 py-6 mt-16 mx-auto max-w-full sm:max-w-[95%] md:max-w-[90%] lg:max-w-[1200px]">
 
         <!-- 📑 หน้าที่ 1: บันทึกข้อมูล (Form) -->
         <div id="view-form" class="page-content active">
-            <div class="mb-6">
-                <h2 class="text-[24px] md:text-[28px] font-bold text-primary mb-1">ระบบบันทึกข้อมูล HHC</h2>
-                <p class="text-on-surface-variant text-sm md:text-base">Home Health Care Data Entry</p>
+            <!-- ข้อ 5: แก้ไขพื้นหลังหัวข้อหน้าบันทึก -->
+            <div class="header-banner">
+                <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">ระบบบันทึกข้อมูล HHC</h2>
+                <p class="text-blue-200 text-sm md:text-base">Home Health Care Data Entry</p>
             </div>
 
             <form class="space-y-5 bg-surface-container-lowest p-5 md:p-6 rounded-xl shadow-md w-full" id="hhc-form">
@@ -110,37 +120,51 @@
 
         <!-- 📊 หน้าที่ 2: สรุปผล (Dashboard) -->
         <div id="view-dashboard" class="page-content">
-            <div class="mb-6">
-                <h2 class="text-[24px] md:text-[28px] font-bold text-primary mb-1">แดชบอร์ดสรุปผล</h2>
-                <p class="text-on-surface-variant text-sm md:text-base">ภาพรวมสถิติและการกระจายข้อมูลของแต่ละหน่วยงานแบบเรียลไทม์</p>
+            <!-- ข้อ 5: แก้ไขพื้นหลังหัวข้อหน้าแดชบอร์ด -->
+            <div class="header-banner">
+                <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">แดชบอร์ดสรุปผล</h2>
+                <p class="text-blue-200 text-sm md:text-base">ภาพรวมสถิติและการกระจายข้อมูลของแต่ละหน่วยงานแบบเรียลไทม์</p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                <div class="bg-surface-container-lowest p-5 rounded-xl shadow-md text-center border-t-4 border-primary">
-                    <p class="text-on-surface-variant font-bold text-xs md:text-sm">จำนวนเคสที่บันทึกทั้งหมด</p>
-                    <p class="text-4xl md:text-5xl font-bold text-primary my-3" id="dash-total-cases">กำลังโหลด...</p>
-                    <span class="text-[11px] bg-primary-fixed text-primary px-2.5 py-0.5 rounded-full">อัปเดตอัตโนมัติ</span>
+            <!-- ข้อ 3: ปรับกรอบสถิติให้อยู่ในแถวเดียวกันเสมอกันทุกหน้าจอ -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="bg-surface-container-lowest p-4 md:p-5 rounded-xl shadow-md text-center border-t-4 border-primary">
+                    <p class="text-on-surface-variant font-bold text-[11px] sm:text-xs md:text-sm">จำนวนเคสที่บันทึกทั้งหมด</p>
+                    <p class="text-2xl sm:text-4xl md:text-5xl font-bold text-primary my-2 md:my-3" id="dash-total-cases">กำลังโหลด...</p>
+                    <span class="text-[9px] sm:text-[11px] bg-primary-fixed text-primary px-2 py-0.5 rounded-full">อัปเดตอัตโนมัติ</span>
                 </div>
 
-                <div class="bg-surface-container-lowest p-5 rounded-xl shadow-md text-center border-t-4 border-secondary">
-                    <p class="text-on-surface-variant font-bold text-xs md:text-sm">แผนกที่ส่งเคสเข้ามามากที่สุด</p>
-                    <p class="text-2xl md:text-3xl font-bold text-secondary my-4 truncate px-2" id="dash-top-dept">กำลังโหลด...</p>
+                <div class="bg-surface-container-lowest p-4 md:p-5 rounded-xl shadow-md text-center border-t-4 border-secondary flex flex-col justify-between items-center">
+                    <p class="text-on-surface-variant font-bold text-[11px] sm:text-xs md:text-sm">แผนกที่ส่งเคสเข้ามามากที่สุด</p>
+                    <p class="text-lg sm:text-2xl md:text-3xl font-bold text-secondary my-auto truncate w-full px-1" id="dash-top-dept">กำลังโหลด...</p>
+                    <div class="h-[18px]"></div>
                 </div>
             </div>
 
-            <div class="bg-surface-container-lowest p-5 rounded-xl shadow-md border-t-4 border-outline-variant">
-                <p class="text-on-surface-variant font-bold text-xs md:text-sm text-center mb-4">📊 สัดส่วนการบันทึกข้อมูลแยกตามหน่วยงาน/แผนก</p>
-                <div class="w-full max-w-[280px] md:max-w-[320px] mx-auto flex justify-center items-center">
-                    <canvas id="deptChart" style="max-height: 320px; max-width: 320px;"></canvas>
+            <!-- ข้อ 3: พื้นที่แสดงแผนภูมิแบ่งเป็น 2 ฝั่ง (แผนก และ แผนภูมิวินิจฉัยโรคเพิ่มเติมเข้ามา) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-surface-container-lowest p-5 rounded-xl shadow-md border-t-4 border-outline-variant">
+                    <p class="text-on-surface-variant font-bold text-xs md:text-sm text-center mb-4">📊 สัดส่วนการบันทึกข้อมูลแยกตามหน่วยงาน/แผนก</p>
+                    <div class="w-full max-w-[260px] mx-auto flex justify-center items-center">
+                        <canvas id="deptChart" style="max-height: 260px; max-width: 260px;"></canvas>
+                    </div>
+                </div>
+                
+                <div class="bg-surface-container-lowest p-5 rounded-xl shadow-md border-t-4 border-primary">
+                    <p class="text-on-surface-variant font-bold text-xs md:text-sm text-center mb-4">📈 แผนภูมิวินิจฉัยโรค (Diagnosis Distribution)</p>
+                    <div class="w-full max-w-[260px] mx-auto flex justify-center items-center">
+                        <canvas id="diagChart" style="max-height: 260px; max-width: 260px;"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- ⏳ หน้าที่ 3: ประวัติการบันทึก -->
         <div id="view-history" class="page-content">
-            <div class="mb-6">
-                <h2 class="text-[24px] md:text-[28px] font-bold text-primary mb-1">ประวัติการบันทึก HHC</h2>
-                <p class="text-on-surface-variant text-sm md:text-base">รายการตรวจสอบข้อมูลล่าสุดจาก Google Sheet</p>
+            <!-- ข้อ 5: แก้ไขพื้นหลังหัวข้อหน้าประวัติ -->
+            <div class="header-banner">
+                <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">ประวัติการบันทึก HHC</h2>
+                <p class="text-blue-200 text-sm md:text-base">รายการตรวจสอบข้อมูลล่าสุดจาก Google Sheet</p>
             </div>
             <div class="space-y-3" id="history-list">
                 <p class="text-center text-on-surface-variant py-4 text-sm">กำลังดึงข้อมูลประวัติจริง...</p>
@@ -149,7 +173,7 @@
 
     </main>
 
-    <!-- 🧭 Navigation Bottom Bar (ขยายเต็มขอบหน้าจอสำหรับทุกอุปกรณ์) -->
+    <!-- 🧭 Navigation Bottom Bar -->
     <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-outline-variant h-16 flex justify-around items-center w-full shadow-lg">
         <button onclick="changeTab('view-form', this)" class="tab-btn flex flex-col items-center justify-center flex-1 text-primary font-bold h-full">
             <span class="material-symbols-outlined text-2xl">edit_note</span>
@@ -165,16 +189,14 @@
         </button>
     </nav>
 
-    <!-- นำเข้าไลบรารี Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // กำหนดวันที่ปัจจุบันในฟอร์มโดยอัตโนมัติ
         document.getElementById('visit-date').valueAsDate = new Date();
         
         let isSubmitting = false;
         let myChart = null; 
+        let myDiagChart = null; // ตัวแปรเก็บกราฟวินิจฉัยโรคตัวใหม่
 
-        // ฟังก์ชันควบคุมการปิด-เปิดหน้าจอ (Tabs Navigation)
         function changeTab(targetId, btnElement) {
             document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -192,7 +214,6 @@
             }
         }
 
-        // ระบบควบคุมกล่องข้อเสนอแนะ "อื่นๆ" ของแผนก
         function toggleOther(val) {
             const container = document.getElementById('other-dept-container');
             const input = document.getElementById('other-dept');
@@ -210,16 +231,23 @@
             }
         }
 
-        // เปลี่ยนชื่อป้ายอัปโหลดไฟล์
         document.getElementById('image-file').addEventListener('change', function(e) {
             if(e.target.files.length > 0) {
                 document.getElementById('upload-label').innerText = '✔️ เลือกรูปสำเร็จ: ' + e.target.files[0].name;
             }
         });
 
-        // 💾 ระบบส่งฟอร์มข้อมูลเข้าหลังบ้าน
+        // 💾 ข้อ 1 & 2: ตรวจสอบการอัปโหลดรูปภาพ และ แสดงกล่องแจ้งเตือน Pop-up เมื่อสำเร็จ
         document.getElementById('hhc-form').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // ข้อ 1: เช็กว่ามีรูปภาพแนบไหม ถ้าไม่มีสั่งเบรกและ Alert ทันที
+            const imageFile = document.getElementById('image-file').files;
+            if (imageFile.length === 0) {
+                alert('⚠️ ไม่สามารถบันทึกข้อมูลได้! กรุณาแนบรูปภาพประกอบให้เรียบร้อยก่อนครับ');
+                return;
+            }
+
             if (isSubmitting) return;
             isSubmitting = true;
             
@@ -243,7 +271,8 @@
             })
             .then(response => {
                 if(response.result === 'success') {
-                    alert('🎉 บันทึกข้อมูลเข้า Google Sheet สำเร็จเรียบร้อยแล้วครับพี่พีท!');
+                    // ข้อ 2: เปลี่ยนป๊อปอัพให้ขึ้นคำตามบรีฟ
+                    alert('บันทึกข้อมูลเรียบร้อย');
                     document.getElementById('hhc-form').reset();
                     document.getElementById('visit-date').valueAsDate = new Date();
                     document.getElementById('upload-label').innerText = 'คลิกเพื่อเลือกรูปภาพประกอบ';
@@ -266,7 +295,7 @@
             });
         });
 
-        // 📊 ฟังก์ชันดึงข้อมูลจาก Google Web App ย้อนกลับมาประมวลผลแบบ Realtime
+        // 📊 ฟังก์ชันประมวลผลข้อมูล Realtime
         function fetchRealtimeData() {
             const scriptUrl = 'https://script.google.com/macros/s/AKfycbw69p5l86H5hNbxXoARnr5zhFw8YNuMMOc6w7JPPmfewO3A1CEIG1v6lmxRpV8huKIV/exec?read=true';
             
@@ -278,10 +307,11 @@
             .then(data => {
                 if(!Array.isArray(data)) throw new Error('Data format error');
 
-                // [A] อัปเดตตัวเลขการ์ดสถิติเดิม
                 document.getElementById('dash-total-cases').innerText = data.length;
                 
                 const depts = data.map(item => item.department || item.Department || item.dept).filter(Boolean);
+                const diags = data.map(item => item.diagnosis || item.Diagnosis || item.diag).filter(Boolean); // ดึงข้อมูลคำวินิจฉัยมาทำกราฟ
+                
                 const countMap = {};
                 let maxDept = "ไม่มีข้อมูล";
                 let maxCount = 0;
@@ -295,10 +325,10 @@
                 });
                 document.getElementById('dash-top-dept').innerText = data.length > 0 ? maxDept : "-";
 
-                // [B] ระบบประมวลผลและวาดแผนภูมิวงกลม (Pie Chart) ด้วย Chart.js
+                // ข้อ 3: เพิ่มแผนภูมิวินิจฉัยโรคเข้ามาแสดงร่วมกัน
                 if (data.length > 0) {
                     const ctx = document.getElementById('deptChart').getContext('2d');
-                    if (myChart) { myChart.destroy(); } // ทำลายกราฟเก่ากันบัฟเฟอร์ซ้อน
+                    if (myChart) { myChart.destroy(); }
                     
                     myChart = new Chart(ctx, {
                         type: 'pie',
@@ -306,27 +336,42 @@
                             labels: Object.keys(countMap),
                             datasets: [{
                                 data: Object.values(countMap),
-                                backgroundColor: [
-                                    '#006a6a', '#1b3d6d', '#004d4d', '#4d9a9a', 
-                                    '#53719c', '#8cf3f3', '#89a7d3', '#b3cbe6'
-                                ],
+                                backgroundColor: ['#006a6a', '#1b3d6d', '#004d4d', '#4d9a9a', '#53719c', '#8cf3f3', '#89a7d3', '#b3cbe6'],
                                 borderWidth: 2,
                                 borderColor: '#ffffff'
                             }]
                         },
                         options: {
                             responsive: true,
-                            plugins: {
-                                legend: {
-                                    position: 'bottom',
-                                    labels: { boxWidth: 12, font: { size: 11 } }
-                                }
-                            }
+                            plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }
+                        }
+                    });
+
+                    // นับจํานวนคําวินิจฉัยเพื่อวาดกราฟวงกลมตัวที่ 2
+                    const diagMap = {};
+                    diags.forEach(g => { diagMap[g] = (diagMap[g] || 0) + 1; });
+
+                    const ctxDiag = document.getElementById('diagChart').getContext('2d');
+                    if (myDiagChart) { myDiagChart.destroy(); }
+                    
+                    myDiagChart = new Chart(ctxDiag, {
+                        type: 'doughnut', // ใช้กราฟโดนัทจะได้สวยตัดกันกับกราฟแรก
+                        data: {
+                            labels: Object.keys(diagMap),
+                            datasets: [{
+                                data: Object.values(diagMap),
+                                backgroundColor: ['#ba1a1a', '#006a6a', '#e5eeff', '#747780', '#002020', '#ffdad6', '#43474f', '#bcc9c7'],
+                                borderWidth: 2,
+                                borderColor: '#ffffff'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }
                         }
                     });
                 }
 
-                // [C] หน้าประวัติ: แสดงผลข้อมูลโดยทำการปกปิดเลข HN (PDPA Masking)
                 const historyList = document.getElementById('history-list');
                 historyList.innerHTML = '';
                 
@@ -342,9 +387,10 @@
 
                     const card = document.createElement('div');
                     card.className = "bg-surface-container-lowest p-4 rounded-xl shadow-sm border-l-4 border-secondary flex flex-col gap-1 transition-all hover:shadow-md text-left";
+                    // ข้อ 4: เปลี่ยนข้อความเฉยๆ เป็น "วันที่บันทึกข้อมูล" ตามรีเควส
                     card.innerHTML = `
                         <div class="flex justify-between text-xs text-on-surface-variant font-medium">
-                            <span>📅 วันที่รับบริการ: ${sDate}</span>
+                            <span>📅 วันที่บันทึกข้อมูล: ${sDate}</span>
                             <span class="text-secondary font-bold flex items-center gap-1">
                                 <span class="w-2 h-2 rounded-full bg-secondary inline-block"></span> บันทึกสำเร็จ
                             </span>
