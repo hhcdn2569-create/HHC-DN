@@ -230,7 +230,7 @@
             }
         });
 
-        // ฟังก์ชันแปลงรูปภาพเป็น Base64 String เพื่อส่งไปยัง Google Apps Script
+        // ระบบจับคู่ส่งค่าไปยัง Web App หลังบ้านตัวใหม่ของพี่พีท
         document.getElementById('hhc-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -256,19 +256,19 @@
             reader.onload = function(event) {
                 const base64Image = event.target.result;
                 
-                // เตรียม Payload ข้อมูลส่งไปหลังบ้าน
                 const deptElement = document.getElementById('department');
                 const finalDept = deptElement.hasAttribute('name') ? deptElement.value : document.getElementById('other-dept').value;
 
+                // แมปปิ้งจับคู่ชื่อตัวแปรให้ตรงกับฝั่งรับของแอปสคริปต์แบบเป๊ะๆ
                 const urlParams = new URLSearchParams();
                 urlParams.append('serviceDate', document.getElementById('visit-date').value);
                 urlParams.append('hn', document.getElementById('hn-number').value);
                 urlParams.append('department', finalDept);
                 urlParams.append('diagnosis', document.getElementById('diagnosis').value);
-                urlParams.append('image', base64Image); // แนบสติงรูปภาพไปด้วย
+                urlParams.append('image', base64Image); 
 
-                // ⚠️ เปลี่ยนเป็นลิงก์ Web App ล่าสุดของพี่พีทแล้ว ⚠️
-                const url = 'https://script.google.com/macros/s/AKfycbzgPZWHTHOUkApC8GIrKDSqUB54ugXZbuNchlfHl2An13EKOb0bRAxKBv0myDxHqXWH/exec';
+                // 🔗 ฝังลิงก์จาก Deployment ล่าสุดของพี่พีทเข้าไส้ในโค้ดแล้วครับ
+                const url = 'https://script.google.com/macros/s/AKfycbwGKeY1UhvsAq2QFY3IqUE5NGg7bU87Amf3WBxuMfKLNlGIE114yMPV2ifS0W6mnI-o/exec';
                 
                 fetch(url, {
                     method: 'POST',
@@ -285,7 +285,7 @@
                             document.getElementById('other-dept-container').classList.add('hidden');
                         }
                     } else {
-                        alert('❌ เกิดข้อผิดพลาด: ' + response.error);
+                        alert('❌ เกิดข้อผิดพลาดจากเซิร์ฟเวอร์: ' + response.error);
                     }
                 })
                 .catch(error => {
@@ -300,12 +300,12 @@
                 });
             };
             
-            reader.readAsDataURL(file); // เริ่มกระบวนการแปลงรูปเป็น Base64
+            reader.readAsDataURL(file); 
         });
 
         function fetchRealtimeData() {
-            // ⚠️ เปลี่ยนเป็นลิงก์ Web App สำหรับตัวอ่านข้อมูลของพี่พีทแล้ว ⚠️
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbxStgCQc_cZsh2GhgR8gMkhct4VF05w0s2_NF3foE5707IzZS8S_XktGIioMwhxkUU6/exec?read=true';
+            // ดึงข้อมูลผ่านลิงก์ Web App ล่าสุดของพี่พีท
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbwGKeY1UhvsAq2QFY3IqUE5NGg7bU87Amf3WBxuMfKLNlGIE114yMPV2ifS0W6mnI-o/exec?read=true';
             
             fetch(scriptUrl)
             .then(res => res.json())
@@ -378,7 +378,6 @@
                 }
 
                 [...data].reverse().slice(0, 15).forEach(item => {
-                    // ตรวจสอบสิทธิ์และดึงค่าลิงก์แสดงรูปภาพ
                     const imgBtn = item.imageUrl && item.imageUrl !== "ไม่มีรูปภาพ" 
                         ? `<a href="${item.imageUrl}" target="_blank" class="mt-2 inline-flex items-center gap-1 text-xs text-primary font-bold bg-primary-container/20 px-3 py-1 rounded-lg hover:bg-primary-container/40 transition-all w-max"><span class="material-symbols-outlined text-sm">image</span> คลิกเปิดดูรูปภาพเคส</a>` 
                         : '';
