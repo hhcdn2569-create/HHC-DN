@@ -29,7 +29,6 @@
         body { background-color: #f8f9ff; color: #0b1c30; min-height: 100vh; display: flex; flex-direction: column; }
         .page-content { display: none; }
         .page-content.active { display: block; }
-        /* ข้อ 5: สไตล์แต่งพื้นหลังหัวข้อให้น่าสนใจและเข้าธีม */
         .header-banner {
             background: linear-gradient(135deg, #002753 0%, #1b3d6d 100%);
             color: #ffffff;
@@ -56,12 +55,10 @@
         <button class="material-symbols-outlined text-primary p-2 hover:bg-surface-container-high rounded-full flex-shrink-0">account_circle</button>
     </header>
 
-    <!-- คอนเทนเนอร์หลัก ขยายเต็มจอทุกแพลตฟอร์ม -->
     <main class="w-full flex-1 px-4 md:px-6 py-6 mt-16 mx-auto max-w-full sm:max-w-[95%] md:max-w-[90%] lg:max-w-[1200px]">
 
         <!-- 📑 หน้าที่ 1: บันทึกข้อมูล (Form) -->
         <div id="view-form" class="page-content active">
-            <!-- ข้อ 5: แก้ไขพื้นหลังหัวข้อหน้าบันทึก -->
             <div class="header-banner">
                 <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">ระบบบันทึกข้อมูล HHC</h2>
                 <p class="text-blue-200 text-sm md:text-base">Home Health Care Data Entry</p>
@@ -108,7 +105,7 @@
                     <div class="border-2 border-dashed border-outline-variant rounded-lg py-5 text-center cursor-pointer bg-surface-bright" onclick="document.getElementById('image-file').click()">
                         <span class="material-symbols-outlined text-secondary text-2xl mb-1">add_a_photo</span>
                         <p class="text-xs md:text-sm text-on-surface-variant px-2" id="upload-label">คลิกเพื่อเลือกรูปภาพประกอบ</p>
-                        <input type="file" id="image-file" name="image" accept="image/*" class="hidden">
+                        <input type="file" id="image-file" accept="image/*" class="hidden">
                     </div>
                 </div>
 
@@ -120,13 +117,11 @@
 
         <!-- 📊 หน้าที่ 2: สรุปผล (Dashboard) -->
         <div id="view-dashboard" class="page-content">
-            <!-- ข้อ 5: แก้ไขพื้นหลังหัวข้อหน้าแดชบอร์ด -->
             <div class="header-banner">
                 <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">แดชบอร์ดสรุปผล</h2>
                 <p class="text-blue-200 text-sm md:text-base">ภาพรวมสถิติและการกระจายข้อมูลของแต่ละหน่วยงานแบบเรียลไทม์</p>
             </div>
 
-            <!-- ข้อ 3: ปรับกรอบสถิติให้อยู่ในแถวเดียวกันเสมอกันทุกหน้าจอ -->
             <div class="grid grid-cols-2 gap-4 mb-6">
                 <div class="bg-surface-container-lowest p-4 md:p-5 rounded-xl shadow-md text-center border-t-4 border-primary">
                     <p class="text-on-surface-variant font-bold text-[11px] sm:text-xs md:text-sm">จำนวนเคสที่บันทึกทั้งหมด</p>
@@ -141,7 +136,6 @@
                 </div>
             </div>
 
-            <!-- ข้อ 3: พื้นที่แสดงแผนภูมิแบ่งเป็น 2 ฝั่ง (แผนก และ แผนภูมิวินิจฉัยโรคเพิ่มเติมเข้ามา) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-surface-container-lowest p-5 rounded-xl shadow-md border-t-4 border-outline-variant">
                     <p class="text-on-surface-variant font-bold text-xs md:text-sm text-center mb-4">📊 สัดส่วนการบันทึกข้อมูลแยกตามหน่วยงาน/แผนก</p>
@@ -161,7 +155,6 @@
 
         <!-- ⏳ หน้าที่ 3: ประวัติการบันทึก -->
         <div id="view-history" class="page-content">
-            <!-- ข้อ 5: แก้ไขพื้นหลังหัวข้อหน้าประวัติ -->
             <div class="header-banner">
                 <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">ประวัติการบันทึก HHC</h2>
                 <p class="text-blue-200 text-sm md:text-base">รายการตรวจสอบข้อมูลล่าสุดจาก Google Sheet</p>
@@ -195,7 +188,7 @@
         
         let isSubmitting = false;
         let myChart = null; 
-        let myDiagChart = null; // ตัวแปรเก็บกราฟวินิจฉัยโรคตัวใหม่
+        let myDiagChart = null;
 
         function changeTab(targetId, btnElement) {
             document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
@@ -237,13 +230,12 @@
             }
         });
 
-        // 💾 ข้อ 1 & 2: ตรวจสอบการอัปโหลดรูปภาพ และ แสดงกล่องแจ้งเตือน Pop-up เมื่อสำเร็จ
+        // ฟังก์ชันแปลงรูปภาพเป็น Base64 String เพื่อส่งไปยัง Google Apps Script
         document.getElementById('hhc-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // ข้อ 1: เช็กว่ามีรูปภาพแนบไหม ถ้าไม่มีสั่งเบรกและ Alert ทันที
-            const imageFile = document.getElementById('image-file').files;
-            if (imageFile.length === 0) {
+            const imageInput = document.getElementById('image-file');
+            if (imageInput.files.length === 0) {
                 alert('⚠️ ไม่สามารถบันทึกข้อมูลได้! กรุณาแนบรูปภาพประกอบให้เรียบร้อยก่อนครับ');
                 return;
             }
@@ -256,61 +248,74 @@
             
             submitBtn.disabled = true;
             submitBtn.style.opacity = "0.7";
-            submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> กำลังบันทึกข้อมูล...';
+            submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> กำลังอัปโหลดและบันทึกข้อมูล...';
 
-            const formData = new FormData(this);
-            const url = 'https://script.google.com/macros/s/AKfycbw69p5l86H5hNbxXoARnr5zhFw8YNuMMOc6w7JPPmfewO3A1CEIG1v6lmxRpV8huKIV/exec';
+            const file = imageInput.files[0];
+            const reader = new FileReader();
             
-            fetch(url, {
-                method: 'POST',
-                body: new URLSearchParams(formData)
-            })
-            .then(res => {
-                if (!res.ok) throw new Error('Network response error');
-                return res.json();
-            })
-            .then(response => {
-                if(response.result === 'success') {
-                    // ข้อ 2: เปลี่ยนป๊อปอัพให้ขึ้นคำตามบรีฟ
-                    alert('บันทึกข้อมูลเรียบร้อย');
-                    document.getElementById('hhc-form').reset();
-                    document.getElementById('visit-date').valueAsDate = new Date();
-                    document.getElementById('upload-label').innerText = 'คลิกเพื่อเลือกรูปภาพประกอบ';
-                    if(!document.getElementById('other-dept-container').classList.contains('hidden')) {
-                        document.getElementById('other-dept-container').classList.add('hidden');
+            reader.onload = function(event) {
+                const base64Image = event.target.result;
+                
+                // เตรียม Payload ข้อมูลส่งไปหลังบ้าน
+                const deptElement = document.getElementById('department');
+                const finalDept = deptElement.hasAttribute('name') ? deptElement.value : document.getElementById('other-dept').value;
+
+                const urlParams = new URLSearchParams();
+                urlParams.append('serviceDate', document.getElementById('visit-date').value);
+                urlParams.append('hn', document.getElementById('hn-number').value);
+                urlParams.append('department', finalDept);
+                urlParams.append('diagnosis', document.getElementById('diagnosis').value);
+                urlParams.append('image', base64Image); // แนบสติงรูปภาพไปด้วย
+
+                // ⚠️ เปลี่ยนเป็นลิงก์ Web App ล่าสุดของพี่พีทแล้ว ⚠️
+                const url = 'https://script.google.com/macros/s/AKfycbxStgCQc_cZsh2GhgR8gMkhct4VF05w0s2_NF3foE5707IzZS8S_XktGIioMwhxkUU6/exec';
+                
+                fetch(url, {
+                    method: 'POST',
+                    body: urlParams
+                })
+                .then(res => res.json())
+                .then(response => {
+                    if(response.result === 'success') {
+                        alert('บันทึกข้อมูลเรียบร้อย');
+                        document.getElementById('hhc-form').reset();
+                        document.getElementById('visit-date').valueAsDate = new Date();
+                        document.getElementById('upload-label').innerText = 'คลิกเพื่อเลือกรูปภาพประกอบ';
+                        if(!document.getElementById('other-dept-container').classList.contains('hidden')) {
+                            document.getElementById('other-dept-container').classList.add('hidden');
+                        }
+                    } else {
+                        alert('❌ เกิดข้อผิดพลาด: ' + response.error);
                     }
-                } else {
-                    alert('❌ เกิดข้อผิดพลาด: ' + response.error);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-                alert('❌ ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่อีกครั้ง');
-            })
-            .finally(() => {
-                isSubmitting = false;
-                submitBtn.disabled = false;
-                submitBtn.style.opacity = "1";
-                submitBtn.innerHTML = originalBtnText;
-            });
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('❌ ไม่สามารถเชื่อมต่อระบบอัปโหลดได้ กรุณาลองใหม่อีกครั้ง');
+                })
+                .finally(() => {
+                    isSubmitting = false;
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = "1";
+                    submitBtn.innerHTML = originalBtnText;
+                });
+            };
+            
+            reader.readAsDataURL(file); // เริ่มกระบวนการแปลงรูปเป็น Base64
         });
 
-        // 📊 ฟังก์ชันประมวลผลข้อมูล Realtime
         function fetchRealtimeData() {
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbw69p5l86H5hNbxXoARnr5zhFw8YNuMMOc6w7JPPmfewO3A1CEIG1v6lmxRpV8huKIV/exec?read=true';
+            // ⚠️ เปลี่ยนเป็นลิงก์ Web App สำหรับตัวอ่านข้อมูลของพี่พีทแล้ว ⚠️
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbxStgCQc_cZsh2GhgR8gMkhct4VF05w0s2_NF3foE5707IzZS8S_XktGIioMwhxkUU6/exec?read=true';
             
             fetch(scriptUrl)
-            .then(res => {
-                if (!res.ok) throw new Error('Fetch status error');
-                return res.json();
-            })
+            .then(res => res.json())
             .then(data => {
                 if(!Array.isArray(data)) throw new Error('Data format error');
 
                 document.getElementById('dash-total-cases').innerText = data.length;
                 
-                const depts = data.map(item => item.department || item.Department || item.dept).filter(Boolean);
-                const diags = data.map(item => item.diagnosis || item.Diagnosis || item.diag).filter(Boolean); // ดึงข้อมูลคำวินิจฉัยมาทำกราฟ
+                const depts = data.map(item => item.department).filter(Boolean);
+                const diags = data.map(item => item.diagnosis).filter(Boolean);
                 
                 const countMap = {};
                 let maxDept = "ไม่มีข้อมูล";
@@ -325,7 +330,6 @@
                 });
                 document.getElementById('dash-top-dept').innerText = data.length > 0 ? maxDept : "-";
 
-                // ข้อ 3: เพิ่มแผนภูมิวินิจฉัยโรคเข้ามาแสดงร่วมกัน
                 if (data.length > 0) {
                     const ctx = document.getElementById('deptChart').getContext('2d');
                     if (myChart) { myChart.destroy(); }
@@ -341,13 +345,9 @@
                                 borderColor: '#ffffff'
                             }]
                         },
-                        options: {
-                            responsive: true,
-                            plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }
-                        }
+                        options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
                     });
 
-                    // นับจํานวนคําวินิจฉัยเพื่อวาดกราฟวงกลมตัวที่ 2
                     const diagMap = {};
                     diags.forEach(g => { diagMap[g] = (diagMap[g] || 0) + 1; });
 
@@ -355,7 +355,7 @@
                     if (myDiagChart) { myDiagChart.destroy(); }
                     
                     myDiagChart = new Chart(ctxDiag, {
-                        type: 'doughnut', // ใช้กราฟโดนัทจะได้สวยตัดกันกับกราฟแรก
+                        type: 'doughnut',
                         data: {
                             labels: Object.keys(diagMap),
                             datasets: [{
@@ -365,10 +365,7 @@
                                 borderColor: '#ffffff'
                             }]
                         },
-                        options: {
-                            responsive: true,
-                            plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }
-                        }
+                        options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
                     });
                 }
 
@@ -381,16 +378,16 @@
                 }
 
                 [...data].reverse().slice(0, 15).forEach(item => {
-                    const sDate = item.serviceDate || item.ServiceDate || item.date || '-';
-                    const diag = item.diagnosis || item.Diagnosis || item.diag || '-';
-                    const deptName = item.department || item.Department || item.dept || '-';
+                    // ตรวจสอบสิทธิ์และดึงค่าลิงก์แสดงรูปภาพ
+                    const imgBtn = item.imageUrl && item.imageUrl !== "ไม่มีรูปภาพ" 
+                        ? `<a href="${item.imageUrl}" target="_blank" class="mt-2 inline-flex items-center gap-1 text-xs text-primary font-bold bg-primary-container/20 px-3 py-1 rounded-lg hover:bg-primary-container/40 transition-all w-max"><span class="material-symbols-outlined text-sm">image</span> คลิกเปิดดูรูปภาพเคส</a>` 
+                        : '';
 
                     const card = document.createElement('div');
                     card.className = "bg-surface-container-lowest p-4 rounded-xl shadow-sm border-l-4 border-secondary flex flex-col gap-1 transition-all hover:shadow-md text-left";
-                    // ข้อ 4: เปลี่ยนข้อความเฉยๆ เป็น "วันที่บันทึกข้อมูล" ตามรีเควส
                     card.innerHTML = `
                         <div class="flex justify-between text-xs text-on-surface-variant font-medium">
-                            <span>📅 วันที่บันทึกข้อมูล: ${sDate}</span>
+                            <span>📅 วันที่บันทึกข้อมูล: ${item.serviceDate}</span>
                             <span class="text-secondary font-bold flex items-center gap-1">
                                 <span class="w-2 h-2 rounded-full bg-secondary inline-block"></span> บันทึกสำเร็จ
                             </span>
@@ -398,8 +395,9 @@
                         <div class="font-bold text-primary mt-1 flex items-center gap-1.5 text-sm md:text-base">
                             HN: <span class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded text-xs select-none tracking-widest">🔒 ***🔒***</span>
                         </div>
-                        <div class="text-xs md:text-sm text-on-surface-variant"><b class="text-on-surface">แผนก:</b> ${deptName}</div>
-                        <div class="text-xs md:text-sm text-on-surface-variant"><b class="text-on-surface">วินิจฉัย:</b> ${diag}</div>
+                        <div class="text-xs md:text-sm text-on-surface-variant"><b class="text-on-surface">แผนก:</b> ${item.department}</div>
+                        <div class="text-xs md:text-sm text-on-surface-variant"><b class="text-on-surface">วินิจฉัย:</b> ${item.diagnosis}</div>
+                        ${imgBtn}
                     `;
                     historyList.appendChild(card);
                 });
