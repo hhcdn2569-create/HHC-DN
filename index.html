@@ -254,14 +254,82 @@
                 document.getElementById('dash-top-dept').innerText = "พัง";
                 document.getElementById('history-list').innerHTML = '<p class="text-center text-error py-4">ดึงข้อมูลไม่สำเร็จ ข้อมูลใน Google Apps Script ยังไม่ได้เปิดสิทธิ์อ่านข้อมูล</p>';
             });
-              // 📥 วางต่อตรงนี้ได้เลยครับ (วางต่อท้ายบรรทัด 257เดิม)
+                 <script>
+        // -----------------------------------------------------------------
+        // 🚀 ระบบจัดการ STATE & INITIALIZATION (ระดับมืออาชีพ)
+        // -----------------------------------------------------------------
+        
+        // กำหนดวันที่ปัจจุบันในฟอร์มโดยอัตโนมัติเมื่อเปิดหน้าเว็บ
+        document.getElementById('visit-date').valueAsDate = new Date();
+        
+        // ตัวแปรควบคุมไม่ให้ระบบส่งข้อมูลซ้อนกัน (Debounce / Submit Lock)
+        let isSubmitting = false;
+
+        // -----------------------------------------------------------------
+        // 🧭 ระบบควบคุมการสลับหน้าจอ (TABS NAVIGATION)
+        // -----------------------------------------------------------------
+        function changeTab(targetId, btnElement) {
+            document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('text-primary', 'font-bold');
+                btn.classList.add('text-on-surface-variant');
+            });
+            
+            document.getElementById(targetId).classList.add('active');
+            btnElement.classList.remove('text-on-surface-variant');
+            btnElement.classList.add('text-primary', 'font-bold');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // ดึงข้อมูลใหม่เฉพาะเมื่อผู้ใช้เปิดหน้า Dashboard หรือ History
+            if (targetId === 'view-dashboard' || targetId === 'view-history') {
+                fetchRealtimeData();
+            }
+        }
+
+        // -----------------------------------------------------------------
+        // 🎛️ ระบบ UI CONTROLS (ฟังก์ชันย่อยในหน้าฟอร์ม)
+        // -----------------------------------------------------------------
+        function toggleOther(val) {
+            const container = document.getElementById('other-dept-container');
+            const input = document.getElementById('other-dept');
+            if (val === 'อื่นๆ') {
+                container.classList.remove('hidden');
+                input.setAttribute('name', 'department');
+                document.getElementById('department').removeAttribute('name');
+                input.required = true;
+            } else {
+                container.classList.add('hidden');
+                input.removeAttribute('name');
+                document.getElementById('department').setAttribute('name', 'department');
+                input.required = false;
+                input.value = '';
+            }
+        }
+
+        document.getElementById('image-file').addEventListener('change', function(e) {
+            if(e.target.files.length > 0) {
+                document.getElementById('upload-label').innerText = '✔️ เลือกรูปสำเร็จ: ' + e.target.files[0].name;
+            }
+        });
+
+        // -----------------------------------------------------------------
+        // 💾 ระบบส่งข้อมูลหลังบ้าน (PROFESSIONAL FORM SUBMISSION)
+        // * แก้ไขปัญหาการบันทึกเบิ้ลและแจ้งเตือนซ้ำซ้อนอย่างเด็ดขาด
+        // -----------------------------------------------------------------
         document.getElementById('hhc-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+            e.preventDefault(); // บล็อกไม่ให้หน้าเพจรีเฟรชหรือเปิดหน้าใหม่
+            
+            // 🛡️ ป้องกันการกดซ้ำ (ถ้ากำลังส่งข้อมูลอยู่ จะไม่ทำซ้ำเด็ดขาด)
+            if (isSubmitting) return;
+            isSubmitting = true;
             
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalBtnText = submitBtn.innerHTML;
+            
+            // ล็อกปุ่มและเปลี่ยน UI ให้ดูเป็นสากล
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> กำลังบันทึกข้อมูล...';
+            submitBtn.style.opacity = "0.7";
+            submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> กำลังดำเนินการส่งข้อมูล...';
 
             const formData = new FormData(this);
             const url = 'https://script.google.com/macros/s/AKfycbw69p5l86H5hNbxXoARnr5zhFw8YNuMMOc6w7JPPmfewO3A1CEIG1v6lmxRpV8huKIV/exec';
@@ -270,10 +338,15 @@
                 method: 'POST',
                 body: new URLSearchParams(formData)
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('Network response was not ok');
+                return res.json();
+            })
             .then(response => {
                 if(response.result === 'success') {
-                    alert('🎉 บันทึกข้อมูลเข้า Google Sheet เรียบร้อยแล้วครับพี่พีท!');
+                    showToast('🎉 บันทึกข้อมูลเข้า Google Sheet เรียบร้อยแล้วครับ!', 'success');
+                    
+                    // รีเซ็ตฟอร์มแบบเคลียร์ค่าอย่างสะอาดสะอาด
                     document.getElementById('hhc-form').reset();
                     document.getElementById('visit-date').valueAsDate = new Date();
                     document.getElementById('upload-label').innerText = 'คลิกเพื่อเลือกรูปภาพประกอบ';
@@ -281,19 +354,93 @@
                         document.getElementById('other-dept-container').classList.add('hidden');
                     }
                 } else {
-                    alert('❌ เกิดข้อผิดพลาด: ' + response.error);
+                    showToast('❌ ข้อผิดพลาดจากระบบ: ' + response.error, 'error');
                 }
             })
             .catch(error => {
-                console.error(error);
-                alert('❌ ไม่สามารถเชื่อมต่อระบบได้ กรุณาลองใหม่อีกครั้ง');
+                console.error('Submission error:', error);
+                showToast('❌ ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่อีกครั้ง', 'error');
             })
             .finally(() => {
+                // ปลดล็อกสถานะ ให้ฟอร์มกลับมาพร้อมใช้งานต่อ
+                isSubmitting = false;
                 submitBtn.disabled = false;
+                submitBtn.style.opacity = "1";
                 submitBtn.innerHTML = originalBtnText;
             });
         });
-    } // วงเล็บปิดเดิมของฟังก์ชัน fetchRealtimeData
-</script>
-</body>
-</html>
+
+        // -----------------------------------------------------------------
+        // 📊 ระบบดึงข้อมูลจาก GOOGLE SHEET ย้อนกลับมาแสดงผล (REALTIME FETCH)
+        // -----------------------------------------------------------------
+        function fetchRealtimeData() {
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbw69p5l86H5hNbxXoARnr5zhFw8YNuMMOc6w7JPPmfewO3A1CEIG1v6lmxRpV8huKIV/exec?read=true';
+            
+            fetch(scriptUrl)
+            .then(res => res.json())
+            .then(data => {
+                // อัปเดตสถิติจำนวนเคสรวมบนแดชบอร์ด
+                document.getElementById('dash-total-cases').innerText = data.length;
+                
+                if(data.length > 0) {
+                    const depts = data.map(item => item.department).filter(Boolean);
+                    const count = {};
+                    let maxDept = "ไม่มีข้อมูล";
+                    let maxCount = 0;
+                    depts.forEach(d => {
+                        count[d] = (count[d] || 0) + 1;
+                        if(count[d] > maxCount) { maxCount = count[d]; maxDept = d; }
+                    });
+                    document.getElementById('dash-top-dept').innerText = maxDept;
+                } else {
+                    document.getElementById('dash-top-dept').innerText = "-";
+                }
+
+                // สร้างรายการแสดงประวัติการบันทึกข้อมูลล่าสุด
+                const historyList = document.getElementById('history-list');
+                historyList.innerHTML = '';
+                
+                if(data.length === 0) {
+                    historyList.innerHTML = '<p class="text-center text-on-surface-variant py-4">ยังไม่มีประวัติข้อมูลในตารางชีท</p>';
+                    return;
+                }
+
+                // แสดงผลอัปเดต 10 รายการล่าสุดจากท้ายตารางขึ้นก่อน
+                [...data].reverse().slice(0, 10).forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "bg-surface-container-lowest p-4 rounded-xl shadow-sm border-l-4 border-secondary flex flex-col gap-1 transition-all hover:shadow-md";
+                    card.innerHTML = `
+                        <div class="flex justify-between text-xs text-on-surface-variant font-medium">
+                            <span>📅 วันที่รับบริการ: ${item.serviceDate || '-'}</span>
+                            <span class="text-secondary font-bold flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-secondary inline-block animate-pulse"></span> บันทึกสำเร็จ
+                            </span>
+                        </div>
+                        <div class="font-bold text-primary mt-1">HN: ${item.hn || '-'}</div>
+                        <div class="text-sm text-on-surface-variant"><b class="text-on-surface">แผนก:</b> ${item.department || '-'}</div>
+                        <div class="text-sm text-on-surface-variant"><b class="text-on-surface">วินิจฉัย:</b> ${item.diagnosis || '-'}</div>
+                    `;
+                    historyList.appendChild(card);
+                });
+            })
+            .catch(err => {
+                console.error('Fetch error:', err);
+                document.getElementById('dash-total-cases').innerText = "ERR";
+                document.getElementById('dash-top-dept').innerText = "ERROR";
+                document.getElementById('history-list').innerHTML = '<p class="text-center text-error py-4">ดึงข้อมูลไม่สำเร็จ กรุณาตรวจสอบการตั้งค่า Deployment ของ Apps Script</p>';
+            });
+        }
+
+        // -----------------------------------------------------------------
+        // 🔔 TOAST NOTIFICATION WINDOW (โมดูลแจ้งเตือนแบบโปรเฟสชันนอล)
+        // -----------------------------------------------------------------
+        function showToast(message, type = 'success') {
+            // เช็คว่ามีกล่องเก่าอยู่ไหม ถ้ามีให้ลบออกก่อนเพื่อป้องกันการขึ้นค้างซ้อน
+            const oldToast = document.getElementById('pro-toast');
+            if (oldToast) oldToast.remove();
+
+            const toast = document.createElement('div');
+            toast.id = 'pro-toast';
+            
+            // ดีไซน์สีโทนพรีเมียมตามสถานะความสำเร็จหรือผิดพลาด
+            const bgColor = type === 'success' ? 'bg
