@@ -88,7 +88,7 @@
                 </div>
 
                 <div class="flex flex-col gap-2">
-                    <label class="font-label-md text-on-surface" for="diagnosis">คำวินิจฉัย (Diagnosis)</label>
+                    <label class="font-label-md text-on-surface" for="diagnosis">วินิจฉัยโรค (Diagnosis)</label>
                     <textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus" id="diagnosis" name="diagnosis" rows="4" placeholder="ระบุรายละเอียดการวินิจฉัย..." required></textarea>
                 </div>
 
@@ -111,7 +111,7 @@
         <div id="view-dashboard" class="page-content">
             <div class="mb-6">
                 <h2 class="font-headline-lg-mobile text-primary mb-1">แดชบอร์ดสรุปผล</h2>
-                <p class="text-on-surface-variant font-body-md">ภาพรวมสถิติและการกระจายข้อมูลของแต่ละหน่วยงานแบบเรียลไทม์</p>
+                <p class="text-on-surface-variant font-body-md">ภาพรวมสถิติและสัดส่วนข้อมูลของแต่ละหน่วยงานแบบเรียลไทม์</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -122,8 +122,8 @@
                 </div>
 
                 <div class="bg-surface-container-lowest p-6 rounded-xl shadow-md text-center border-t-4 border-secondary">
-                    <p class="text-on-surface-variant font-bold text-sm">แผนกที่ส่งเคสเข้ามามากที่สุด</p>
-                    <p class="text-3xl font-bold text-secondary my-5" id="dash-top-dept">กำลังโหลด...</p>
+                    <p class="text-on-surface-variant font-bold text-sm">หน่วยงาน/แผนกที่ส่งเคสเข้ามามากที่สุด</p>
+                    <p class="text-5xl font-bold text-secondary my-5" id="dash-top-dept">กำลังโหลด...</p>
                 </div>
             </div>
 
@@ -139,7 +139,7 @@
         <div id="view-history" class="page-content">
             <div class="mb-8">
                 <h2 class="font-headline-lg-mobile text-primary mb-2">ประวัติการบันทึก HHC</h2>
-                <p class="text-on-surface-variant font-body-md">รายการตรวจสอบข้อมูลล่าสุดจาก Google Sheet</p>
+                <p class="text-on-surface-variant font-body-md">รายการที่ได้บันทึกข้อมูลล่าสุด</p>
             </div>
             <div class="space-y-4" id="history-list">
                 <p class="text-center text-on-surface-variant">กำลังดึงข้อมูลประวัติจริง...</p>
@@ -242,7 +242,7 @@
             })
             .then(response => {
                 if(response.result === 'success') {
-                    alert('🎉 บันทึกข้อมูลเข้า Google Sheet สำเร็จเรียบร้อยแล้วครับพี่พีท!');
+                    alert('🎉 บันทึกข้อมูลสำเร็จเรียบร้อยแล้ว 🎉');
                     document.getElementById('hhc-form').reset();
                     document.getElementById('visit-date').valueAsDate = new Date();
                     document.getElementById('upload-label').innerText = 'คลิกเพื่อเลือกรูปภาพประกอบ';
