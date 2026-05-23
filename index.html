@@ -108,24 +108,36 @@
             </form>
         </div>
 
-        <!-- 📊 หน้าที่ 2: สรุปผล (Dashboard เรียบลื่นดึงข้อมูลจริง -->
+              <!-- 📊 หน้าที่ 2: สรุปผล (Dashboard เรียบลื่นดึงข้อมูลจริง + เสริมกราฟวงกลม Professional) -->
         <div id="view-dashboard" class="page-content">
-            <div class="mb-8">
-                <h2 class="font-headline-lg-mobile text-primary mb-2">แดชบอร์ดสรุปผล</h2>
-                <p class="text-on-surface-variant font-body-md">ภาพรวมสถิติการบันทึกข้อมูลจริงแบบเรียลไทม์</p>
+            <div class="mb-6">
+                <h2 class="font-headline-lg-mobile text-primary mb-1">แดชบอร์ดสรุปผล</h2>
+                <p class="text-on-surface-variant font-body-md">ภาพรวมสถิติและการกระจายข้อมูลของแต่ละหน่วยงานแบบเรียลไทม์</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <!-- ส่วนที่ 1: กล่องตัวเลขสถิติเด่น (ของเดิมที่พี่พีทชอบ เก็บไว้ครบถ้วน) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div class="bg-surface-container-lowest p-6 rounded-xl shadow-md text-center border-t-4 border-primary">
                     <p class="text-on-surface-variant font-bold text-sm">จำนวนเคสที่บันทึกทั้งหมด</p>
                     <p class="text-5xl font-bold text-primary my-4" id="dash-total-cases">กำลังโหลด...</p>
                     <span class="text-xs bg-primary-fixed text-primary px-3 py-1 rounded-full">อัปเดตอัตโนมัติ</span>
                 </div>
+
                 <div class="bg-surface-container-lowest p-6 rounded-xl shadow-md text-center border-t-4 border-secondary">
                     <p class="text-on-surface-variant font-bold text-sm">แผนกที่ส่งเคสเข้ามามากที่สุด</p>
                     <p class="text-3xl font-bold text-secondary my-5" id="dash-top-dept">กำลังโหลด...</p>
                 </div>
             </div>
+
+            <!-- ส่วนที่ 2: เสริมเข้ามาใหม่! กล่องแสดงแผนภูมิวงกลมสรุปสัดส่วนแผนก (สไตล์ Professional) -->
+            <div class="bg-surface-container-lowest p-6 rounded-xl shadow-md border-t-4 border-outline-variant">
+                <p class="text-on-surface-variant font-bold text-sm text-center mb-4">📊 สัดส่วนการบันทึกข้อมูลแยกตามหน่วยงาน/แผนก</p>
+                <div class="w-full max-w-[320px] mx-auto flex justify-center items-center">
+                    <canvas id="deptChart" style="max-height: 320px; max-width: 320px;"></canvas>
+                </div>
+            </div>
         </div>
+
 
         <!-- ⏳ หน้าที่ 3: ประวัติการบันทึก (History ดึงข้อมูลจริงจากชีท) -->
         <div id="view-history" class="page-content">
@@ -254,20 +266,17 @@
                 document.getElementById('dash-top-dept').innerText = "พัง";
                 document.getElementById('history-list').innerHTML = '<p class="text-center text-error py-4">ดึงข้อมูลไม่สำเร็จ ข้อมูลใน Google Apps Script ยังไม่ได้เปิดสิทธิ์อ่านข้อมูล</p>';
             });
-                 <script>
-        // -----------------------------------------------------------------
-        // 🚀 ระบบจัดการ STATE & INITIALIZATION (ระดับมืออาชีพ)
-        // -----------------------------------------------------------------
-        
-        // กำหนดวันที่ปัจจุบันในฟอร์มโดยอัตโนมัติเมื่อเปิดหน้าเว็บ
+                    <!-- นำเข้าไลบรารี Chart.js สำหรับใช้วาดแผนภูมิวงกลม -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // ตั้งค่าวันที่ปัจจุบันให้ฟอร์มโดยอัตโนมัติ
         document.getElementById('visit-date').valueAsDate = new Date();
         
-        // ตัวแปรควบคุมไม่ให้ระบบส่งข้อมูลซ้อนกัน (Debounce / Submit Lock)
+        // ตัวแปรล็อกสถานะป้องกันการส่งข้อมูลเบิ้ลหลายครั้ง
         let isSubmitting = false;
+        let myChart = null; // ตัวแปรสำหรับจดจำและเคลียร์ค่ากราฟเก่า
 
-        // -----------------------------------------------------------------
-        // 🧭 ระบบควบคุมการสลับหน้าจอ (TABS NAVIGATION)
-        // -----------------------------------------------------------------
+        // ฟังก์ชันสลับหน้าจอ (Tabs) แบบสมูท
         function changeTab(targetId, btnElement) {
             document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -280,15 +289,12 @@
             btnElement.classList.add('text-primary', 'font-bold');
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // ดึงข้อมูลใหม่เฉพาะเมื่อผู้ใช้เปิดหน้า Dashboard หรือ History
             if (targetId === 'view-dashboard' || targetId === 'view-history') {
                 fetchRealtimeData();
             }
         }
 
-        // -----------------------------------------------------------------
-        // 🎛️ ระบบ UI CONTROLS (ฟังก์ชันย่อยในหน้าฟอร์ม)
-        // -----------------------------------------------------------------
+        // ระบบควบคุมกล่องข้อเสนอแนะ "อื่นๆ" ของแผนก
         function toggleOther(val) {
             const container = document.getElementById('other-dept-container');
             const input = document.getElementById('other-dept');
@@ -306,30 +312,26 @@
             }
         }
 
+        // ตรวจจับการเลือกรูปภาพ
         document.getElementById('image-file').addEventListener('change', function(e) {
             if(e.target.files.length > 0) {
                 document.getElementById('upload-label').innerText = '✔️ เลือกรูปสำเร็จ: ' + e.target.files[0].name;
             }
         });
 
-        // -----------------------------------------------------------------
-        // 💾 ระบบส่งข้อมูลหลังบ้าน (PROFESSIONAL FORM SUBMISSION)
-        // * แก้ไขปัญหาการบันทึกเบิ้ลและแจ้งเตือนซ้ำซ้อนอย่างเด็ดขาด
-        // -----------------------------------------------------------------
+        // 💾 ระบบส่งฟอร์ม (บันทึกเสร็จแล้วขึ้นแจ้งเตือน อยู่หน้าเดิม ไม่ส่งข้อมูลเบิ้ลซ้ำ)
         document.getElementById('hhc-form').addEventListener('submit', function(e) {
-            e.preventDefault(); // บล็อกไม่ให้หน้าเพจรีเฟรชหรือเปิดหน้าใหม่
+            e.preventDefault();
             
-            // 🛡️ ป้องกันการกดซ้ำ (ถ้ากำลังส่งข้อมูลอยู่ จะไม่ทำซ้ำเด็ดขาด)
             if (isSubmitting) return;
             isSubmitting = true;
             
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalBtnText = submitBtn.innerHTML;
             
-            // ล็อกปุ่มและเปลี่ยน UI ให้ดูเป็นสากล
             submitBtn.disabled = true;
             submitBtn.style.opacity = "0.7";
-            submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> กำลังดำเนินการส่งข้อมูล...';
+            submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> กำลังบันทึกข้อมูล...';
 
             const formData = new FormData(this);
             const url = 'https://script.google.com/macros/s/AKfycbw69p5l86H5hNbxXoARnr5zhFw8YNuMMOc6w7JPPmfewO3A1CEIG1v6lmxRpV8huKIV/exec';
@@ -339,14 +341,14 @@
                 body: new URLSearchParams(formData)
             })
             .then(res => {
-                if (!res.ok) throw new Error('Network response was not ok');
+                if (!res.ok) throw new Error('Network response error');
                 return res.json();
             })
             .then(response => {
                 if(response.result === 'success') {
-                    showToast('🎉 บันทึกข้อมูลเข้า Google Sheet เรียบร้อยแล้วครับ!', 'success');
+                    // กล่องข้อความแจ้งเตือนเมื่อบันทึกเสร็จสิ้นเรียบร้อย
+                    alert('🎉 บันทึกข้อมูลเข้า Google Sheet สำเร็จเรียบร้อยแล้วครับพี่พีท!');
                     
-                    // รีเซ็ตฟอร์มแบบเคลียร์ค่าอย่างสะอาดสะอาด
                     document.getElementById('hhc-form').reset();
                     document.getElementById('visit-date').valueAsDate = new Date();
                     document.getElementById('upload-label').innerText = 'คลิกเพื่อเลือกรูปภาพประกอบ';
@@ -354,15 +356,14 @@
                         document.getElementById('other-dept-container').classList.add('hidden');
                     }
                 } else {
-                    showToast('❌ ข้อผิดพลาดจากระบบ: ' + response.error, 'error');
+                    alert('❌ เกิดข้อผิดพลาด: ' + response.error);
                 }
             })
             .catch(error => {
-                console.error('Submission error:', error);
-                showToast('❌ ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่อีกครั้ง', 'error');
+                console.error(error);
+                alert('❌ ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่อีกครั้ง');
             })
             .finally(() => {
-                // ปลดล็อกสถานะ ให้ฟอร์มกลับมาพร้อมใช้งานต่อ
                 isSubmitting = false;
                 submitBtn.disabled = false;
                 submitBtn.style.opacity = "1";
@@ -370,33 +371,64 @@
             });
         });
 
-        // -----------------------------------------------------------------
-        // 📊 ระบบดึงข้อมูลจาก GOOGLE SHEET ย้อนกลับมาแสดงผล (REALTIME FETCH)
-        // -----------------------------------------------------------------
+        // 📊 ฟังก์ชันดึงข้อมูลจากชีทมาประมวลผล (ทำกราฟวงกลม + ปิดเลข HN เพื่อความปลอดภัย PDPA)
         function fetchRealtimeData() {
             const scriptUrl = 'https://script.google.com/macros/s/AKfycbw69p5l86H5hNbxXoARnr5zhFw8YNuMMOc6w7JPPmfewO3A1CEIG1v6lmxRpV8huKIV/exec?read=true';
             
             fetch(scriptUrl)
             .then(res => res.json())
             .then(data => {
-                // อัปเดตสถิติจำนวนเคสรวมบนแดชบอร์ด
+                // [A] อัปเดตตัวเลขการ์ดสถิติเดิม
                 document.getElementById('dash-total-cases').innerText = data.length;
                 
-                if(data.length > 0) {
-                    const depts = data.map(item => item.department).filter(Boolean);
-                    const count = {};
-                    let maxDept = "ไม่มีข้อมูล";
-                    let maxCount = 0;
-                    depts.forEach(d => {
-                        count[d] = (count[d] || 0) + 1;
-                        if(count[d] > maxCount) { maxCount = count[d]; maxDept = d; }
+                const depts = data.map(item => item.department).filter(Boolean);
+                const countMap = {};
+                let maxDept = "ไม่มีข้อมูล";
+                let maxCount = 0;
+                
+                depts.forEach(d => {
+                    countMap[d] = (countMap[d] || 0) + 1;
+                    if(countMap[d] > maxCount) {
+                        maxCount = countMap[d];
+                        maxDept = d;
+                    }
+                });
+                document.getElementById('dash-top-dept').innerText = data.length > 0 ? maxDept : "-";
+
+                // [B] ระบบประมวลผลและวาดแผนภูมิวงกลม (Pie Chart) ด้วย Chart.js
+                if (data.length > 0) {
+                    const ctx = document.getElementById('deptChart').getContext('2d');
+                    
+                    // ทำลายกราฟเก่าทิ้งก่อนเพื่อป้องกันบัคกราฟซ้อนเวลาดึงข้อมูลใหม่
+                    if (myChart) { myChart.destroy(); }
+                    
+                    myChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: Object.keys(countMap),
+                            datasets: [{
+                                data: Object.values(countMap),
+                                backgroundColor: [
+                                    '#006a6a', '#1b3d6d', '#004d4d', '#4d9a9a', 
+                                    '#53719c', '#8cf3f3', '#89a7d3', '#b3cbe6'
+                                ],
+                                borderWidth: 2,
+                                borderColor: '#ffffff'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: { boxWidth: 12, font: { size: 11, family: 'sans-serif' } }
+                                }
+                            }
+                        }
                     });
-                    document.getElementById('dash-top-dept').innerText = maxDept;
-                } else {
-                    document.getElementById('dash-top-dept').innerText = "-";
                 }
 
-                // สร้างรายการแสดงประวัติการบันทึกข้อมูลล่าสุด
+                // [C] หน้าประวัติ: แสดงผลข้อมูลโดยทำการปกปิดเลข HN (PDPA Masking)
                 const historyList = document.getElementById('history-list');
                 historyList.innerHTML = '';
                 
@@ -405,18 +437,21 @@
                     return;
                 }
 
-                // แสดงผลอัปเดต 10 รายการล่าสุดจากท้ายตารางขึ้นก่อน
-                [...data].reverse().slice(0, 10).forEach(item => {
+                // แสดงเคสล่าสุดจากท้ายตารางขึ้นก่อน (ซ่อนเลข HN เป็นความลับสากล)
+                [...data].reverse().slice(0, 15).forEach(item => {
                     const card = document.createElement('div');
-                    card.className = "bg-surface-container-lowest p-4 rounded-xl shadow-sm border-l-4 border-secondary flex flex-col gap-1 transition-all hover:shadow-md";
+                    card.className = "bg-surface-container-lowest p-4 rounded-xl shadow-sm border-l-4 border-secondary flex flex-col gap-1 transition-all hover:shadow-md mb-3";
                     card.innerHTML = `
                         <div class="flex justify-between text-xs text-on-surface-variant font-medium">
                             <span>📅 วันที่รับบริการ: ${item.serviceDate || '-'}</span>
                             <span class="text-secondary font-bold flex items-center gap-1">
-                                <span class="w-2 h-2 rounded-full bg-secondary inline-block animate-pulse"></span> บันทึกสำเร็จ
+                                <span class="w-2 h-2 rounded-full bg-secondary inline-block"></span> บันทึกสำเร็จ
                             </span>
                         </div>
-                        <div class="font-bold text-primary mt-1">HN: ${item.hn || '-'}</div>
+                        <!-- ซ่อนเลข HN จริง เปลี่ยนเป็นเครื่องหมายตัวคูณเพื่อความปลอดภัยตามกฎหมาย PDPA -->
+                        <div class="font-bold text-primary mt-1 flex items-center gap-1.5">
+                            HN: <span class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded text-xs select-none tracking-widest">🔒 ***🔒***</span>
+                        </div>
                         <div class="text-sm text-on-surface-variant"><b class="text-on-surface">แผนก:</b> ${item.department || '-'}</div>
                         <div class="text-sm text-on-surface-variant"><b class="text-on-surface">วินิจฉัย:</b> ${item.diagnosis || '-'}</div>
                     `;
@@ -427,20 +462,9 @@
                 console.error('Fetch error:', err);
                 document.getElementById('dash-total-cases').innerText = "ERR";
                 document.getElementById('dash-top-dept').innerText = "ERROR";
-                document.getElementById('history-list').innerHTML = '<p class="text-center text-error py-4">ดึงข้อมูลไม่สำเร็จ กรุณาตรวจสอบการตั้งค่า Deployment ของ Apps Script</p>';
+                document.getElementById('history-list').innerHTML = '<p class="text-center text-error py-4">ดึงข้อมูลไม่สำเร็จ</p>';
             });
         }
-
-        // -----------------------------------------------------------------
-        // 🔔 TOAST NOTIFICATION WINDOW (โมดูลแจ้งเตือนแบบโปรเฟสชันนอล)
-        // -----------------------------------------------------------------
-        function showToast(message, type = 'success') {
-            // เช็คว่ามีกล่องเก่าอยู่ไหม ถ้ามีให้ลบออกก่อนเพื่อป้องกันการขึ้นค้างซ้อน
-            const oldToast = document.getElementById('pro-toast');
-            if (oldToast) oldToast.remove();
-
-            const toast = document.createElement('div');
-            toast.id = 'pro-toast';
-            
-            // ดีไซน์สีโทนพรีเมียมตามสถานะความสำเร็จหรือผิดพลาด
-            const bgColor = type === 'success' ? 'bg
+    </script>
+</body>
+</html>
