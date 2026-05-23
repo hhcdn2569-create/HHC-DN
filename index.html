@@ -108,4 +108,153 @@
             </form>
         </div>
 
-        <!-- 📊 หน้าที่ 2: สรุปผล (Dashboard เรียบลื่นดึงข้อมูลจริง
+        <!-- 📊 หน้าที่ 2: สรุปผล (Dashboard เรียบลื่นดึงข้อมูลจริง -->
+        <div id="view-dashboard" class="page-content">
+            <div class="mb-8">
+                <h2 class="font-headline-lg-mobile text-primary mb-2">แดชบอร์ดสรุปผล</h2>
+                <p class="text-on-surface-variant font-body-md">ภาพรวมสถิติการบันทึกข้อมูลจริงแบบเรียลไทม์</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-surface-container-lowest p-6 rounded-xl shadow-md text-center border-t-4 border-primary">
+                    <p class="text-on-surface-variant font-bold text-sm">จำนวนเคสที่บันทึกทั้งหมด</p>
+                    <p class="text-5xl font-bold text-primary my-4" id="dash-total-cases">กำลังโหลด...</p>
+                    <span class="text-xs bg-primary-fixed text-primary px-3 py-1 rounded-full">อัปเดตอัตโนมัติ</span>
+                </div>
+                <div class="bg-surface-container-lowest p-6 rounded-xl shadow-md text-center border-t-4 border-secondary">
+                    <p class="text-on-surface-variant font-bold text-sm">แผนกที่ส่งเคสเข้ามามากที่สุด</p>
+                    <p class="text-3xl font-bold text-secondary my-5" id="dash-top-dept">กำลังโหลด...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ⏳ หน้าที่ 3: ประวัติการบันทึก (History ดึงข้อมูลจริงจากชีท) -->
+        <div id="view-history" class="page-content">
+            <div class="mb-8">
+                <h2 class="font-headline-lg-mobile text-primary mb-2">ประวัติการบันทึก HHC</h2>
+                <p class="text-on-surface-variant font-body-md">รายการตรวจสอบข้อมูลล่าสุดจาก Google Sheet</p>
+            </div>
+            <div class="space-y-4" id="history-list">
+                <p class="text-center text-on-surface-variant">กำลังดึงข้อมูลประวัติจริง...</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 🧭 Navigation Bottom Bar แก้วิธีสลับหน้า (ไม่กองรวมกันแล้ว) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-outline-variant h-16 flex justify-around items-center max-w-[800px] mx-auto shadow-lg">
+        <button onclick="changeTab('view-form', this)" class="tab-btn flex flex-col items-center justify-center flex-1 text-primary font-bold">
+            <span class="material-symbols-outlined">edit_note</span>
+            <span class="text-xs">บันทึก</span>
+        </button>
+        <button onclick="changeTab('view-dashboard', this)" class="tab-btn flex flex-col items-center justify-center flex-1 text-on-surface-variant">
+            <span class="material-symbols-outlined">analytics</span>
+            <span class="text-xs">แดชบอร์ด</span>
+        </button>
+        <button onclick="changeTab('view-history', this)" class="tab-btn flex flex-col items-center justify-center flex-1 text-on-surface-variant">
+            <span class="material-symbols-outlined">history</span>
+            <span class="text-xs">ประวัติ</span>
+        </button>
+    </nav>
+
+    <script>
+        // กำหนดวันที่ปัจจุบันในฟอร์มโดยอัตโนมัติ
+        document.getElementById('visit-date').valueAsDate = new Date();
+
+        // ฟังก์ชันควบคุมการปิด-เปิดหน้าจอ (Tabs Navigation)
+        function changeTab(targetId, btnElement) {
+            document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('text-primary', 'font-bold');
+                btn.classList.add('text-on-surface-variant');
+            });
+            document.getElementById(targetId).classList.add('active');
+            btnElement.classList.remove('text-on-surface-variant');
+            btnElement.classList.add('text-primary', 'font-bold');
+            window.scrollTo(0,0);
+            
+            if (targetId === 'view-dashboard' || targetId === 'view-history') {
+                fetchRealtimeData();
+            }
+        }
+
+        // แสดงผลกล่องข้อความแผนกอื่นๆ
+        function toggleOther(val) {
+            const container = document.getElementById('other-dept-container');
+            const input = document.getElementById('other-dept');
+            if (val === 'อื่นๆ') {
+                container.classList.remove('hidden');
+                input.setAttribute('name', 'department');
+                document.getElementById('department').removeAttribute('name');
+            } else {
+                container.classList.add('hidden');
+                input.removeAttribute('name');
+                document.getElementById('department').setAttribute('name', 'department');
+            }
+        }
+
+        // เปลี่ยนชื่อป้ายอัปโหลดไฟล์
+        document.getElementById('image-file').addEventListener('change', function(e) {
+            if(e.target.files.length > 0) {
+                document.getElementById('upload-label').innerText = '✔️ เลือกรูปสำเร็จ: ' + e.target.files[0].name;
+            }
+        });
+
+        // 🌟 ฟังก์ชันดึงข้อมูลจาก Google Web App ย้อนกลับมาแสดงบนหน้าเว็บแบบเรียลไทม์
+        function fetchRealtimeData() {
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbw69p5l86H5hNbxXoARnr5zhFw8YNuMMOc6w7JPPmfewO3A1CEIG1v6lmxRpV8huKIV/exec?read=true';
+            
+            fetch(scriptUrl)
+            .then(res => res.json())
+            .then(data => {
+                // 1. จัดการหน้าแดชบอร์ด
+                document.getElementById('dash-total-cases').innerText = data.length;
+                
+                if(data.length > 0) {
+                    const depts = data.map(item => item.department).filter(Boolean);
+                    const count = {};
+                    let maxDept = "ไม่มีข้อมูล";
+                    let maxCount = 0;
+                    depts.forEach(d => {
+                        count[d] = (count[d] || 0) + 1;
+                        if(count[d] > maxCount) { maxCount = count[d]; maxDept = d; }
+                    });
+                    document.getElementById('dash-top-dept').innerText = maxDept;
+                } else {
+                    document.getElementById('dash-top-dept').innerText = "-";
+                }
+
+                // 2. จัดการหน้าประวัติ (ดึงมาสร้างการ์ดรายการล่าสุด)
+                const historyList = document.getElementById('history-list');
+                historyList.innerHTML = '';
+                
+                if(data.length === 0) {
+                    historyList.innerHTML = '<p class="text-center text-on-surface-variant py-4">ยังไม่มีประวัติข้อมูลในตารางชีท</p>';
+                    return;
+                }
+
+                // แสดงผลเรียงจากเคสล่าสุดขึ้นก่อน
+                data.reverse().slice(0, 10).forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "bg-surface-container-lowest p-4 rounded-xl shadow-sm border-l-4 border-secondary flex flex-col gap-1";
+                    card.innerHTML = `
+                        <div class="flex justify-between text-xs text-on-surface-variant font-medium">
+                            <span>📅 วันที่รับบริการ: ${item.serviceDate || '-'}</span>
+                            <span class="text-secondary font-bold">● บันทึกแล้ว</span>
+                        </div>
+                        <div class="font-bold text-primary mt-1">HN: ${item.hn || '-'}</div>
+                        <div class="text-sm text-on-surface-variant"><b class="text-on-surface">แผนก:</b> ${item.department || '-'}</div>
+                        <div class="text-sm text-on-surface-variant"><b class="text-on-surface">วินิจฉัย:</b> ${item.diagnosis || '-'}</div>
+                    `;
+                    historyList.appendChild(card);
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('dash-total-cases').innerText = "เอ๋อ";
+                document.getElementById('dash-top-dept').innerText = "พัง";
+                document.getElementById('history-list').innerHTML = '<p class="text-center text-error py-4">ดึงข้อมูลไม่สำเร็จ ข้อมูลใน Google Apps Script ยังไม่ได้เปิดสิทธิ์อ่านข้อมูล</p>';
+            });
+        }
+    </script>
+</body>
+</html>
