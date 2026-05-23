@@ -26,15 +26,15 @@
     <style>
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .form-input-focus:focus { outline: none; border-color: #002753; box-shadow: 0 0 0 1px #002753; }
-        body { background-color: #f8f9ff; color: #0b1c30; }
+        body { background-color: #f8f9ff; color: #0b1c30; min-height: 100vh; display: flex; flex-col: column; }
         .page-content { display: none; }
         .page-content.active { display: block; }
     </style>
 </head>
-<body class="font-body-md text-body-md mb-24 md:mb-0 md:pt-16">
+<body class="font-body-md text-body-md pb-24 md:pb-6 md:pt-16">
 
-    <!-- ส่วนหัว TopAppBar (รองรับ Responsive ทุกขนาดจอ) -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-surface shadow-sm flex items-center justify-between px-4 md:px-8 h-16 max-w-[800px] mx-auto">
+    <!-- ส่วนหัว TopAppBar (ปรับให้เต็มหน้าจอขอบถึงขอบทุกอุปกรณ์) -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-surface shadow-sm flex items-center justify-between px-4 md:px-6 h-16 w-full">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden flex-shrink-0">
                 <img alt="Hospital Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGchRZxpezkxRytbeAehlkXD-w9XqjcrBUZNgA5aZRiAC3oR5HAiXxzQeV4iDezoe7DRRFe6-kTGHIYeRe-kJDnQ6c8XRnekRiKYzY5nSVw5RBnf3u2YIt_-zrcCm9JQlH84bV_p2MhnwuuqwOlBlHfA32olfnz58hah6cVafgYDy91PuT1T1f3BOz9aja50-arxdqVwm-HDZzgZk3zCnXXJtA4R0bDOmtZstyRYXXWXfy5QkmoyMfISBtjF82T82c6YCzeE7WwK4"/>
@@ -47,18 +47,17 @@
         <button class="material-symbols-outlined text-primary p-2 hover:bg-surface-container-high rounded-full flex-shrink-0">account_circle</button>
     </header>
 
-    <!-- คอนเทนเนอร์หลัก ยืดหยุ่นตอบโจทย์ทุกขนาดอุปกรณ์ -->
-    <main class="max-w-[800px] mx-auto px-4 md:px-6 py-6 mt-16">
+    <!-- คอนเทนเนอร์หลัก แก้สัดส่วนขยายเต็มจอตามสรีระจอของทุกแพลตฟอร์ม -->
+    <main class="w-full flex-1 px-4 md:px-6 py-6 mt-16 mx-auto max-w-full sm:max-w-[95%] md:max-w-[90%] lg:max-w-[1200px]">
 
         <!-- 📑 หน้าที่ 1: บันทึกข้อมูล (Form) -->
         <div id="view-form" class="page-content active">
             <div class="mb-6">
-                <!-- ปรับแต่งสีคำว่า ระบบบันทึกข้อมูล HHC ให้เป็นสีน้ำเงินตามธีมหลักสอดรับกับปุ่มกด -->
                 <h2 class="text-[24px] md:text-[28px] font-bold text-primary mb-1">ระบบบันทึกข้อมูล HHC</h2>
                 <p class="text-on-surface-variant text-sm md:text-base">Home Health Care Data Entry</p>
             </div>
 
-            <form class="space-y-5 bg-surface-container-lowest p-5 md:p-6 rounded-xl shadow-md" id="hhc-form">
+            <form class="space-y-5 bg-surface-container-lowest p-5 md:p-6 rounded-xl shadow-md w-full" id="hhc-form">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="flex flex-col gap-1.5">
                         <label class="font-label-md text-on-surface text-sm" for="visit-date">วันที่</label>
@@ -137,7 +136,7 @@
             </div>
         </div>
 
-        <!-- ⏳ หน้าที่ 3: ประวัติการบันทีึก -->
+        <!-- ⏳ หน้าที่ 3: ประวัติการบันทึก -->
         <div id="view-history" class="page-content">
             <div class="mb-6">
                 <h2 class="text-[24px] md:text-[28px] font-bold text-primary mb-1">ประวัติการบันทึก HHC</h2>
@@ -150,8 +149,8 @@
 
     </main>
 
-    <!-- 🧭 Navigation Bottom Bar (Responsive และยึดตำแหน่งแม่นยำ) -->
-    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-outline-variant h-16 flex justify-around items-center max-w-[800px] mx-auto shadow-lg">
+    <!-- 🧭 Navigation Bottom Bar (ขยายเต็มขอบหน้าจอสำหรับทุกอุปกรณ์) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-outline-variant h-16 flex justify-around items-center w-full shadow-lg">
         <button onclick="changeTab('view-form', this)" class="tab-btn flex flex-col items-center justify-center flex-1 text-primary font-bold h-full">
             <span class="material-symbols-outlined text-2xl">edit_note</span>
             <span class="text-[11px] md:text-xs">บันทึก</span>
