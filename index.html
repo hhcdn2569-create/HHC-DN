@@ -1,124 +1,1056 @@
+<!-- บันทึกข้อมูล HHC (3-Menu Navigation) -->
 <!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบบันทึกข้อมูล HHC - กลุ่มงานพยาบาลชุมชน</title>
-    <style>
-        :root { --primary-color: #0d6efd; --bg-color: #f4f6fa; --text-color: #333; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: var(--text-color); padding-bottom: 70px; }
-        .app-container { max-width: 480px; margin: 0 auto; background: #ffffff; min-height: 100vh; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
-        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: #ffffff; height: 65px; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #e2e8f0; z-index: 1000; }
-        .nav-item { background: none; border: none; flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.75rem; color: #8e8e93; cursor: pointer; gap: 4px; }
-        .nav-item.active { color: #009688; font-weight: bold; }
-        .nav-icon { font-size: 1.3rem; }
-        .page { display: none; padding: 20px; box-sizing: border-box; }
-        .page.active { display: block; }
-        .header-title { font-size: 1.25rem; font-weight: bold; color: #212529; margin: 5px 0; }
-        .header-sub { font-size: 0.85rem; color: #6c757d; margin: 0 0 20px 0; }
-        .form-group { margin-bottom: 18px; }
-        label { display: block; margin-bottom: 6px; font-size: 0.9rem; font-weight: 600; color: #495057; }
-        input[type="text"], input[type="date"], select, textarea { width: 100%; padding: 12px; border: 1px solid #dee2e6; border-radius: 10px; box-sizing: border-box; font-size: 0.95rem; background-color: #fff; }
-        .upload-dashed { border: 2px dashed #ced4da; border-radius: 12px; padding: 25px 15px; text-align: center; cursor: pointer; background: #fafafa; }
-        .submit-btn { width: 100%; padding: 14px; background: var(--primary-color); color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        .stat-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 10px; }
-        .stat-card { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 14px; padding: 16px; }
-        .progress-circle { width: 90px; height: 90px; border-radius: 50%; background: conic-gradient(#009688 94.2%, #e9ecef 0); display: flex; align-items: center; justify-content: center; margin: 15px auto; position: relative; }
-        .progress-circle::after { content: "94.2%"; position: absolute; width: 74px; height: 74px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .history-card { background: #ffffff; border: 1px solid #edf2f7; border-radius: 12px; padding: 14px; margin-bottom: 12px; border-left: 4px solid #009688; }
-        .history-meta { display: flex; justify-content: space-between; font-size: 0.8rem; color: #adb5bd; }
-        .tag { font-size: 0.75rem; padding: 4px 10px; border-radius: 6px; background: #e0f2f1; color: #00796b; }
+
+<html class="light" lang="th"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>ระบบบันทึกข้อมูล HHC - สมเด็จพระสังฆราช</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;family=Public+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#121e1c",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#d6e3ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-primary-fixed": "#001b3d",
+                        "on-error": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "background": "#f8f9ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#002020",
+                        "surface-dim": "#cbdbf5",
+                        "on-tertiary-fixed-variant": "#3d4947",
+                        "surface-variant": "#d3e4fe",
+                        "tertiary-container": "#33403e",
+                        "surface-container-low": "#eff4ff",
+                        "primary-container": "#1b3d6d",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#dce9ff",
+                        "surface-tint": "#405f91",
+                        "secondary-fixed-dim": "#6fd7d6",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#8cf3f3",
+                        "on-primary-container": "#8aa9e0",
+                        "on-surface": "#0b1c30",
+                        "on-secondary-fixed-variant": "#004f4f",
+                        "tertiary-fixed-dim": "#bcc9c7",
+                        "outline": "#747780",
+                        "on-tertiary-container": "#9eaba9",
+                        "on-secondary-container": "#007070",
+                        "surface-container": "#e5eeff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#264777",
+                        "tertiary-fixed": "#d7e5e2",
+                        "on-surface-variant": "#43474f",
+                        "inverse-surface": "#213145",
+                        "primary-fixed-dim": "#a9c7ff",
+                        "inverse-primary": "#a9c7ff",
+                        "primary": "#002753",
+                        "outline-variant": "#c4c6d0",
+                        "surface-bright": "#f8f9ff",
+                        "tertiary": "#1e2a28",
+                        "secondary": "#006a6a",
+                        "on-background": "#0b1c30",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#8cf3f3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "max-width": "1440px",
+                        "base": "8px",
+                        "margin-desktop": "48px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Public Sans"],
+                        "label-sm": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "headline-md": ["Manrope"],
+                        "headline-lg": ["Manrope"],
+                        "headline-xl": ["Manrope"],
+                        "label-md": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-xl": ["40px", {"lineHeight": "48px", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .form-input-focus:focus {
+            outline: none;
+            border-color: #002753;
+            box-shadow: 0 0 0 1px #002753;
+        }
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+        }
+        .upload-zone-active {
+            border-color: #006a6a;
+            background-color: #e5eeff;
+        }
     </style>
 </head>
-<body>
-
-<div class="app-container">
-
-    <!-- 🌟 หน้าที่ 1: บันทึกข้อมูล HHC -->
-    <div id="page-form" class="page active">
-        <div class="header-title">ระบบบันทึกข้อมูล HHC (กลุ่มงานพยาบาลชุมชน)</div>
-        <div class="header-sub">Home Health Care Data Entry</div>
-        
-        <form action="https://script.google.com/macros/s/AKfycbw69p5l86H5hNbxXoARnr5zhFw8YNuMMOc6w7JPPmfewO3A1CEIG1v6lmxRpV8huKIV/exec" method="POST" id="hhcForm">
-            <div class="form-group">
-                <label>วันที่รับบริการ</label>
-                <input type="date" id="serviceDate" name="serviceDate" required>
-            </div>
-            <div class="form-group">
-                <label>เลขที่บัตรผู้ป่วย (HN)</label>
-                <input type="text" id="hn" name="hn" placeholder="เช่น 66000123" required>
-            </div>
-            <div class="form-group">
-                <label>หน่วยงาน/แผนก</label>
-                <select id="department" name="department" required>
-                    <option value="">เลือกหน่วยงาน</option>
-                    <option value="อายุรกรรม">อายุรกรรม</option>
-                    <option value="โรคหัวใจ">โรคหัวใจ</option>
-                    <option value="ระบบประสาท">ระบบประสาท</option>
-                    <option value="ศัลยกรรมกระดูก">ศัลยกรรมกระดูก</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>คำวินิจฉัย (Diagnosis)</label>
-                <textarea id="diagnosis" name="diagnosis" rows="4" placeholder="ระบุรายละเอียดอาการและการวินิจฉัย..." required></textarea>
-            </div>
-            <div class="form-group">
-                <label>แนบรูปภาพประกอบ</label>
-                <div class="upload-dashed" onclick="document.getElementById('imageFile').click()">
-                    <span id="uploadText">📷 คลิกเพื่อจำลองการอัปโหลดรูปภาพ</span>
-                    <input type="file" id="imageFile" name="image" accept="image/*" style="display: none;">
-                </div>
-            </div>
-            <button type="submit" class="submit-btn">💾 บันทึกข้อมูลเข้า Google Sheet</button>
-        </form>
-    </div>
-
-    <!-- 🌟 หน้าที่ 2: แดชบอร์ด -->
-    <div id="page-dashboard" class="page">
-        <div class="header-title">แดชบอร์ดสรุปผล</div>
-        <div class="header-sub">ภาพรวมการทำงานในระบบพยาบาลชุมชน</div>
-        <div class="stat-grid">
-            <div class="stat-card">
-                <div style="color: #6c757d; font-size: 0.85rem;">เคสทั้งหมดวันนี้</div>
-                <div style="font-size: 2rem; font-weight: bold;">664</div>
-            </div>
-            <div class="stat-card" style="text-align: center;">
-                <div style="color: #6c757d; font-size: 0.85rem;">อัตราการทำงานสำเร็จ</div>
-                <div class="progress-circle"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 🌟 หน้าที่ 3: ประวัติ -->
-    <div id="page-history" class="page">
-        <div class="header-title">ประวัติการบันทึก HHC</div>
-        <div class="header-sub">รายการตรวจสอบข้อมูลย้อนหลัง</div>
-        <div class="history-card">
-            <div class="history-meta"><span>24 พ.ค. 2026 - 14:30</span><span style="color:#009688;">● สำเร็จ</span></div>
-            <div style="font-weight: bold; margin: 5px 0;">HN: 65-XXXXXX</div>
-            <span class="tag">อายุรกรรม</span>
-        </div>
-    </div>
-
-    <!-- เมนูบาร์ด้านล่างเพื่อสลับหน้าจอ -->
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchPage('page-form', this)"><span>📝 บันทึก</span></button>
-        <button class="nav-item" onclick="switchPage('page-dashboard', this)"><span>📊 แดชบอร์ด</span></button>
-        <button class="nav-item" onclick="switchPage('page-history', this)"><span>⏳ ประวัติ</span></button>
-    </nav>
+<body class="font-body-md text-body-md mb-20 md:mb-0 md:pt-16">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim shadow-sm flex items-center justify-between px-margin-mobile h-16 w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="Hospital Logo" class="w-full h-full object-cover" data-alt="A professional medical logo icon featuring a stylized caduceus and healing cross, rendered in deep navy blue and medical teal against a clean white circular background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGchRZxpezkxRytbeAehlkXD-w9XqjcrBUZNgA5aZRiAC3oR5HAiXxzQeV4iDezoe7DRRFe6-kTGHIYeRe-kJDnQ6c8XRnekRiKYzY5nSVw5RBnf3u2YIt_-zrcCm9JQlH84bV_p2MhnwuuqwOlBlHfA32olfnz58hah6cVafgYDy91PuT1T1f3BOz9aja50-arxdqVwm-HDZzgZk3zCnXXJtA4R0bDOmtZstyRYXXWXfy5QkmoyMfISBtjF82T82c6YCzeE7WwK4"/>
 </div>
-
+<div class="flex flex-col">
+<h1 class="font-headline-md text-[18px] md:text-headline-md-mobile font-bold text-primary dark:text-primary-fixed-dim leading-tight">กลุ่มงานพยาบาลชุมชน</h1>
+<p class="text-[12px] md:text-[14px] text-on-surface-variant font-medium leading-tight">โรงพยาบาลสมเด็จพระสังฆราช (อมฺพรมหาเถร)</p>
+</div>
+</div>
+<button class="material-symbols-outlined text-primary dark:text-primary-fixed-dim p-2 hover:bg-surface-container-high transition-colors rounded-full active:opacity-80">account_circle</button>
+</header>
+<main class="max-w-[800px] mx-auto px-margin-mobile py-8 mt-16 md:mt-0">
+<!-- Breadcrumb / Section Title -->
+<div class="mb-8">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary mb-2">ระบบบันทึกข้อมูล HHC (กลุ่มงานพยาบาลชุมชน)</h2>
+<p class="text-on-surface-variant font-body-md">Home Health Care Data Entry</p>
+</div>
+<!-- Entry Form Card -->
+<form class="space-y-gutter bg-surface-container-lowest p-6 md:p-8 rounded-xl shadow-[0px_2px_8px_rgba(27,61,109,0.08)]" id="hhc-form">
+<!-- Bento Grid Section 1: Basic Info -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Date Field -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface" for="visit-date">วันที่รับบริการ</label>
+<div class="relative">
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus transition-all" id="visit-date" placeholder="เลือกวันที่" required="" type="date"/>
+</div>
+</div>
+<!-- HN Field -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface" for="hn-number">เลขที่บัตรผู้ป่วย (HN)</label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus transition-all" id="hn-number" placeholder="เช่น 66000123" required="" type="text"/>
+</div>
+</div>
+<!-- Department Section -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface" for="department">หน่วยงาน/แผนก</label>
+<select class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus transition-all appearance-none cursor-pointer" id="department" onchange="toggleOther(this.value)">
+<option disabled="" selected="" value="">เลือกหน่วยงาน</option>
+<option value="ER">ER</option>
+<option value="OPD">OPD</option>
+<option value="ICU">ICU</option>
+<option value="กุมาร">กุมาร</option>
+<option value="ORT">ORT</option>
+<option value="ศัลยกรรม">ศัลยกรรม</option>
+<option value="นรีเวช">นรีเวช</option>
+<option value="จักษุ">จักษุ</option>
+<option value="Stroke">Stroke</option>
+<option value="ฉ.2">ฉ.2</option>
+<option value="ฉ.3">ฉ.3</option>
+<option value="ฉ.4">ฉ.4</option>
+<option value="ฉ.5">ฉ.5</option>
+<option value="ฉ.6">ฉ.6</option>
+<option value="ฉ.7">ฉ.7</option>
+<option value="อายุรกรรม (ชาย)">อายุรกรรม (ชาย)</option>
+<option value="อายุรกรรม (หญิง)">อายุรกรรม (หญิง)</option>
+<option value="อื่นๆ">อื่นๆ (ระบุเพิ่มเติม)</option>
+</select>
+</div>
+<!-- Other Department Text Area -->
+<div class="hidden flex flex-col gap-2 animate-in fade-in slide-in-from-top-2 duration-300" id="other-dept-container">
+<label class="font-label-md text-label-md text-on-surface" for="other-dept">ระบุหน่วยงานอื่น ๆ</label>
+<textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus transition-all" id="other-dept" placeholder="โปรดระบุ..." rows="2"></textarea>
+</div>
+<!-- Diagnosis Section -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface" for="diagnosis">คำวินิจฉัย (Diagnosis)</label>
+<textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus transition-all" id="diagnosis" placeholder="ระบุรายละเอียดอาการและการวินิจฉัย..." required="" rows="4"></textarea>
+</div>
+<!-- File Upload Section -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface">แนบรูปภาพประกอบ</label>
+<div class="relative border-2 border-dashed border-outline-variant rounded-xl p-8 flex flex-col items-center justify-center gap-3 bg-tertiary-container/5 hover:bg-tertiary-container/10 transition-all cursor-pointer group" id="drop-zone">
+<input accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="file-upload" multiple="" type="file"/>
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_a_photo</span>
+</div>
+<div class="text-center">
+<p class="font-label-md text-on-surface">คลิกเพื่ออัปโหลด หรือลากไฟล์มาวางที่นี่</p>
+<p class="text-label-sm text-on-surface-variant mt-1">PNG, JPG, HEIC (สูงสุด 10MB)</p>
+</div>
+<div class="mt-4 flex flex-wrap gap-2" id="preview-container"></div>
+</div>
+</div>
+<!-- Submit Button Area -->
+<div class="pt-4">
+<button class="w-full md:w-auto md:min-w-[200px] bg-primary-container text-white py-4 px-8 rounded-xl font-headline-md text-headline-md-mobile hover:bg-primary transition-all active:scale-[0.98] shadow-md flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined">save</span>
+                    บันทึกข้อมูล
+                </button>
+</div>
+</form>
+</main>
+<!-- BottomNavBar (Visible on Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe bg-surface-container dark:bg-surface-container-lowest shadow-[0px_-2px_8px_rgba(27,61,109,0.08)]"><a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-xl px-4 py-1 active:scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">edit_note</span>
+<span class="font-label-sm text-label-sm">บันทึก</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-variant/50 transition-all active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">แดชบอร์ด</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-variant/50 transition-all active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-sm text-label-sm">ประวัติ</span>
+</a></nav>
+<!-- Success Toast (Hidden by default) -->
+<div class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-on-secondary-container text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300 z-[100]" id="success-toast">
+<span class="material-symbols-outlined">check_circle</span>
+<span class="font-label-md">บันทึกข้อมูลสำเร็จ</span>
+</div>
 <script>
-    document.getElementById('serviceDate').valueAsDate = new Date();
-    function switchPage(pageId, element) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
-        element.classList.add('active');
+        // Toggle "Other" Department Field
+        function toggleOther(value) {
+            const container = document.getElementById('other-dept-container');
+            if (value === 'อื่นๆ') {
+                container.classList.remove('hidden');
+                document.getElementById('other-dept').setAttribute('required', 'true');
+            } else {
+                container.classList.add('hidden');
+                document.getElementById('other-dept').removeAttribute('required');
+            }
+        }
+
+        // Image Preview Logic
+        const fileInput = document.getElementById('file-upload');
+        const previewContainer = document.getElementById('preview-container');
+        const dropZone = document.getElementById('drop-zone');
+
+        fileInput.addEventListener('change', function(e) {
+            handleFiles(this.files);
+        });
+
+        // Drag and Drop Effects
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.add('upload-zone-active');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('upload-zone-active');
+            }, false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        });
+
+        function handleFiles(files) {
+            previewContainer.innerHTML = '';
+            [...files].forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const div = document.createElement('div');
+                        div.className = 'relative w-20 h-20 rounded-lg overflow-hidden border border-outline-variant';
+                        div.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+                        previewContainer.appendChild(div);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Form Submission Intercept
+        document.getElementById('hhc-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Interaction Feedback
+            const toast = document.getElementById('success-toast');
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                this.reset();
+                previewContainer.innerHTML = '';
+                document.getElementById('other-dept-container').classList.add('hidden');
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('visit-date').value = today;
+            }, 3000);
+        });
+
+        // Set default date to today
+        window.onload = () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('visit-date').value = today;
+        };
+    </script>
+</body></html>
+
+<!-- แดชบอร์ดสรุปผล (3-Menu Navigation) -->
+<!DOCTYPE html>
+
+<html class="light" lang="th"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>แดชบอร์ด HHC แบบเรียลไทม์ | สมเด็จพระสังฆราช</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&amp;family=Public+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#121e1c",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed": "#d6e3ff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-primary-fixed": "#001b3d",
+                    "on-error": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "background": "#f8f9ff",
+                    "surface-container-highest": "#d3e4fe",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed": "#002020",
+                    "surface-dim": "#cbdbf5",
+                    "on-tertiary-fixed-variant": "#3d4947",
+                    "surface-variant": "#d3e4fe",
+                    "tertiary-container": "#33403e",
+                    "surface-container-low": "#eff4ff",
+                    "primary-container": "#1b3d6d",
+                    "error-container": "#ffdad6",
+                    "surface-container-high": "#dce9ff",
+                    "surface-tint": "#405f91",
+                    "secondary-fixed-dim": "#6fd7d6",
+                    "on-secondary": "#ffffff",
+                    "secondary-container": "#8cf3f3",
+                    "on-primary-container": "#8aa9e0",
+                    "on-surface": "#0b1c30",
+                    "on-secondary-fixed-variant": "#004f4f",
+                    "tertiary-fixed-dim": "#bcc9c7",
+                    "outline": "#747780",
+                    "on-tertiary-container": "#9eaba9",
+                    "on-secondary-container": "#007070",
+                    "surface-container": "#e5eeff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#264777",
+                    "tertiary-fixed": "#d7e5e2",
+                    "on-surface-variant": "#43474f",
+                    "inverse-surface": "#213145",
+                    "primary-fixed-dim": "#a9c7ff",
+                    "inverse-primary": "#a9c7ff",
+                    "primary": "#002753",
+                    "outline-variant": "#c4c6d0",
+                    "surface-bright": "#f8f9ff",
+                    "tertiary": "#1e2a28",
+                    "secondary": "#006a6a",
+                    "on-background": "#0b1c30",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#8cf3f3"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "max-width": "1440px",
+                    "base": "8px",
+                    "margin-desktop": "48px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Public Sans"],
+                    "label-sm": ["Public Sans"],
+                    "body-md": ["Public Sans"],
+                    "headline-lg-mobile": ["Manrope"],
+                    "headline-md": ["Manrope"],
+                    "headline-lg": ["Manrope"],
+                    "headline-xl": ["Manrope"],
+                    "label-md": ["Public Sans"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "headline-xl": ["40px", {"lineHeight": "48px", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        vertical-align: middle;
+      }
+      .chart-container {
+        position: relative;
+      }
+      .clinical-shadow {
+        box-shadow: 0px 2px 8px rgba(27, 61, 109, 0.08);
+      }
+      .glass-surface {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
     }
-    document.getElementById('imageFile').addEventListener('change', function(e) {
-        if(e.target.files.length > 0) document.getElementById('uploadText').innerText = '✔️ เลือกไฟล์สำเร็จ: ' + e.target.files[0].name;
-    });
-</script>
-</body>
-</html>
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen pb-24 md:pb-0 md:pt-16">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-margin-mobile h-20 w-full bg-surface dark:bg-surface-dim shadow-sm border-b border-outline-variant"><div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-primary-container clinical-shadow shrink-0">
+<img alt="Hospital Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdn73VHZf_RiWe2Pjd87LWZGrrvGg8mnc9h0axEIPXsTRhAQWXyN8IkmYIGHX_P_MFaNRpUe4dAMlYAIUXmU6AGNINxZu6aaCNztNd6KeGohp0bs60STVgkdMEpXXxvw9vOlUIlvrDCPHbbOgmfBPFSc5a3tdPMLW5uCCq67zMCAUFgGGe8VMzTFb79fceFXnZ39qtDzamaA3HMZfLekh1JizOUM4rss2EPrd1fkbdzNeZYFQcMhs-QosgnInqwBPjX0fOYtgZpc4"/>
+</div>
+<div class="flex flex-col">
+<h1 class="font-headline-md text-base md:text-lg font-bold text-primary dark:text-primary-fixed-dim leading-tight">
+            กลุ่มงานพยาบาลชุมชน
+        </h1>
+<p class="text-on-surface-variant text-label-sm font-label-sm">
+            โรงพยาบาลสมเด็จพระสังฆราช (อมฺพรมหาเถร)
+        </p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined p-2 rounded-full text-primary hover:bg-surface-container-high transition-colors">search</button>
+<button class="material-symbols-outlined p-2 rounded-full text-primary hover:bg-surface-container-high transition-colors">notifications</button>
+<span class="material-symbols-outlined text-primary text-3xl">account_circle</span>
+</div></header>
+<main class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-8">
+<!-- Dashboard Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">ระบบภาพรวม</h2>
+<p class="text-on-surface-variant font-body-md">ตัวชี้วัดประสิทธิภาพการพยาบาลชุมชนแบบเรียลไทม์</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-lg text-label-md font-label-md hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">calendar_today</span>
+                    วันนี้: 24 ต.ค. 2566
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-label-md font-label-md active:opacity-80 transition-opacity" style="transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                    ส่งออก PDF
+                </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Summary Stats -->
+<div class="md:col-span-4 clinical-shadow bg-surface-container-lowest p-6 rounded-xl flex flex-col justify-between group hover:border-primary border border-transparent transition-all">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant mb-1">เคสทั้งหมดวันนี้</p>
+<h3 class="font-headline-xl text-headline-xl text-primary">663</h3>
+</div>
+<div class="p-3 bg-primary-container rounded-lg text-white">
+<span class="material-symbols-outlined">clinical_notes</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-2">
+<span class="text-secondary font-label-md flex items-center">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+                        12%
+                    </span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">เทียบกับค่าเฉลี่ยเมื่อวาน</span>
+</div>
+<!-- Mini Sparkline Placeholder -->
+<div class="h-12 w-full mt-4 flex items-end gap-1">
+<div class="w-full bg-primary/10 h-[40%] rounded-t-sm"></div>
+<div class="w-full bg-primary/20 h-[60%] rounded-t-sm"></div>
+<div class="w-full bg-primary/10 h-[30%] rounded-t-sm"></div>
+<div class="w-full bg-primary/40 h-[80%] rounded-t-sm"></div>
+<div class="w-full bg-primary/30 h-[50%] rounded-t-sm"></div>
+<div class="w-full bg-primary/60 h-[90%] rounded-t-sm"></div>
+<div class="w-full bg-primary h-[100%] rounded-t-sm" style="transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+</div>
+</div>
+<div class="md:col-span-4 clinical-shadow bg-surface-container-lowest p-6 rounded-xl border border-transparent">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant mb-1">อัตราการทำงานสำเร็จ</p>
+<h3 class="font-headline-xl text-headline-xl text-primary">94.2%</h3>
+</div>
+<div class="p-3 bg-secondary-container rounded-lg text-on-secondary-container">
+<span class="material-symbols-outlined">verified</span>
+</div>
+</div>
+<!-- Donut Chart -->
+<div class="relative flex justify-center py-2">
+<svg class="w-32 h-32 transform -rotate-90">
+<circle class="text-surface-container-high" cx="64" cy="64" fill="transparent" r="50" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-secondary" cx="64" cy="64" fill="transparent" r="50" stroke="currentColor" stroke-dasharray="314.159" stroke-dashoffset="18.2" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-label-md font-label-md text-secondary">เป้าหมาย: 95%</span>
+</div>
+</div>
+</div>
+<div class="md:col-span-4 clinical-shadow bg-surface-container-lowest p-6 rounded-xl border border-transparent">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant mb-1">เจ้าหน้าที่ปฏิบัติงาน</p>
+<h3 class="font-headline-xl text-headline-xl text-primary">42</h3>
+</div>
+<div class="p-3 bg-tertiary-fixed text-on-tertiary-fixed rounded-lg">
+<span class="material-symbols-outlined">medical_services</span>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<span class="text-label-sm font-label-sm">ปฏิบัติหน้าที่</span>
+</div>
+<span class="text-label-md font-label-md">38</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+<span class="text-label-sm font-label-sm">พักเบรก</span>
+</div>
+<span class="text-label-md font-label-md">4</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[90%]"></div>
+</div>
+</div>
+</div>
+<!-- Top Departments - Large Bar Chart Area -->
+<div class="md:col-span-8 clinical-shadow bg-surface-container-lowest p-6 rounded-xl">
+<div class="flex justify-between items-center mb-8">
+<h4 class="font-headline-md text-primary">ผลการดำเนินงานแยกตามแผนก</h4>
+<select class="border-none bg-surface-container text-label-md font-label-md rounded-lg py-1 pl-3 pr-8 focus:ring-primary">
+<option>ปริมาณเคส</option>
+<option>ระยะเวลารอคอย</option>
+</select>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-label-md font-label-md">
+<span class="">อายุรกรรมผู้สูงอายุ</span>
+<span class="text-primary font-bold">45 เคส</span>
+</div>
+<div class="w-full bg-surface-container-high h-4 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[85%] rounded-full" style="transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-md font-label-md">
+<span class="">หลังผ่าตัด</span>
+<span class="text-primary font-bold">32 เคส</span>
+</div>
+<div class="w-full bg-surface-container-high h-4 rounded-full overflow-hidden">
+<div class="bg-primary/80 h-full w-[65%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-md font-label-md">
+<span class="">โรคเรื้อรัง</span>
+<span class="text-primary font-bold">28 เคส</span>
+</div>
+<div class="w-full bg-surface-container-high h-4 rounded-full overflow-hidden">
+<div class="bg-primary/60 h-full w-[55%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-md font-label-md">
+<span class="">ประคับประคอง</span>
+<span class="text-primary font-bold">23 เคส</span>
+</div>
+<div class="w-full bg-surface-container-high h-4 rounded-full overflow-hidden">
+<div class="bg-primary/40 h-full w-[45%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity / Trends -->
+<div class="md:col-span-4 clinical-shadow bg-surface-container-lowest p-6 rounded-xl flex flex-col">
+<h4 class="font-headline-md text-primary mb-6">การแจ้งเตือนล่าสุด</h4>
+<div class="flex-1 space-y-4">
+<div class="flex gap-4 p-3 bg-error-container/30 rounded-lg">
+<span class="material-symbols-outlined text-error">warning</span>
+<div>
+<p class="text-label-md font-label-md text-on-error-container">ระยะเวลารอคอยวิกฤต</p>
+<p class="text-label-sm text-on-surface-variant">แผนกผู้สูงอายุรอคอยเกิน 4 ชม. (Dept. Ref: GD-XXXXX)</p>
+</div>
+</div>
+<div class="flex gap-4 p-3 bg-secondary-container/20 rounded-lg">
+<span class="material-symbols-outlined text-secondary">task_alt</span>
+<div>
+<p class="text-label-md font-label-md text-on-secondary-container">บรรลุโควตาแล้ว</p>
+<p class="text-label-sm text-on-surface-variant">บรรลุเป้าหมายรายวันหลังผ่าตัด (Ref: PO-XXXXX)</p>
+</div>
+</div>
+<div class="flex gap-4 p-3 hover:bg-surface-container transition-colors rounded-lg cursor-pointer">
+<span class="material-symbols-outlined text-outline">schedule</span>
+<div>
+<p class="text-label-md font-label-md">เปลี่ยนกะพยาบาล</p>
+<p class="text-label-sm text-on-surface-variant">กะดึกเข้าเวรในอีก 45 นาที</p>
+</div>
+</div>
+</div>
+<button class="mt-6 w-full py-2 text-primary font-label-md text-label-md border border-outline-variant rounded-lg hover:bg-surface-container transition-colors">
+                    ดูบันทึกเหตุการณ์
+                </button>
+</div>
+</div>
+<!-- Secondary Section: Geographical or List -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 clinical-shadow bg-surface-container-lowest rounded-xl overflow-hidden min-h-[400px] flex flex-col">
+<div class="p-6">
+<h4 class="font-headline-md text-primary">การกระจายตัวของเคส</h4>
+</div>
+<div class="flex-1 relative bg-surface-container-high">
+<img alt="Service Map" class="w-full h-full object-cover grayscale opacity-50" data-alt="A sophisticated data visualization map of Bangkok, Thailand, showing home healthcare service distribution. The map uses a clean, light-mode architectural style with roads and districts faintly outlined in slate gray. Overlaid on the map are glowing pulse markers in deep navy blue and bright teal, indicating active healthcare visits. The overall aesthetic is professional, technological, and calm, suitable for a medical command center dashboard." data-location="Bangkok" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmGdCQdmznfjtp8Z21VFP8NOJrIbMxgxk9_LMpjcn5iFu7Z1NFcCuWbjL_cz99mexuNZLreg_QQtL68Cix_jn7xcomXADWXx47ESoLiOt-I0yQnrLPGcPskFelNly9izSeYGP0qGZus1A7hM1aw254cSHMwaydgr96YgAQAIqY-DkW3mSQqm_oPsGS-GCdYNShaMUy37ziyYoWKTZfEHAR81fu2tFmc27yfa6ljCy6FUzkikwkN-AnP9zT6-Ctv7Euu7J_ZRV42S8"/>
+<div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm p-4 rounded-lg clinical-shadow">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-3 h-3 rounded-full bg-primary" style="transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);"></span>
+<span class="text-label-sm">ความหนาแน่นสูง</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-secondary"></span>
+<span class="text-label-sm">กำลังเยี่ยมบ้าน</span>
+</div>
+</div>
+</div>
+</div>
+<div class="clinical-shadow bg-surface-container-lowest p-6 rounded-xl">
+<h4 class="font-headline-md text-primary mb-6">ความพึงพอใจของผู้ป่วย</h4>
+<div class="space-y-6">
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="text-label-md font-label-md">ความพึงพอใจโดยรวม</span>
+<span class="text-secondary font-bold">4.8/5.0</span>
+</div>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+</div>
+<div class="p-4 bg-tertiary-container text-on-tertiary-container rounded-lg">
+<p class="text-body-md italic mb-2">"ทีมงาน HHC ยอดเยี่ยมมาก การอัปเดตแบบเรียลไทม์ผ่านแอปช่วยให้ครอบครัวประสานงานกันได้ง่ายขึ้นมาก"</p>
+<p class="text-label-sm font-label-md text-right">ความคิดเห็นจากญาติผู้ป่วย — คุณสมชาย</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe bg-surface-container dark:bg-surface-container-lowest shadow-lg md:hidden"><a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-variant/50 transition-all active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="font-label-sm text-label-sm">บันทึก</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-xl px-4 py-1 active:scale-95 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-sm text-label-sm">แดชบอร์ด</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-variant/50 transition-all active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-sm text-label-sm">ประวัติ</span>
+</a></nav>
+<script>
+        // Simple micro-interaction for chart bars
+        document.querySelectorAll('.bg-primary').forEach(bar => {
+            const width = bar.style.width;
+            bar.style.width = '0%';
+            setTimeout(() => {
+                bar.style.transition = 'width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                bar.style.width = width;
+            }, 300);
+        });
+
+        // Dashboard refresh simulation
+        setInterval(() => {
+            const totalCases = document.querySelector('h3.font-headline-xl');
+            if (totalCases && Math.random() > 0.7) {
+                const current = parseInt(totalCases.innerText);
+                totalCases.innerText = current + 1;
+                totalCases.classList.add('text-secondary');
+                setTimeout(() => totalCases.classList.remove('text-secondary'), 1000);
+            }
+        }, 5000);
+    </script>
+</body></html>
+
+<!-- ประวัติการบันทึก (3-Menu Navigation) -->
+<!DOCTYPE html>
+
+<html lang="th" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>ประวัติการบันทึก - HHC Records</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&amp;family=Manrope:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        @supports (-webkit-touch-callout: none) {
+            .pb-safe {
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+        }
+        /* Custom hide scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#121e1c",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed": "#d6e3ff",
+                      "inverse-on-surface": "#eaf1ff",
+                      "on-primary-fixed": "#001b3d",
+                      "on-error": "#ffffff",
+                      "surface": "#f8f9ff",
+                      "background": "#f8f9ff",
+                      "surface-container-highest": "#d3e4fe",
+                      "on-primary": "#ffffff",
+                      "on-secondary-fixed": "#002020",
+                      "surface-dim": "#cbdbf5",
+                      "on-tertiary-fixed-variant": "#3d4947",
+                      "surface-variant": "#d3e4fe",
+                      "tertiary-container": "#33403e",
+                      "surface-container-low": "#eff4ff",
+                      "primary-container": "#1b3d6d",
+                      "error-container": "#ffdad6",
+                      "surface-container-high": "#dce9ff",
+                      "surface-tint": "#405f91",
+                      "secondary-fixed-dim": "#6fd7d6",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#8cf3f3",
+                      "on-primary-container": "#8aa9e0",
+                      "on-surface": "#0b1c30",
+                      "on-secondary-fixed-variant": "#004f4f",
+                      "tertiary-fixed-dim": "#bcc9c7",
+                      "outline": "#747780",
+                      "on-tertiary-container": "#9eaba9",
+                      "on-secondary-container": "#007070",
+                      "surface-container": "#e5eeff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#264777",
+                      "tertiary-fixed": "#d7e5e2",
+                      "on-surface-variant": "#43474f",
+                      "inverse-surface": "#213145",
+                      "primary-fixed-dim": "#a9c7ff",
+                      "inverse-primary": "#a9c7ff",
+                      "primary": "#002753",
+                      "outline-variant": "#c4c6d0",
+                      "surface-bright": "#f8f9ff",
+                      "tertiary": "#1e2a28",
+                      "secondary": "#006a6a",
+                      "on-background": "#0b1c30",
+                      "error": "#ba1a1a",
+                      "secondary-fixed": "#8cf3f3"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "max-width": "1440px",
+                      "base": "8px",
+                      "margin-desktop": "48px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Public Sans"],
+                      "label-sm": ["Public Sans"],
+                      "body-md": ["Public Sans"],
+                      "headline-lg-mobile": ["Manrope"],
+                      "headline-md": ["Manrope"],
+                      "headline-lg": ["Manrope"],
+                      "headline-xl": ["Manrope"],
+                      "label-md": ["Public Sans"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "headline-xl": ["40px", {"lineHeight": "48px", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim shadow-sm flex items-center justify-between px-margin-mobile h-16 w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">local_hospital</span>
+</div>
+<div class="flex flex-col">
+<h1 class="font-headline-md text-[18px] leading-tight text-primary dark:text-primary-fixed-dim font-bold">กลุ่มงานพยาบาลชุมชน</h1>
+<p class="text-label-sm text-[12px] text-on-surface-variant dark:text-on-tertiary-container">โรงพยาบาลสมเด็จพระสังฆราช (อมฺพรมหาเถร)</p>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-primary dark:text-primary-fixed-dim hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</header>
+<main class="pt-20 pb-24 px-margin-mobile max-w-lg mx-auto">
+<!-- Search & Filter Section -->
+<section class="mb-6 space-y-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-12 pr-4 py-3 bg-surface-container-lowest border-none rounded-xl shadow-sm focus:ring-2 focus:ring-primary text-body-md placeholder:text-outline-variant" placeholder="ค้นหาด้วยรหัสที่ปกปิด" type="text"/>
+</div>
+<div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar no-scrollbar">
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-secondary-container text-on-secondary-container font-label-md text-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                    ทั้งหมด
+                </button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                    แผนก
+                </button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">sort</span>
+                    ล่าสุด
+                </button>
+</div>
+</section>
+<!-- Records Counter -->
+<div class="flex justify-between items-center mb-4">
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">พบ 4 รายการ</p>
+<span class="material-symbols-outlined text-outline">info</span>
+</div>
+<!-- Records List -->
+<div class="space-y-4">
+<!-- Entry Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-[0px_2px_8px_rgba(27,61,109,0.08)] border-l-4 border-primary hover:bg-surface-container-low transition-colors active:scale-[0.98] cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div>
+<p class="text-label-sm font-label-sm text-outline uppercase">24 ต.ค. 2023 • 14:30</p>
+<h2 class="font-headline-md text-headline-md-mobile text-primary mt-1">HN: 65-XXXXXX</h2>
+</div>
+<span class="material-symbols-outlined text-primary">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 py-3 border-y border-outline-variant/20">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] text-secondary">medical_services</span>
+<span class="text-label-md font-label-md">อายุรกรรม</span>
+</div>
+<div class="h-4 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] text-secondary">person</span>
+<span class="text-label-md font-label-md">S.D.</span>
+</div>
+</div>
+<div class="mt-3 flex gap-2">
+<span class="px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed text-label-sm font-label-sm">ติดตามอาการ</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant text-label-sm font-label-sm">ที่โรงพยาบาล</span>
+</div>
+</div>
+<!-- Entry Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-[0px_2px_8px_rgba(27,61,109,0.08)] border-l-4 border-primary-container hover:bg-surface-container-low transition-colors active:scale-[0.98] cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div>
+<p class="text-label-sm font-label-sm text-outline uppercase">22 ต.ค. 2023 • 09:15</p>
+<h2 class="font-headline-md text-headline-md-mobile text-primary mt-1">HN: 64-XXXXXX</h2>
+</div>
+<span class="material-symbols-outlined text-primary">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 py-3 border-y border-outline-variant/20">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] text-secondary">cardiology</span>
+<span class="text-label-md font-label-md">โรคหัวใจ</span>
+</div>
+<div class="h-4 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] text-secondary">person</span>
+<span class="text-label-md font-label-md">M.S.</span>
+</div>
+</div>
+<div class="mt-3 flex gap-2">
+<span class="px-2 py-0.5 rounded bg-error-container text-on-error-container text-label-sm font-label-sm">ด่วน</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant text-label-sm font-label-sm">ปรึกษาทางไกล</span>
+</div>
+</div>
+<!-- Entry Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-[0px_2px_8px_rgba(27,61,109,0.08)] border-l-4 border-primary-container hover:bg-surface-container-low transition-colors active:scale-[0.98] cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div>
+<p class="text-label-sm font-label-sm text-outline uppercase">18 ต.ค. 2023 • 11:00</p>
+<h2 class="font-headline-md text-headline-md-mobile text-primary mt-1">HN: 66-XXXXXX</h2>
+</div>
+<span class="material-symbols-outlined text-primary">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 py-3 border-y border-outline-variant/20">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] text-secondary">neurology</span>
+<span class="text-label-md font-label-md">ระบบประสาท</span>
+</div>
+<div class="h-4 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] text-secondary">person</span>
+<span class="text-label-md font-label-md">A.P.</span>
+</div>
+</div>
+<div class="mt-3 flex gap-2">
+<span class="px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed text-label-sm font-label-sm">กายภาพบำบัด</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant text-label-sm font-label-sm">เยี่ยมที่บ้าน</span>
+</div>
+</div>
+<!-- Entry Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-[0px_2px_8px_rgba(27,61,109,0.08)] border-l-4 border-primary-container hover:bg-surface-container-low transition-colors active:scale-[0.98] cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div>
+<p class="text-label-sm font-label-sm text-outline uppercase">15 ต.ค. 2023 • 15:45</p>
+<h2 class="font-headline-md text-headline-md-mobile text-primary mt-1">HN: 62-XXXXXX</h2>
+</div>
+<span class="material-symbols-outlined text-primary">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 py-3 border-y border-outline-variant/20">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] text-secondary">orthopedics</span>
+<span class="text-label-md font-label-md">ศัลยกรรมกระดูก</span>
+</div>
+<div class="h-4 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] text-secondary">person</span>
+<span class="text-label-md font-label-md">K.W.</span>
+</div>
+</div>
+<div class="mt-3 flex gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant text-label-sm font-label-sm">หลังผ่าตัด</span>
+</div>
+</div>
+</div>
+<!-- Pagination / Load More -->
+<button class="mt-8 w-full py-4 rounded-xl border-2 border-dashed border-outline-variant text-primary font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">expand_more</span>
+            โหลดรายการเพิ่มเติม
+        </button>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe bg-surface-container dark:bg-surface-container-lowest shadow-[0px_-2px_8px_rgba(27,61,109,0.08)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-variant/50 transition-all active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="font-label-sm text-label-sm">บันทึก</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-variant/50 transition-all active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">แดชบอร์ด</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-xl px-4 py-1 active:scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="font-label-sm text-label-sm">ประวัติ</span>
+</a>
+</nav>
+<script>
+        // Simple search interactivity
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.bg-surface-container-lowest');
+            
+            cards.forEach(card => {
+                const hn = card.querySelector('h2').textContent.toLowerCase();
+                const name = card.querySelector('.text-on-surface-variant:last-child span:last-child').textContent.toLowerCase();
+                
+                if (hn.includes(query) || name.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Tapping effects for cards
+        const recordCards = document.querySelectorAll('.bg-surface-container-lowest');
+        recordCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Mock navigation ripple or transition
+                card.style.opacity = '0.7';
+                setTimeout(() => card.style.opacity = '1', 150);
+            });
+        });
+    </script>
+</body></html>
