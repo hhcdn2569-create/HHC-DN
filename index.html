@@ -13,13 +13,11 @@
             theme: {
                 extend: {
                     "colors": {
-                        "on-error-container": "#93000a", "on-tertiary-fixed": "#121e1c", "on-tertiary": "#ffffff", "primary-fixed": "#d6e3ff", "inverse-on-surface": "#eaf1ff", "on-primary-fixed": "#001b3d", "on-error": "#ffffff", "surface": "#f8f9ff", "background": "#f8f9ff", "surface-container-highest": "#d3e4fe", "on-primary": "#ffffff", "on-secondary-fixed": "#002020", "surface-dim": "#cbdbf5", "on-tertiary-fixed-variant": "#3d4947", "surface-variant": "#d3e4fe", "tertiary-container": "#33403e", "surface-container-low": "#eff4ff", "primary-container": "#1b3d6d", "error-container": "#ffdad6", "surface-container-high": "#dce9ff", "surface-tint": "#405f91", "secondary-fixed-dim": "#6fd7d6", "on-secondary": "#ffffff", "secondary-container": "#8cf3f3", "on-primary-container": "#8aa9e0", "on-surface": "#0b1c30", "on-secondary-fixed-variant": "#004f4f", "tertiary-fixed-dim": "#bcc9c7", "outline": "#747780", "on-tertiary-container": "#9eaba9", "on-secondary-container": "#007070", "surface-container": "#e5eeff", "surface-container-lowest": "#ffffff", "on-primary-fixed-variant": "#264777", "tertiary-fixed": "#d7e5e2", "on-surface-variant": "#43474f", "inverse-surface": "#213145", "primary-fixed-dim": "#a9c7ff", "inverse-primary": "#a9c7ff", "primary": "#002753", "outline-variant": "#c4c6d0", "surface-bright": "#f8f9ff", "tertiary": "#1e2a28", "secondary": "#006a6a", "on-background": "#0b1c30", "error": "#ba1a1a", "secondary-fixed": "#8cf3f3"
+                        "primary": "#002753", "secondary": "#006a6a", "surface": "#f8f9ff", "surface-bright": "#f8f9ff", "surface-container-lowest": "#ffffff", "on-surface": "#0b1c30", "on-surface-variant": "#43474f", "outline-variant": "#c4c6d0", "error": "#ba1a1a"
                     },
-                    "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
-                    "fontFamily": { "body-lg": ["Public Sans"], "label-sm": ["Public Sans"], "body-md": ["Public Sans"], "headline-lg-mobile": ["Manrope"], "headline-md": ["Manrope"], "headline-lg": ["Manrope"], "headline-xl": ["Manrope"], "label-md": ["Public Sans"] },
-                    "fontSize": { "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}], "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}], "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}], "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}], "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}], "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}], "headline-xl": ["40px", {"lineHeight": "48px", "fontWeight": "700"}], "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}] }
-                },
-            },
+                    "fontFamily": { "body-md": ["Public Sans"], "headline-md": ["Manrope"], "label-md": ["Public Sans"] }
+                }
+            }
         }
     </script>
     <style>
@@ -40,12 +38,12 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="font-body-md text-body-md pb-24 md:pb-6 md:pt-16">
+<body class="font-body-md text-sm md:text-base pb-24 md:pb-6 md:pt-16">
 
-    <!-- 🌐 ส่วนหัวของหน้าจอ (Header) -->
+    <!-- Header -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-surface shadow-sm flex items-center justify-between px-4 md:px-6 h-16 w-full border-b border-outline-variant/30">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden flex-shrink-0">
+            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden flex-shrink-0">
                 <img alt="Hospital Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGchRZxpezkxRytbeAehlkXD-w9XqjcrBUZNgA5aZRiAC3oR5HAiXxzQeV4iDezoe7DRRFe6-kTGHIYeRe-kJDnQ6c8XRnekRiKYzY5nSVw5RBnf3u2YIt_-zrcCm9JQlH84bV_p2MhnwuuqwOlBlHfA32olfnz58hah6cVafgYDy91PuT1T1f3BOz9aja50-arxdqVwm-HDZzgZk3zCnXXJtA4R0bDOmtZstyRYXXWXfy5QkmoyMfISBtjF82T82c6YCzeE7WwK4"/>
             </div>
             <div class="flex flex-col min-w-0">
@@ -53,13 +51,13 @@
                 <p class="text-[11px] md:text-[12px] text-on-surface-variant font-medium leading-tight truncate">โรงพยาบาลสมเด็จพระสังฆราช (อมฺพรมหาเถร)</p>
             </div>
         </div>
-        <button class="material-symbols-outlined text-primary p-2 hover:bg-surface-container-high rounded-full flex-shrink-0">account_circle</button>
+        <button class="material-symbols-outlined text-primary p-2 hover:bg-gray-200 rounded-full flex-shrink-0">account_circle</button>
     </header>
 
-    <!-- 📋 ส่วนเนื้อหาหลัก (Main Content) -->
+    <!-- Main Content -->
     <main class="w-full flex-1 px-4 md:px-6 py-6 mt-16 mx-auto max-w-full sm:max-w-[95%] md:max-w-[90%] lg:max-w-[1200px]">
 
-        <!-- Tab 1: หน้าบันทึกข้อมูล (Form View) -->
+        <!-- Tab 1: Form -->
         <div id="view-form" class="page-content active animate-fade-in">
             <div class="header-banner">
                 <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">ระบบบันทึกข้อมูล HHC</h2>
@@ -69,18 +67,18 @@
             <form class="space-y-5 bg-surface-container-lowest p-5 md:p-6 rounded-xl shadow-md w-full" id="hhc-form">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="flex flex-col gap-1.5">
-                        <label class="font-label-md text-on-surface text-sm" for="visit-date">วันที่รับบริการ</label>
-                        <input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus text-sm md:text-base" id="visit-date" required type="date"/>
+                        <label class="font-label-md text-on-surface text-sm">วันที่รับบริการ</label>
+                        <input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus" id="visit-date" required type="date"/>
                     </div>
                     <div class="flex flex-col gap-1.5">
-                        <label class="font-label-md text-on-surface text-sm" for="hn-number">เลขผู้ป่วย (HN)</label>
-                        <input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus text-sm md:text-base" id="hn-number" placeholder="เช่น 66000123" required type="text"/>
+                        <label class="font-label-md text-on-surface text-sm">เลขผู้ป่วย (HN)</label>
+                        <input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus" id="hn-number" placeholder="เช่น 66000123" required type="text"/>
                     </div>
                 </div>
 
                 <div class="flex flex-col gap-1.5">
-                    <label class="font-label-md text-on-surface text-sm" for="department">หน่วยงาน/แผนกที่ส่งต่อ</label>
-                    <select class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus cursor-pointer text-sm md:text-base" id="department" onchange="toggleOther(this.value)" required>
+                    <label class="font-label-md text-on-surface text-sm">หน่วยงาน/แผนกที่ส่งต่อ</label>
+                    <select class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus cursor-pointer" id="department" onchange="toggleOther(this.value)" required>
                         <option disabled selected value="">เลือกหน่วยงาน</option>
                         <option value="ER">ER</option><option value="OPD">OPD</option><option value="ICU">ICU</option>
                         <option value="กุมาร">กุมาร</option><option value="ORT">ORT</option><option value="ศัลยกรรม">ศัลยกรรม</option>
@@ -93,38 +91,36 @@
                 </div>
 
                 <div class="hidden flex flex-col gap-1.5" id="other-dept-container">
-                    <label class="font-label-md text-on-surface text-sm" for="other-dept">ระบุแผนกเพิ่มเติม</label>
-                    <input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus text-sm md:text-base" id="other-dept" placeholder="ระบุชื่อแผนก">
+                    <label class="font-label-md text-on-surface text-sm">ระบุแผนกเพิ่มเติม</label>
+                    <input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus" id="other-dept" placeholder="ระบุชื่อแผนก">
                 </div>
 
                 <div class="flex flex-col gap-1.5">
-                    <label class="font-label-md text-on-surface text-sm" for="diagnosis">คำวินิจฉัยโรคหลัก / อาการสำคัญ (Diagnosis)</label>
-                    <textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus text-sm md:text-base" id="diagnosis" rows="4" placeholder="ระบุรายละเอียดการวินิจฉัยและข้อมูลที่จำเป็นต่อการเยี่ยมบ้าน..." required></textarea>
+                    <label class="font-label-md text-on-surface text-sm">คำวินิจฉัยโรคหลัก / อาการสำคัญ</label>
+                    <textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright form-input-focus" id="diagnosis" rows="4" placeholder="ระบุรายละเอียดการวินิจฉัย..." required></textarea>
                 </div>
 
                 <div class="flex flex-col gap-1.5">
-                    <label class="font-label-md text-on-surface text-sm">แนบรูปภาพประกอบเคส</label>
-                    <div class="border-2 border-dashed border-outline-variant rounded-lg py-6 text-center cursor-pointer bg-surface-bright hover:bg-surface-container-low transition-all" onclick="document.getElementById('image-file').click()">
+                    <label class="font-label-md text-on-surface text-sm">แนบรูปภาพประกอบเคส (แนะนำขนาดไม่เกิน 5MB)</label>
+                    <div class="border-2 border-dashed border-outline-variant rounded-lg py-6 text-center cursor-pointer bg-surface-bright hover:bg-gray-100 transition-all" onclick="document.getElementById('image-file').click()">
                         <span class="material-symbols-outlined text-secondary text-3xl mb-1">add_a_photo</span>
                         <p class="text-xs md:text-sm text-on-surface-variant px-2" id="upload-label">คลิกเพื่อเลือกรูปภาพประกอบ</p>
                         <input type="file" id="image-file" accept="image/*" class="hidden">
                     </div>
                 </div>
 
-                <button class="w-full bg-primary text-white font-bold py-3.5 rounded-lg shadow-md hover:bg-opacity-95 transition-all flex items-center justify-center gap-2 text-sm md:text-base" type="submit">
+                <button class="w-full bg-primary text-white font-bold py-3.5 rounded-lg shadow-md hover:bg-blue-900 transition-all flex items-center justify-center gap-2" type="submit">
                     <span class="material-symbols-outlined text-xl">save</span> บันทึกข้อมูลเข้าสู่ระบบ
                 </button>
             </form>
         </div>
 
-        <!-- Tab 2: หน้าแดชบอร์ดสรุปสถิติ (Dashboard View) -->
+        <!-- Tab 2: Dashboard -->
         <div id="view-dashboard" class="page-content animate-fade-in">
             <div class="header-banner">
                 <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">แดชบอร์ดสรุปผล</h2>
                 <p class="text-blue-200 text-sm md:text-base">ภาพรวมสถิติข้อมูลแบบเรียลไทม์</p>
             </div>
-            
-            <!-- Cards สรุปยอด -->
             <div class="grid grid-cols-2 gap-4 mb-6">
                 <div class="bg-surface-container-lowest p-4 md:p-5 rounded-xl shadow-md text-center border-t-4 border-primary">
                     <p class="text-on-surface-variant font-bold text-xs">จำนวนเคสทั้งหมด</p>
@@ -135,8 +131,6 @@
                     <p class="text-lg sm:text-2xl md:text-3xl font-bold text-secondary my-2 truncate" id="dash-top-dept">กำลังโหลด...</p>
                 </div>
             </div>
-
-            <!-- กราฟวิเคราะห์สถิติ -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-surface-container-lowest p-5 rounded-xl shadow-md border border-outline-variant">
                     <h3 class="text-sm font-bold text-primary mb-3">📊 สถิติจำนวนเคสแยกตามหน่วยงาน (แผนก)</h3>
@@ -149,14 +143,12 @@
             </div>
         </div>
 
-        <!-- Tab 3: หน้าแสดงประวัติย้อนหลัง (History View) -->
+        <!-- Tab 3: History -->
         <div id="view-history" class="page-content animate-fade-in">
             <div class="header-banner">
                 <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">ประวัติการบันทึก HHC</h2>
                 <p class="text-blue-200 text-sm md:text-base">รายการตรวจสอบและค้นหาข้อมูลล่าสุด</p>
             </div>
-
-            <!-- 🔍 แถบค้นหาประวัติข้อมูล (Search Filter) -->
             <div class="bg-surface-container-lowest p-4 rounded-xl shadow-md border border-outline-variant mb-5 flex flex-col sm:flex-row gap-3">
                 <div class="flex-1 relative">
                     <span class="material-symbols-outlined absolute left-3 top-3.5 text-on-surface-variant text-xl">search</span>
@@ -167,19 +159,16 @@
                         <option value="">ทุกหน่วยงาน</option>
                         <option value="ER">ER</option><option value="OPD">OPD</option><option value="ICU">ICU</option>
                         <option value="กุมาร">กุมาร</option><option value="ORT">ORT</option><option value="ศัลยกรรม">ศัลยกรรม</option>
-                        <option value="นรีเวช">นรีเวช</option><option value="จักษุ">จักษุ</option><option value="Stroke">Stroke</option>
                     </select>
                 </div>
             </div>
-
-            <!-- รายการแสดงผลการค้นหา -->
             <div class="space-y-3" id="history-list">
                 <p class="text-center text-on-surface-variant text-sm py-8">กำลังดึงข้อมูลประวัติย้อนหลัง...</p>
             </div>
         </div>
     </main>
 
-    <!-- 📱 เมนูนำทางด้านล่าง (Bottom Navigation Bar) -->
+    <!-- Bottom Nav -->
     <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-outline-variant h-16 flex justify-around items-center w-full shadow-lg">
         <button onclick="changeTab('view-form', this)" class="tab-btn flex flex-col items-center justify-center flex-1 text-primary font-bold h-full transition-all">
             <span class="material-symbols-outlined text-2xl">edit_note</span><span class="text-xs">บันทึก</span>
@@ -192,29 +181,24 @@
         </button>
     </nav>
 
-    <!-- ⚙️ ส่วนควบคุม Script และกราฟทั้งหมด -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.getElementById('visit-date').valueAsDate = new Date();
-        
         let isSubmitting = false;
         let myChart = null; 
         let myDiagChart = null;
-        let allRecordsData = []; // เก็บข้อมูลแบบ Global ไว้เพื่อฟังก์ชันค้นหา
+        let allRecordsData = []; 
 
-        // ลิงก์ระบบหลังบ้าน Web App ล่าสุดของพี่พีท 
+        // ลิงก์ Web App ของพี่พีท
         const scriptUrl = 'https://script.google.com/macros/s/AKfycbyWIL_akYv92AhsI2WikfEPBTUqJL5RFmZ_egvU3S4Ghu7x55EvgeKdxE3q9gBM5TTR/exec';
 
         function changeTab(targetId, btnElement) {
             document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('text-primary', 'font-bold'));
-            
             document.getElementById(targetId).classList.add('active');
             btnElement.classList.add('text-primary', 'font-bold');
-            
-            if (targetId === 'view-dashboard' || targetId === 'view-history') {
-                fetchRealtimeData();
-            }
+            if (targetId === 'view-dashboard' || targetId === 'view-history') { fetchRealtimeData(); }
         }
 
         function toggleOther(val) {
@@ -228,13 +212,13 @@
             }
         });
 
-        // 🛠️ ส่วนฟังก์ชันยิงข้อมูลที่เคลียร์และจัดโครงสร้างวงเล็บปีกกาให้ถูกต้องแล้ว
+        // ฟังก์ชัน Submit แบบแก้ CORS เรียบร้อยแล้ว
         document.getElementById('hhc-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const imageInput = document.getElementById('image-file');
             
             if (imageInput.files.length === 0) { 
-                alert('⚠️ กรุณาแนบรูปภาพประกอบเคสก่อนครับพี่พีท'); 
+                alert('⚠️ กรุณาแนบรูปภาพประกอบเคสก่อนครับ'); 
                 return; 
             }
             if (isSubmitting) return;
@@ -242,7 +226,7 @@
 
             const submitBtn = this.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
-            submitBtn.innerText = '⏳ กำลังส่งข้อมูลและรูปภาพ...';
+            submitBtn.innerText = '⏳ กำลังส่งข้อมูลและรูปภาพ... (อาจใช้เวลาสักครู่)';
 
             const file = imageInput.files[0];
             const reader = new FileReader();
@@ -259,16 +243,13 @@
                 urlParams.append('diagnosis', document.getElementById('diagnosis').value);
                 urlParams.append('image', event.target.result); 
 
-                // ยิงข้อมูลเข้าเว็บแอป Google Apps Script หลังบ้าน
+                // ยิงข้อมูลออกแบบไม่ฝัง Headers เพื่อหลบการบล็อก
                 fetch(scriptUrl, { 
-                    method: 'POST', 
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: urlParams 
+                    method: 'POST',
+                    body: urlParams
                 })
                 .then(res => {
-                    alert('🎉 บันทึกข้อมูลและอัปโหลดรูปเรียบร้อยแล้วครับพี่พีท!');
+                    alert('🎉 บันทึกข้อมูลและอัปโหลดรูปเรียบร้อยแล้วครับ!');
                     document.getElementById('hhc-form').reset();
                     document.getElementById('visit-date').valueAsDate = new Date();
                     document.getElementById('upload-label').innerText = 'คลิกเพื่อเลือกรูปภาพประกอบ';
@@ -276,7 +257,7 @@
                 })
                 .catch(err => {
                     console.error(err);
-                    alert('❌ ระบบหลังบ้านไม่ตอบสนอง กรุณาเช็กสิทธิ์สคริปต์อีกครั้งครับ');
+                    alert('❌ ระบบหลังบ้านไม่ตอบสนอง\n1. เช็กสิทธิ์ Apps Script (ต้องเป็น "ทุกคน")\n2. ขนาดรูปอาจใหญ่เกินไป ลองรูปเล็กๆ ดูก่อนครับ');
                 })
                 .finally(() => { 
                     isSubmitting = false; 
@@ -287,126 +268,70 @@
             reader.readAsDataURL(file);
         });
 
-        // 📊 ดึงข้อมูลเพื่อนำไปประมวลผลระบบสถิติและประวัติข้อมูล
         function fetchRealtimeData() {
             fetch(scriptUrl)
             .then(res => res.json())
             .then(data => {
                 if(!data || data.error) return;
-                
-                allRecordsData = data; // พ่นข้อมูลลงตัวแปรกลางเพื่อใช้เสิร์ชเร็วยิ่งขึ้น
-
+                allRecordsData = data; 
                 document.getElementById('dash-total-cases').innerText = data.length;
                 
                 const depts = data.map(item => item.department).filter(Boolean);
                 const countMap = {}; 
-                let maxDept = "-"; 
-                let maxCount = 0;
-                
+                let maxDept = "-"; let maxCount = 0;
                 depts.forEach(d => {
                     countMap[d] = (countMap[d] || 0) + 1;
-                    if(countMap[d] > maxCount) { 
-                        maxCount = countMap[d]; 
-                        maxDept = d; 
-                    }
+                    if(countMap[d] > maxCount) { maxCount = countMap[d]; maxDept = d; }
                 });
                 document.getElementById('dash-top-dept').innerText = maxDept;
 
                 if (myChart) myChart.destroy();
-                const ctx = document.getElementById('deptChart').getContext('2d');
-                myChart = new Chart(ctx, {
+                myChart = new Chart(document.getElementById('deptChart').getContext('2d'), {
                     type: 'bar',
-                    data: {
-                        labels: Object.keys(countMap),
-                        datasets: [{
-                            label: 'จำนวนเคสย่อย',
-                            data: Object.values(countMap),
-                            backgroundColor: '#1b3d6d',
-                            borderColor: '#002753',
-                            borderWidth: 1,
-                            borderRadius: 6
-                        }]
-                    },
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } }
-                    }
+                    data: { labels: Object.keys(countMap), datasets: [{ label: 'จำนวนเคส', data: Object.values(countMap), backgroundColor: '#1b3d6d', borderRadius: 6 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
                 });
 
                 const diags = data.map(item => item.diagnosis ? item.diagnosis.substring(0,12) : "ไม่ระบุ");
-                const diagMap = {};
-                diags.forEach(d => diagMap[d] = (diagMap[d] || 0) + 1);
+                const diagMap = {}; diags.forEach(d => diagMap[d] = (diagMap[d] || 0) + 1);
 
                 if (myDiagChart) myDiagChart.destroy();
-                const ctx2 = document.getElementById('diagChart').getContext('2d');
-                myDiagChart = new Chart(ctx2, {
+                myDiagChart = new Chart(document.getElementById('diagChart').getContext('2d'), {
                     type: 'pie',
-                    data: {
-                        labels: Object.keys(diagMap).slice(0, 5),
-                        datasets: [{
-                            data: Object.values(diagMap).slice(0, 5),
-                            backgroundColor: ['#002753', '#006a6a', '#747780', '#ba1a1a', '#6fd7d6']
-                        }]
-                    },
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false,
-                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }
-                    }
+                    data: { labels: Object.keys(diagMap).slice(0, 5), datasets: [{ data: Object.values(diagMap).slice(0, 5), backgroundColor: ['#002753', '#006a6a', '#747780', '#ba1a1a', '#6fd7d6'] }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
                 });
-
                 renderHistoryCards(allRecordsData);
-            })
-            .catch(err => {
-                const historyList = document.getElementById('history-list');
-                historyList.innerHTML = '<p class="text-center text-error text-sm py-8">❌ ไม่สามารถดึงข้อมูลประวัติได้ กรุณารีเฟรชหน้าเว็บใหม่อีกครั้ง</p>';
+            }).catch(err => {
+                document.getElementById('history-list').innerHTML = '<p class="text-center text-error text-sm py-8">❌ ไม่สามารถดึงข้อมูลประวัติได้ กรุณาเช็กโค้ด doGet หลังบ้าน</p>';
             });
         }
 
-        // 🔍 ฟังก์ชันกรองประวัติและค้นหาแบบไดนามิก (Dynamic Search)
         function filterHistory() {
             const searchText = document.getElementById('search-input').value.toLowerCase().trim();
             const filterDept = document.getElementById('filter-dept').value;
-
-            const filtered = allRecordsData.filter(item => {
-                const matchSearch = (item.hn && item.hn.toLowerCase().includes(searchText)) || 
-                                    (item.department && item.department.toLowerCase().includes(searchText)) ||
-                                    (item.diagnosis && item.diagnosis.toLowerCase().includes(searchText));
-                const matchDept = filterDept === "" || item.department === filterDept;
-                return matchSearch && matchDept;
-            });
-
-            renderHistoryCards(filtered);
+            renderHistoryCards(allRecordsData.filter(item => {
+                const matchSearch = (item.hn && item.hn.toLowerCase().includes(searchText)) || (item.department && item.department.toLowerCase().includes(searchText)) || (item.diagnosis && item.diagnosis.toLowerCase().includes(searchText));
+                return matchSearch && (filterDept === "" || item.department === filterDept);
+            }));
         }
 
-        // ฟังก์ชันวาดการ์ดแสดงประวัติข้อมูลผู้ป่วย
         function renderHistoryCards(dataList) {
             const historyList = document.getElementById('history-list');
             historyList.innerHTML = '';
-            
             if(dataList.length === 0) {
-                historyList.innerHTML = '<p class="text-center text-on-surface-variant text-sm py-8">ไม่พบข้อมูลประวัติที่ตรงกับเงื่อนไขการค้นหา</p>';
-                return;
+                historyList.innerHTML = '<p class="text-center text-on-surface-variant text-sm py-8">ไม่พบข้อมูลที่ค้นหา</p>'; return;
             }
-
             [...dataList].reverse().slice(0, 20).forEach(item => {
-                const imgBtn = item.imageUrl && item.imageUrl !== "ไม่มีรูปภาพ" ? 
-                    `<a href="${item.imageUrl}" target="_blank" class="mt-2.5 inline-flex items-center gap-1 text-xs text-primary font-bold bg-primary-container/20 hover:bg-primary-container/40 px-3 py-1.5 rounded-lg transition-all">🖼️ เปิดดูรูปภาพเคสผู้ป่วย</a>` : '';
-                
-                const card = document.createElement('div');
-                card.className = "bg-surface-container-lowest p-4 rounded-xl shadow-sm border-l-4 border-secondary text-left animate-fade-in";
-                card.innerHTML = `
-                    <div class="text-xs text-on-surface-variant flex justify-between">
-                        <span>📅 วันที่รับบริการ: ${item.serviceDate}</span>
-                        <span class="text-secondary font-bold flex items-center gap-0.5"><span class="material-symbols-outlined text-sm">check_circle</span>บันทึกสำเร็จ</span>
-                    </div>
-                    <div class="font-bold text-primary mt-1 text-sm md:text-base">เลข HN: ${item.hn}</div>
-                    <div class="text-xs md:text-sm text-on-surface-variant mt-0.5"><b>หน่วยงาน/แผนก:</b> ${item.department}</div>
-                    <div class="text-xs md:text-sm text-on-surface-variant bg-surface p-2 rounded mt-1.5 border border-outline-variant/30"><b>ผลวินิจฉัย:</b> ${item.diagnosis}</div>
-                    ${imgBtn}
-                `;
-                historyList.appendChild(card);
+                const imgBtn = item.imageUrl && item.imageUrl !== "ไม่มีรูปภาพ" ? `<a href="${item.imageUrl}" target="_blank" class="mt-2.5 inline-flex items-center gap-1 text-xs text-primary font-bold bg-blue-100 hover:bg-blue-200 px-3 py-1.5 rounded-lg transition-all">🖼️ เปิดดูรูปภาพ</a>` : '';
+                historyList.innerHTML += `
+                    <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border-l-4 border-secondary text-left animate-fade-in mb-3">
+                        <div class="text-xs text-on-surface-variant flex justify-between"><span>📅 วันที่: ${item.serviceDate}</span><span class="text-secondary font-bold">บันทึกสำเร็จ</span></div>
+                        <div class="font-bold text-primary mt-1">เลข HN: ${item.hn}</div>
+                        <div class="text-sm text-on-surface-variant mt-0.5"><b>แผนก:</b> ${item.department}</div>
+                        <div class="text-sm text-on-surface-variant bg-surface p-2 rounded mt-1.5 border border-outline-variant/30"><b>ผลวินิจฉัย:</b> ${item.diagnosis}</div>
+                        ${imgBtn}
+                    </div>`;
             });
         }
     </script>
