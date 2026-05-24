@@ -165,7 +165,7 @@ dark_mode
 <div id="view-history" class="page-content animate-fade-in">
 <div class="header-banner">
 <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">ประวัติการบันทึกข้อมูล</h2>
-<p class="text-blue-200 text-sm md:text-base">รายการตรวจสอบสืบค้นและค้นหาเคสผู้ป่วยย้อนหลัง (ซ่อนข้อมูลตาม PDPA)</p>
+<p class="text-blue-200 text-sm md:text-base">รายการตรวจสอบสืบค้นและค้นหาเคสผู้ป่วยย้อนหลัง</p>
 </div>
 <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-outline-variant/30 mb-5 flex flex-col sm:flex-row gap-3">
 <div class="flex-1 relative">
@@ -283,13 +283,8 @@ document.getElementById('hhc-form').addEventListener('submit', function(e) {
 e.preventDefault();
 
 if (!base64ImageString) {
-    Swal.fire({
-        icon: 'warning',
-        title: 'ลืมแนบรูปภาพ',
-        text: 'กรุณาใส่รูปถ่ายประกอบเคสด้วยครับ',
-        confirmButtonColor: '#ba1a1a'
-    });
-    return;
+alert('⚠️ พี่พีทลืมแนบรูปภาพหรือเปล่าครับ? กรุณาใส่รูปถ่ายประกอบเคสด้วยครับ');
+return;
 }
 if (isSubmitting) return;
 isSubmitting = true;
@@ -314,32 +309,26 @@ headers: { 'Content-Type': 'text/plain' },
 body: JSON.stringify(payload)
 })
 .then(() => {
-    // แจ้งเตือนแบบ Popup SweetAlert2
-    Swal.fire({
-        icon: 'success',
-        title: 'บันทึกสำเร็จ!',
-        text: 'บันทึกข้อมูล HHC และภาพขึ้นระบบเรียบร้อยแล้ว',
-        confirmButtonColor: '#002753',
-        confirmButtonText: 'ตกลง'
-    });
-    document.getElementById('hhc-form').reset();
-    document.getElementById('visit-date').valueAsDate = new Date();
-    resetImageSelection();
-    toggleOther('');
+Swal.fire({
+  icon: 'success',
+  title: 'บันทึกสำเร็จ!',
+  text: 'บันทึกข้อมูล HHC และภาพขึ้นระบบเรียบร้อยแล้ว',
+  confirmButtonColor: '#002753',
+  confirmButtonText: 'ตกลง'
+});
+document.getElementById('hhc-form').reset();
+document.getElementById('visit-date').valueAsDate = new Date();
+resetImageSelection();
+toggleOther('');
 })
 .catch(err => {
-    console.error(err);
-    Swal.fire({
-        icon: 'error',
-        title: 'เกิดข้อผิดพลาด',
-        text: 'ไม่สามารถส่งข้อมูลเข้าสคริปต์ได้ โปรดลองอีกครั้ง',
-        confirmButtonColor: '#ba1a1a'
-    });
+console.error(err);
+alert('❌ เกิดข้อผิดพลาดทางเทคนิค ไม่สามารถส่งข้อมูลเข้าสคริปต์ได้');
 })
 .finally(() => {
-    isSubmitting = false;
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = '<span class="material-symbols-outlined text-xl">save</span> บันทึกข้อมูลเข้าสู่ระบบ';
+isSubmitting = false;
+submitBtn.disabled = false;
+submitBtn.innerHTML = '<span class="material-symbols-outlined text-xl">save</span> บันทึกข้อมูลเข้าสู่ระบบ';
 });
 });
 // 📊 ฟังก์ชันดึงฐานข้อมูลแบบ Realtime จากแผ่นงานเพื่อทำประวัติและแดชบอร์ด
@@ -371,7 +360,7 @@ countMap[d] = (countMap[d] || 0) + 1;
 if(countMap[d] > maxCount) { maxCount = countMap[d]; maxDept = d; }
 });
 document.getElementById('dash-top-dept').innerText = maxDept;
-// วาดกราฟแท่งแยกแผนกแบบหลายสี (Department Bar Chart - Multicolor)
+// วาดกราฟแท่งแยกแผนก (Department Bar Chart)
 if (deptChartInstance) deptChartInstance.destroy();
 const ctx = document.getElementById('deptChart').getContext('2d');
 deptChartInstance = new Chart(ctx, {
@@ -387,9 +376,7 @@ backgroundColor: [
     'rgba(255, 206, 86, 0.8)',
     'rgba(75, 192, 192, 0.8)',
     'rgba(153, 102, 255, 0.8)',
-    'rgba(255, 159, 64, 0.8)',
-    'rgba(27, 61, 109, 0.8)',
-    'rgba(0, 106, 106, 0.8)'
+    'rgba(255, 159, 64, 0.8)'
 ],
 borderColor: [
     'rgba(255, 99, 132, 1)',
@@ -397,9 +384,7 @@ borderColor: [
     'rgba(255, 206, 86, 1)',
     'rgba(75, 192, 192, 1)',
     'rgba(153, 102, 255, 1)',
-    'rgba(255, 159, 64, 1)',
-    'rgba(27, 61, 109, 1)',
-    'rgba(0, 106, 106, 1)'
+    'rgba(255, 159, 64, 1)'
 ],
 borderWidth: 1,
 borderRadius: 6
@@ -460,11 +445,10 @@ return;
 const sortedList = [...dataList].reverse();
 sortedList.forEach(item => {
 
-// 🔒 เซ็นเซอร์เลข HN แบบ PDPA (แสดงแค่ 2 ตัวแรกตามด้วย X)
 const originalHn = item.hn ? item.hn.toString().trim() : "";
 const maskedHn = originalHn.length > 2 ? originalHn.substring(0, 2) + "XXXX" : "XXXX";
 
-// 1. เรนเดอร์ลงตาราง Desktop (ไม่แสดงรูปภาพ)
+// 1. เรนเดอร์ลงตาราง Desktop
 const tr = document.createElement('tr');
 tr.innerHTML = `
 <td>${item.serviceDate}</td>
@@ -473,7 +457,7 @@ tr.innerHTML = `
 <td class="max-w-xs truncate" title="${item.diagnosis}">${item.diagnosis}</td>
 `;
 desktopBody.appendChild(tr);
-// 2. เรนเดอร์ลงตารางการ์ดมือถือ Mobile (ไม่แสดงรูปภาพ)
+// 2. เรนเดอร์ลงตารางการ์ดมือถือ Mobile
 const card = document.createElement('div');
 card.className = "bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border-l-4 border-secondary text-left animate-fade-in";
 card.innerHTML = `
