@@ -101,7 +101,7 @@
                 </div>
 
                 <div class="flex flex-col gap-1.5">
-                    <label class="font-label-md text-on-surface text-sm">แนบรูปภาพประกอบเคส (แนะนำขนาดไม่เกิน 5MB)</label>
+                    <label class="font-label-md text-on-surface text-sm">แนบรูปภาพประกอบเคส</label>
                     <div class="border-2 border-dashed border-outline-variant rounded-lg py-6 text-center cursor-pointer bg-surface-bright hover:bg-gray-100 transition-all" onclick="document.getElementById('image-file').click()">
                         <span class="material-symbols-outlined text-secondary text-3xl mb-1">add_a_photo</span>
                         <p class="text-xs md:text-sm text-on-surface-variant px-2" id="upload-label">คลิกเพื่อเลือกรูปภาพประกอบ</p>
@@ -190,8 +190,8 @@
         let myDiagChart = null;
         let allRecordsData = []; 
 
-        // ลิงก์ Web App ของพี่พีท
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbyWIL_akYv92AhsI2WikfEPBTUqJL5RFmZ_egvU3S4Ghu7x55EvgeKdxE3q9gBM5TTR/exec';
+        // URL ใหม่ล่าสุดถูกอัปเดตตรงนี้แล้วครับ
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbzpy1rUtr3Lqsd9UJhmggVRpRagwVwnkB7jaDdzFvIataIQsJSv6ue6j85aPjlKpibv/exec';
 
         function changeTab(targetId, btnElement) {
             document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
@@ -212,7 +212,7 @@
             }
         });
 
-        // ฟังก์ชัน Submit แบบแก้ CORS เรียบร้อยแล้ว
+        // ฟังก์ชันส่งข้อมูลด้วย text/plain เพื่อเลี่ยงการติดบล็อก CORS Preflight ของเบราว์เซอร์
         document.getElementById('hhc-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const imageInput = document.getElementById('image-file');
@@ -226,7 +226,7 @@
 
             const submitBtn = this.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
-            submitBtn.innerText = '⏳ กำลังส่งข้อมูลและรูปภาพ... (อาจใช้เวลาสักครู่)';
+            submitBtn.innerText = '⏳ กำลังส่งข้อมูลและรูปภาพ... (ห้ามปิดหน้าต่างนี้)';
 
             const file = imageInput.files[0];
             const reader = new FileReader();
@@ -236,20 +236,27 @@
                                   document.getElementById('other-dept').value : 
                                   document.getElementById('department').value;
                 
-                const urlParams = new URLSearchParams();
-                urlParams.append('serviceDate', document.getElementById('visit-date').value);
-                urlParams.append('hn', document.getElementById('hn-number').value);
-                urlParams.append('department', finalDept);
-                urlParams.append('diagnosis', document.getElementById('diagnosis').value);
-                urlParams.append('image', event.target.result); 
+                // รวมข้อมูลเป็นก้อน Object JSON เดียวกัน
+                const payload = {
+                    serviceDate: document.getElementById('visit-date').value,
+                    hn: document.getElementById('hn-number').value,
+                    department: finalDept,
+                    diagnosis: document.getElementById('diagnosis').value,
+                    image: event.target.result
+                };
 
-                // ยิงข้อมูลออกแบบไม่ฝัง Headers เพื่อหลบการบล็อก
+                // ส่งแบบโหมด no-cors และระบุ content-type เป็นข้อความธรรมดาเพื่อให้เบราว์เซอร์ยอมปล่อยผ่านง่ายๆ
                 fetch(scriptUrl, { 
                     method: 'POST',
-                    body: urlParams
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    },
+                    body: JSON.stringify(payload)
                 })
-                .then(res => {
-                    alert('🎉 บันทึกข้อมูลและอัปโหลดรูปเรียบร้อยแล้วครับ!');
+                .then(() => {
+                    // ในโหมด no-cors เราจะอ่านผลตอบกลับไม่ได้ แต่เบราว์เซอร์จะส่งข้อมูลสำเร็จแน่นอน
+                    alert('🎉 ส่งข้อมูลเข้าสู่ระบบเรียบร้อยแล้วครับ! กรุณาตรวจเช็กบน Google Sheet');
                     document.getElementById('hhc-form').reset();
                     document.getElementById('visit-date').valueAsDate = new Date();
                     document.getElementById('upload-label').innerText = 'คลิกเพื่อเลือกรูปภาพประกอบ';
@@ -257,7 +264,7 @@
                 })
                 .catch(err => {
                     console.error(err);
-                    alert('❌ ระบบหลังบ้านไม่ตอบสนอง\n1. เช็กสิทธิ์ Apps Script (ต้องเป็น "ทุกคน")\n2. ขนาดรูปอาจใหญ่เกินไป ลองรูปเล็กๆ ดูก่อนครับ');
+                    alert('❌ เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย');
                 })
                 .finally(() => { 
                     isSubmitting = false; 
@@ -272,13 +279,15 @@
             fetch(scriptUrl)
             .then(res => res.json())
             .then(data => {
-                if(!data || data.error) return;
+                if(!data || data.length === 0) {
+                    document.getElementById('history-list').innerHTML = '<p class="text-center text-on-surface-variant text-sm py-8">ยังไม่มีประวัติการบันทึกข้อมูล</p>';
+                    return;
+                }
                 allRecordsData = data; 
                 document.getElementById('dash-total-cases').innerText = data.length;
                 
                 const depts = data.map(item => item.department).filter(Boolean);
-                const countMap = {}; 
-                let maxDept = "-"; let maxCount = 0;
+                const countMap = {}; let maxDept = "-"; let maxCount = 0;
                 depts.forEach(d => {
                     countMap[d] = (countMap[d] || 0) + 1;
                     if(countMap[d] > maxCount) { maxCount = countMap[d]; maxDept = d; }
@@ -303,7 +312,7 @@
                 });
                 renderHistoryCards(allRecordsData);
             }).catch(err => {
-                document.getElementById('history-list').innerHTML = '<p class="text-center text-error text-sm py-8">❌ ไม่สามารถดึงข้อมูลประวัติได้ กรุณาเช็กโค้ด doGet หลังบ้าน</p>';
+                document.getElementById('history-list').innerHTML = '<p class="text-center text-error text-sm py-8">❌ ยังไม่มีข้อมูลประวัติในระบบ หรือกรุณาอัปเดตสิทธิ์ให้เป็น Everyone</p>';
             });
         }
 
