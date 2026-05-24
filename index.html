@@ -243,7 +243,15 @@
                 // ปรับโหมด fetch เป็น no-cors เพื่อให้สามารถยิงข้ามเซิร์ฟเวอร์สำเร็จโดยไม่มีปัญหาบล็อกจากกูเกิลสคริปต์
                 fetch(scriptUrl, { 
                     method: 'POST', 
-                    mode: 'no-cors',
+                   // ส่งข้อมูลเข้าเว็บแอป Google Apps Script โดยตรง
+                fetch(scriptUrl, { 
+                    method: 'POST', 
+                    // ส่งข้อมูลเข้าเว็บแอป Google Apps Script โดยตรง
+                fetch(scriptUrl, { 
+                    method: 'POST', 
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded font-bold',
+                    },
                     body: urlParams 
                 })
                 .then(res => {
