@@ -445,4 +445,49 @@ return matchSearch && matchDept;
 renderHistoryUI(filtered);
 }
 // เรนเดอร์การแสดงผลสลับระหว่างหน้าจอคอม (Table) กับ มือถือ (Cards)
-function renderHistoryUI(
+function renderHistoryUI(dataList) {
+const desktopBody = document.getElementById('desktop-history-table');
+const mobileList = document.getElementById('mobile-history-list');
+
+desktopBody.innerHTML = '';
+mobileList.innerHTML = '';
+if(dataList.length === 0) {
+desktopBody.innerHTML = '<tr><td colspan="4" class="text-center py-8">ไม่พบรายการข้อมูลที่ค้นหา</td></tr>';
+mobileList.innerHTML = '<p class="text-center py-8">ไม่พบรายการข้อมูลที่ค้นหา</p>';
+return;
+}
+// เรียงจากข้อมูลใหม่ล่าสุดขึ้นก่อน
+const sortedList = [...dataList].reverse();
+sortedList.forEach(item => {
+
+// 🔒 เซ็นเซอร์เลข HN แบบ PDPA (แสดงแค่ 2 ตัวแรกตามด้วย X)
+const originalHn = item.hn ? item.hn.toString().trim() : "";
+const maskedHn = originalHn.length > 2 ? originalHn.substring(0, 2) + "XXXX" : "XXXX";
+
+// 1. เรนเดอร์ลงตาราง Desktop (ไม่แสดงรูปภาพ)
+const tr = document.createElement('tr');
+tr.innerHTML = `
+<td>${item.serviceDate}</td>
+<td class="font-bold text-primary dark:text-primary-fixed">${maskedHn}</td>
+<td><span class="bg-blue-100 dark:bg-slate-700 text-blue-800 dark:text-blue-200 text-xs px-2 py-1 rounded-full font-medium">${item.department}</span></td>
+<td class="max-w-xs truncate" title="${item.diagnosis}">${item.diagnosis}</td>
+`;
+desktopBody.appendChild(tr);
+// 2. เรนเดอร์ลงตารางการ์ดมือถือ Mobile (ไม่แสดงรูปภาพ)
+const card = document.createElement('div');
+card.className = "bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border-l-4 border-secondary text-left animate-fade-in";
+card.innerHTML = `
+<div class="text-[11px] text-on-surface-variant dark:text-slate-400 flex justify-between">
+<span>📅 รับบริการเมื่อ: ${item.serviceDate}</span>
+<span class="text-emerald-600 font-bold flex items-center gap-0.5"><span class="material-symbols-outlined text-sm">check_circle</span>คีย์เข้าระบบสำเร็จ</span>
+</div>
+<div class="font-bold text-primary dark:text-primary-fixed mt-1 text-sm">เลข HN คนไข้: ${maskedHn}</div>
+<div class="text-xs text-on-surface-variant dark:text-slate-300 mt-0.5"><b>หน่วยงานส่งต่อ:</b> ${item.department}</div>
+<div class="text-xs text-on-surface-variant dark:text-slate-300 bg-slate-50 dark:bg-slate-700 p-2.5 rounded mt-2 border border-outline-variant/30"><b>คำวินิจฉัย:</b> ${item.diagnosis}</div>
+`;
+mobileList.appendChild(card);
+});
+}
+</script>
+</body>
+</html>
