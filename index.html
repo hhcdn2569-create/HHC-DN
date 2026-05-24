@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
-<title>ระบบบันทึกข้อมูล HHC - สมเด็จพระสังฆราช</title>
+<title>ระบบบันทึกข้อมูล HHC - โรงพยาบาลสมเด็จพระสังฆราช</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
@@ -54,7 +54,7 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 <img alt="Hospital Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGchRZxpezkxRytbeAehlkXD-w9XqjcrBUZNgA5aZRiAC3oR5HAiXxzQeV4iDezoe7DRRFe6-kTGHIYeRe-kJDnQ6c8XRnekRiKYzY5nSVw5RBnf3u2YIt_-zrcCm9JQlH84bV_p2MhnwuuqwOlBlHfA32olfnz58hah6cVafgYDy91PuT1T1f3BOz9aja50-arxdqVwm-HDZzgZk3zCnXXJtA4R0bDOmtZstyRYXXWXfy5QkmoyMfISBtjF82T82c6YCzeE7WwK4"/>
 </div>
 <div class="flex flex-col min-w-0">
-<h1 class="font-headline-md text-[16px] md:text-[18px] font-bold text-primary dark:text-primary-fixed leading-tight truncate">กลุ่มงานพยาบาลชุมชน</h1>
+<h1 class="font-headline-md text-[18px] md:text-[18px] font-bold text-primary dark:text-primary-fixed leading-tight truncate">กลุ่มงานพยาบาลชุมชน</h1>
 <p class="text-[11px] md:text-[12px] text-on-surface-variant dark:text-slate-400 font-medium leading-tight truncate">โรงพยาบาลสมเด็จพระสังฆราช (อมฺพรมหาเถร)</p>
 </div>
 </div>
@@ -75,7 +75,7 @@ dark_mode
 <form class="space-y-5 bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl shadow-md w-full border border-outline-variant/30" id="hhc-form">
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <div class="flex flex-col gap-1.5">
-<label class="font-label-md text-on-surface dark:text-slate-300 text-sm" for="visit-date">วันที่รับบริการ</label>
+<label class="font-label-md text-on-surface dark:text-slate-300 text-sm" for="visit-date">วันที่</label>
 <input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright dark:bg-slate-700 dark:text-white form-input-focus text-sm md:text-base" id="visit-date" required type="date"/>
 </div>
 <div class="flex flex-col gap-1.5">
@@ -101,7 +101,7 @@ dark_mode
 <input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright dark:bg-slate-700 dark:text-white form-input-focus text-sm md:text-base" id="other-dept" placeholder="ระบุชื่อแผนก">
 </div>
 <div class="flex flex-col gap-1.5">
-<label class="font-label-md text-on-surface dark:text-slate-300 text-sm" for="diagnosis">คำวินิจฉัย (Diagnosis)</label>
+<label class="font-label-md text-on-surface dark:text-slate-300 text-sm" for="diagnosis">คำวินิจฉัยโรค (Diagnosis)</label>
 <textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright dark:bg-slate-700 dark:text-white form-input-focus text-sm md:text-base" id="diagnosis" rows="4" placeholder="ระบุรายละเอียดการวินิจฉัยหรืออาการสำคัญของผู้ป่วย..." required></textarea>
 </div>
 <div class="flex flex-col gap-1.5">
@@ -227,7 +227,7 @@ let base64ImageString = "";
 let deptChartInstance = null;
 let diagChartInstance = null;
 let allRecordsData = [];
-// ลิงก์ Web App ล่าสุดของพี่พีทชี้ตรงเข้า Google Apps Script
+// ลิงก์ Web App ล่าสุดชี้ตรงเข้า Google Apps Script
 const scriptUrl = 'https://script.google.com/macros/s/AKfycbzTXnvh5FMJ34n7-PPuA2fhJ9EokOS8DpgaXAq8dSmbXA1rCm9LJzXWFiW74JTh-BttGA/exec';
 // ระบบสลับธีมโหมดมืด มู้ดสว่าง
 function toggleDarkMode() {
@@ -283,14 +283,14 @@ document.getElementById('hhc-form').addEventListener('submit', function(e) {
 e.preventDefault();
 
 if (!base64ImageString) {
-alert('⚠️ พี่พีทลืมแนบรูปภาพหรือเปล่าครับ? กรุณาใส่รูปถ่ายประกอบเคสด้วยครับ');
+alert('⚠️ กรุณาใส่รูปถ่ายประกอบเคส ⚠️');
 return;
 }
 if (isSubmitting) return;
 isSubmitting = true;
 const submitBtn = document.getElementById('submit-btn');
 submitBtn.disabled = true;
-submitBtn.innerText = '⏳ ระบบกำลังอัปโหลดรูปภาพและบันทึกข้อมูล...';
+submitBtn.innerText = '⏳ ระบบกำลังบันทึกข้อมูล กรุณารอสักครู่...';
 const finalDept = document.getElementById('department').value === 'อื่นๆ' ?
 document.getElementById('other-dept').value :
 document.getElementById('department').value;
@@ -476,11 +476,11 @@ const card = document.createElement('div');
 card.className = "bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border-l-4 border-secondary text-left animate-fade-in";
 card.innerHTML = `
 <div class="text-[11px] text-on-surface-variant dark:text-slate-400 flex justify-between">
-<span>📅 รับบริการเมื่อ: ${item.serviceDate}</span>
+<span>📅 วันที่: ${item.serviceDate}</span>
 <span class="text-emerald-600 font-bold flex items-center gap-0.5"><span class="material-symbols-outlined text-sm">check_circle</span>คีย์เข้าระบบสำเร็จ</span>
 </div>
 <div class="font-bold text-primary dark:text-primary-fixed mt-1 text-sm">เลข HN คนไข้: ${maskedHn}</div>
-<div class="text-xs text-on-surface-variant dark:text-slate-300 mt-0.5"><b>หน่วยงานส่งต่อ:</b> ${item.department}</div>
+<div class="text-xs text-on-surface-variant dark:text-slate-300 mt-0.5"><b>หน่วยงานที่ส่งต่อ:</b> ${item.department}</div>
 <div class="text-xs text-on-surface-variant dark:text-slate-300 bg-slate-50 dark:bg-slate-700 p-2.5 rounded mt-2 border border-outline-variant/30"><b>คำวินิจฉัย:</b> ${item.diagnosis}</div>
 `;
 mobileList.appendChild(card);
