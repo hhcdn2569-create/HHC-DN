@@ -143,8 +143,8 @@ dark_mode
 <p class="text-3xl md:text-4xl font-bold text-emerald-600 my-2" id="dash-today-cases">0</p>
 </div>
 <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm text-center border-t-4 border-amber-500">
-<p class="text-on-surface-variant dark:text-slate-400 font-bold text-xs uppercase tracking-wider">อัตราการแนบรูป</p>
-<p class="text-3xl md:text-4xl font-bold text-amber-500 my-2" id="dash-image-rate">100%</p>
+<p class="text-on-surface-variant dark:text-slate-400 font-bold text-xs uppercase tracking-wider">วันที่มีเคสมากที่สุด</p>
+<p class="text-2xl md:text-3xl font-bold text-amber-500 my-2" id="dash-busiest-day">-</p>
 </div>
 </div>
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -360,6 +360,20 @@ countMap[d] = (countMap[d] || 0) + 1;
 if(countMap[d] > maxCount) { maxCount = countMap[d]; maxDept = d; }
 });
 document.getElementById('dash-top-dept').innerText = maxDept;
+
+// [จุดที่แก้]: คำนวณวันที่มีเคสมากที่สุด
+const dateCounts = {};
+data.forEach(item => {
+    const d = item.serviceDate;
+    if(d) dateCounts[d] = (dateCounts[d] || 0) + 1;
+});
+let maxDate = "-";
+let maxVal = 0;
+for(const d in dateCounts) {
+    if(dateCounts[d] > maxVal) { maxVal = dateCounts[d]; maxDate = d; }
+}
+document.getElementById('dash-busiest-day').innerText = maxDate;
+
 // วาดกราฟแท่งแยกแผนก (Department Bar Chart)
 if (deptChartInstance) deptChartInstance.destroy();
 const ctx = document.getElementById('deptChart').getContext('2d');
