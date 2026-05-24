@@ -1,515 +1,448 @@
 <!DOCTYPE html>
 <html class="light" lang="th">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
-    <title>ระบบบันทึกข้อมูล HHC - สมเด็จพระสังฆราช</title>
-    <!-- Tailwind CSS และ Plugins ครบชุด -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "on-error-container": "#93000a", "on-tertiary-fixed": "#121e1c", "on-tertiary": "#ffffff", "primary-fixed": "#d6e3ff", "inverse-on-surface": "#eaf1ff", "on-primary-fixed": "#001b3d", "on-error": "#ffffff", "surface": "#f8f9ff", "background": "#f8f9ff", "surface-container-highest": "#d3e4fe", "on-primary": "#ffffff", "on-secondary-fixed": "#002020", "surface-dim": "#cbdbf5", "on-tertiary-fixed-variant": "#3d4947", "surface-variant": "#d3e4fe", "tertiary-container": "#33403e", "surface-container-low": "#eff4ff", "primary-container": "#1b3d6d", "error-container": "#ffdad6", "surface-container-high": "#dce9ff", "surface-tint": "#405f91", "secondary-fixed-dim": "#6fd7d6", "on-secondary": "#ffffff", "secondary-container": "#8cf3f3", "on-primary-container": "#8aa9e0", "on-surface": "#0b1c30", "on-secondary-fixed-variant": "#004f4f", "tertiary-fixed-dim": "#bcc9c7", "outline": "#747780", "on-tertiary-container": "#9eaba9", "on-secondary-container": "#007070", "surface-container": "#e5eeff", "surface-container-lowest": "#ffffff", "on-primary-fixed-variant": "#264777", "tertiary-fixed": "#d7e5e2", "on-surface-variant": "#43474f", "inverse-surface": "#213145", "primary-fixed-dim": "#a9c7ff", "inverse-primary": "#a9c7ff", "primary": "#002753", "outline-variant": "#c4c6d0", "surface-bright": "#f8f9ff", "tertiary": "#1e2a28", "secondary": "#006a6a", "on-background": "#0b1c30", "error": "#ba1a1a", "secondary-fixed": "#8cf3f3"
-                    },
-                    "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
-                    "fontFamily": { "body-lg": ["Public Sans"], "label-sm": ["Public Sans"], "body-md": ["Public Sans"], "headline-lg-mobile": ["Manrope"], "headline-md": ["Manrope"], "headline-lg": ["Manrope"], "headline-xl": ["Manrope"], "label-md": ["Public Sans"] },
-                    "fontSize": { "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}], "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}], "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}], "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}], "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}], "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}], "headline-xl": ["40px", {"lineHeight": "48px", "fontWeight": "700"}], "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}] }
-                },
-            },
-        }
-    </script>
-    <style>
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .form-input-focus:focus { outline: none; border-color: #002753; box-shadow: 0 0 0 2px rgba(0, 39, 83, 0.2); }
-        body { background-color: #f8f9ff; min-height: 100vh; display: flex; flex-direction: column; transition: background-color 0.3s; }
-        html.dark body { background-color: #0b1c30; color: #eaf1ff; }
-        .page-content { display: none; }
-        .page-content.active { display: block; }
-        .header-banner {
-            background: linear-gradient(135deg, #002753 0%, #1b3d6d 100%);
-            color: #ffffff;
-            padding: 24px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 39, 83, 0.2);
-            margin-bottom: 24px;
-        }
-        .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-        /* สไตล์ตารางประวัติสำหรับหน้าจอคอม */
-        .custom-table th { background-color: #002753; color: white; padding: 12px; text-align: left; font-size: 14px; }
-        .custom-table td { padding: 12px; border-bottom: 1px solid #e5eeff; font-size: 14px; }
-        html.dark .custom-table td { border-bottom: 1px solid #213145; }
-    </style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>ระบบบันทึกข้อมูล HHC - สมเด็จพระสังฆราช</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<script id="tailwind-config">
+tailwind.config = {
+darkMode: "class",
+theme: {
+extend: {
+"colors": {
+"on-error-container": "#93000a", "on-tertiary-fixed": "#121e1c", "on-tertiary": "#ffffff", "primary-fixed": "#d6e3ff", "inverse-on-surface": "#eaf1ff", "on-primary-fixed": "#001b3d", "on-error": "#ffffff", "surface": "#f8f9ff", "background": "#f8f9ff", "surface-container-highest": "#d3e4fe", "on-primary": "#ffffff", "on-secondary-fixed": "#002020", "surface-dim": "#cbdbf5", "on-tertiary-fixed-variant": "#3d4947", "surface-variant": "#d3e4fe", "tertiary-container": "#33403e", "surface-container-low": "#eff4ff", "primary-container": "#1b3d6d", "error-container": "#ffdad6", "surface-container-high": "#dce9ff", "surface-tint": "#405f91", "secondary-fixed-dim": "#6fd7d6", "on-secondary": "#ffffff", "secondary-container": "#8cf3f3", "on-primary-container": "#8aa9e0", "on-surface": "#0b1c30", "on-secondary-fixed-variant": "#004f4f", "tertiary-fixed-dim": "#bcc9c7", "outline": "#747780", "on-tertiary-container": "#9eaba9", "on-secondary-container": "#007070", "surface-container": "#e5eeff", "surface-container-lowest": "#ffffff", "on-primary-fixed-variant": "#264777", "tertiary-fixed": "#d7e5e2", "on-surface-variant": "#43474f", "inverse-surface": "#213145", "primary-fixed-dim": "#a9c7ff", "inverse-primary": "#a9c7ff", "primary": "#002753", "outline-variant": "#c4c6d0", "surface-bright": "#f8f9ff", "tertiary": "#1e2a28", "secondary": "#006a6a", "on-background": "#0b1c30", "error": "#ba1a1a", "secondary-fixed": "#8cf3f3"
+},
+"borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+"fontFamily": { "body-lg": ["Public Sans"], "label-sm": ["Public Sans"], "body-md": ["Public Sans"], "headline-lg-mobile": ["Manrope"], "headline-md": ["Manrope"], "headline-lg": ["Manrope"], "headline-xl": ["Manrope"], "label-md": ["Public Sans"] },
+"fontSize": { "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}], "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}], "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}], "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}], "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}], "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}], "headline-xl": ["40px", {"lineHeight": "48px", "fontWeight": "700"}], "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}] }
+},
+},
+}
+</script>
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.form-input-focus:focus { outline: none; border-color: #002753; box-shadow: 0 0 0 2px rgba(0, 39, 83, 0.2); }
+body { background-color: #f8f9ff; min-height: 100vh; display: flex; flex-direction: column; transition: background-color 0.3s; }
+html.dark body { background-color: #0b1c30; color: #eaf1ff; }
+.page-content { display: none; }
+.page-content.active { display: block; }
+.header-banner {
+background: linear-gradient(135deg, #002753 0%, #1b3d6d 100%);
+color: #ffffff;
+padding: 24px;
+border-radius: 16px;
+box-shadow: 0 4px 20px rgba(0, 39, 83, 0.2);
+margin-bottom: 24px;
+}
+.animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+/* สไตล์ตารางประวัติสำหรับหน้าจอคอม */
+.custom-table th { background-color: #002753; color: white; padding: 12px; text-align: left; font-size: 14px; }
+.custom-table td { padding: 12px; border-bottom: 1px solid #e5eeff; font-size: 14px; }
+html.dark .custom-table td { border-bottom: 1px solid #213145; }
+</style>
 </head>
 <body class="font-body-md text-on-surface pb-24 md:pb-6 md:pt-16">
+<header class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 shadow-sm flex items-center justify-between px-4 md:px-6 h-16 w-full transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden flex-shrink-0">
+<img alt="Hospital Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGchRZxpezkxRytbeAehlkXD-w9XqjcrBUZNgA5aZRiAC3oR5HAiXxzQeV4iDezoe7DRRFe6-kTGHIYeRe-kJDnQ6c8XRnekRiKYzY5nSVw5RBnf3u2YIt_-zrcCm9JQlH84bV_p2MhnwuuqwOlBlHfA32olfnz58hah6cVafgYDy91PuT1T1f3BOz9aja50-arxdqVwm-HDZzgZk3zCnXXJtA4R0bDOmtZstyRYXXWXfy5QkmoyMfISBtjF82T82c6YCzeE7WwK4"/>
+</div>
+<div class="flex flex-col min-w-0">
+<h1 class="font-headline-md text-[16px] md:text-[18px] font-bold text-primary dark:text-primary-fixed leading-tight truncate">กลุ่มงานพยาบาลชุมชน</h1>
+<p class="text-[11px] md:text-[12px] text-on-surface-variant dark:text-slate-400 font-medium leading-tight truncate">โรงพยาบาลสมเด็จพระสังฆราช (อมฺพรมหาเถร)</p>
+</div>
+</div>
 
-    <!-- 🌐 ส่วนหัวแถบด้านบน (Top Bar Header) -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 shadow-sm flex items-center justify-between px-4 md:px-6 h-16 w-full transition-colors">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden flex-shrink-0">
-                <img alt="Hospital Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGchRZxpezkxRytbeAehlkXD-w9XqjcrBUZNgA5aZRiAC3oR5HAiXxzQeV4iDezoe7DRRFe6-kTGHIYeRe-kJDnQ6c8XRnekRiKYzY5nSVw5RBnf3u2YIt_-zrcCm9JQlH84bV_p2MhnwuuqwOlBlHfA32olfnz58hah6cVafgYDy91PuT1T1f3BOz9aja50-arxdqVwm-HDZzgZk3zCnXXJtA4R0bDOmtZstyRYXXWXfy5QkmoyMfISBtjF82T82c6YCzeE7WwK4"/>
-            </div>
-            <div class="flex flex-col min-w-0">
-                <h1 class="font-headline-md text-[16px] md:text-[18px] font-bold text-primary dark:text-primary-fixed leading-tight truncate">กลุ่มงานพยาบาลชุมชน</h1>
-                <p class="text-[11px] md:text-[12px] text-on-surface-variant dark:text-slate-400 font-medium leading-tight truncate">โรงพยาบาลสมเด็จพระสังฆราช (อมฺพรมหาเถร)</p>
-            </div>
-        </div>
-        
-        <!-- ปุ่มสลับโหมดมืด/สว่าง & โปรไฟล์ -->
-        <div class="flex items-center gap-2">
-            <button onclick="toggleDarkMode()" class="material-symbols-outlined text-primary dark:text-primary-fixed p-2 hover:bg-surface-container-high dark:hover:bg-slate-800 rounded-full">
-                dark_mode
-            </button>
-            <button class="material-symbols-outlined text-primary dark:text-primary-fixed p-2 hover:bg-surface-container-high dark:hover:bg-slate-800 rounded-full flex-shrink-0">account_circle</button>
-        </div>
-    </header>
+<div class="flex items-center gap-2">
+<button onclick="toggleDarkMode()" class="material-symbols-outlined text-primary dark:text-primary-fixed p-2 hover:bg-surface-container-high dark:hover:bg-slate-800 rounded-full">
+dark_mode
+</button>
+<button class="material-symbols-outlined text-primary dark:text-primary-fixed p-2 hover:bg-surface-container-high dark:hover:bg-slate-800 rounded-full flex-shrink-0">account_circle</button>
+</div>
+</header>
+<main class="w-full flex-1 px-4 md:px-6 py-6 mt-16 mx-auto max-w-full sm:max-w-[95%] md:max-w-[90%] lg:max-w-[1200px]">
+<div id="view-form" class="page-content active animate-fade-in">
+<div class="header-banner">
+<h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">ระบบบันทึกข้อมูล HHC</h2>
+<p class="text-blue-200 text-sm md:text-base">Home Health Care Data Entry System</p>
+</div>
+<form class="space-y-5 bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl shadow-md w-full border border-outline-variant/30" id="hhc-form">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-on-surface dark:text-slate-300 text-sm" for="visit-date">วันที่รับบริการ</label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright dark:bg-slate-700 dark:text-white form-input-focus text-sm md:text-base" id="visit-date" required type="date"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-on-surface dark:text-slate-300 text-sm" for="hn-number">เลขผู้ป่วย (HN)</label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright dark:bg-slate-700 dark:text-white form-input-focus text-sm md:text-base" id="hn-number" placeholder="เช่น 66000123" required type="text"/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-on-surface dark:text-slate-300 text-sm" for="department">หน่วยงาน/แผนกที่ส่งต่อ</label>
+<select class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright dark:bg-slate-700 dark:text-white form-input-focus cursor-pointer text-sm md:text-base" id="department" onchange="toggleOther(this.value)" required>
+<option disabled selected value="">เลือกหน่วยงาน</option>
+<option value="ER">ER</option><option value="OPD">OPD</option><option value="ICU">ICU</option>
+<option value="กุมาร">กุมาร</option><option value="ORT">ORT</option><option value="ศัลยกรรม">ศัลยกรรม</option>
+<option value="นรีเวช">นรีเวช</option><option value="จักษุ">จักษุ</option><option value="Stroke">Stroke</option>
+<option value="ฉ.2">ฉ.2</option><option value="ฉ.3">ฉ.3</option><option value="ฉ.4">ฉ.4</option>
+<option value="ฉ.5">ฉ.5</option><option value="ฉ.6">ฉ.6</option><option value="ฉ.7">ฉ.7</option>
+<option value="อายุรกรรม (ชาย)">อายุรกรรม (ชาย)</option><option value="อายุรกรรม (หญิง)">อายุรกรรม (หญิง)</option>
+<option value="อื่นๆ">อื่นๆ (ระบุเพิ่มเติม)</option>
+</select>
+</div>
+<div class="hidden flex flex-col gap-1.5" id="other-dept-container">
+<label class="font-label-md text-on-surface dark:text-slate-300 text-sm" for="other-dept">ระบุแผนกเพิ่มเติม</label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright dark:bg-slate-700 dark:text-white form-input-focus text-sm md:text-base" id="other-dept" placeholder="ระบุชื่อแผนก">
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-on-surface dark:text-slate-300 text-sm" for="diagnosis">คำวินิจฉัย (Diagnosis)</label>
+<textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright dark:bg-slate-700 dark:text-white form-input-focus text-sm md:text-base" id="diagnosis" rows="4" placeholder="ระบุรายละเอียดการวินิจฉัยหรืออาการสำคัญของผู้ป่วย..." required></textarea>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-on-surface dark:text-slate-300 text-sm">แนบรูปภาพประกอบเคส</label>
+<div class="border-2 border-dashed border-outline-variant rounded-lg py-6 text-center cursor-pointer bg-surface-bright dark:bg-slate-700 hover:bg-surface-container-low dark:hover:bg-slate-600 transition-all" onclick="document.getElementById('image-file').click()">
+<span class="material-symbols-outlined text-secondary text-4xl mb-1">add_a_photo</span>
+<p class="text-xs md:text-sm text-on-surface-variant dark:text-slate-300 px-2 font-medium" id="upload-label">คลิกที่นี่เพื่อถ่ายภาพหรือเลือกไฟล์รูปภาพ</p>
+<input type="file" id="image-file" accept="image/*" class="hidden">
+</div>
+<div id="image-preview-container" class="hidden mt-3 flex justify-center relative">
+<img id="image-preview" src="" class="max-h-48 rounded-lg shadow-sm border border-outline-variant">
+<button type="button" onclick="resetImageSelection()" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 shadow-md hover:bg-red-700">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-4 rounded-lg shadow-md transition-all flex items-center justify-center gap-2 text-sm md:text-base" type="submit" id="submit-btn">
+<span class="material-symbols-outlined text-xl">save</span> บันทึกข้อมูลเข้าสู่ระบบ
+</button>
+</form>
+</div>
+<div id="view-dashboard" class="page-content animate-fade-in">
+<div class="header-banner">
+<h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">แดชบอร์ดสรุปผลสถิติ</h2>
+<p class="text-blue-200 text-sm md:text-base">รายงานภาพรวมข้อมูลประมวลผลอัตโนมัติ</p>
+</div>
 
-    <!-- 📋 ส่วนเนื้อหาหลัก (Main Content) -->
-    <main class="w-full flex-1 px-4 md:px-6 py-6 mt-16 mx-auto max-w-full sm:max-w-[95%] md:max-w-[90%] lg:max-w-[1200px]">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm text-center border-t-4 border-primary">
+<p class="text-on-surface-variant dark:text-slate-400 font-bold text-xs uppercase tracking-wider">เคสทั้งหมดในระบบ</p>
+<p class="text-3xl md:text-4xl font-bold text-primary dark:text-primary-fixed my-2" id="dash-total-cases">0</p>
+</div>
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm text-center border-t-4 border-secondary">
+<p class="text-on-surface-variant dark:text-slate-400 font-bold text-xs uppercase tracking-wider">แผนกที่ส่งเคสสูงสุด</p>
+<p class="text-lg md:text-xl font-bold text-secondary my-3 truncate" id="dash-top-dept">-</p>
+</div>
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm text-center border-t-4 border-emerald-600">
+<p class="text-on-surface-variant dark:text-slate-400 font-bold text-xs uppercase tracking-wider">บันทึกวันนี้</p>
+<p class="text-3xl md:text-4xl font-bold text-emerald-600 my-2" id="dash-today-cases">0</p>
+</div>
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm text-center border-t-4 border-amber-500">
+<p class="text-on-surface-variant dark:text-slate-400 font-bold text-xs uppercase tracking-wider">อัตราการแนบรูป</p>
+<p class="text-3xl md:text-4xl font-bold text-amber-500 my-2" id="dash-image-rate">100%</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-outline-variant/30">
+<h3 class="text-sm font-bold text-primary dark:text-primary-fixed mb-3 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">bar_chart</span> เคสแยกตามหน่วยงาน (Department)
+</h3>
+<div class="relative h-[280px] w-full"><canvas id="deptChart"></canvas></div>
+</div>
+<div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-outline-variant/30">
+<h3 class="text-sm font-bold text-primary dark:text-primary-fixed mb-3 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">pie_chart</span> สัดส่วนกลุ่มโรค/คำวินิจฉัยหลัก (Top 5)
+</h3>
+<div class="relative h-[280px] w-full"><canvas id="diagChart"></canvas></div>
+</div>
+</div>
+</div>
+<div id="view-history" class="page-content animate-fade-in">
+<div class="header-banner">
+<h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">ประวัติการบันทึกข้อมูล</h2>
+<p class="text-blue-200 text-sm md:text-base">รายการตรวจสอบสืบค้นและค้นหาเคสผู้ป่วยย้อนหลัง (ซ่อนข้อมูลตาม PDPA)</p>
+</div>
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-outline-variant/30 mb-5 flex flex-col sm:flex-row gap-3">
+<div class="flex-1 relative">
+<span class="material-symbols-outlined absolute left-3 top-3 text-on-surface-variant text-xl">search</span>
+<input type="text" id="search-input" oninput="filterHistory()" class="w-full pl-10 pr-4 py-2 rounded-lg border border-outline-variant dark:bg-slate-700 dark:text-white form-input-focus text-sm" placeholder="ค้นหาด้วยเลข HN, ชื่อแผนก, หรือคำวินิจฉัย...">
+</div>
+<div class="w-full sm:w-52">
+<select id="filter-dept" onchange="filterHistory()" class="w-full px-3 py-2 rounded-lg border border-outline-variant dark:bg-slate-700 dark:text-white form-input-focus text-sm cursor-pointer">
+<option value="">เลือกดูทุกแผนก</option>
+<option value="ER">ER</option><option value="OPD">OPD</option><option value="ICU">ICU</option>
+<option value="กุมาร">กุมาร</option><option value="ORT">ORT</option><option value="ศัลยกรรม">ศัลยกรรม</option>
+<option value="นรีเวช">นรีเวช</option><option value="จักษุ">จักษุ</option><option value="Stroke">Stroke</option>
+</select>
+</div>
+<button onclick="fetchRealtimeData()" class="bg-primary-container text-primary font-bold px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-1 hover:bg-opacity-80">
+<span class="material-symbols-outlined text-sm">refresh</span>รีเฟรชข้อมูล
+</button>
+</div>
+<div class="hidden md:block bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden border border-outline-variant/30">
+<table class="w-full custom-table">
+<thead>
+<tr>
+<th>วันที่รับบริการ</th>
+<th>เลข HN ผู้ป่วย</th>
+<th>หน่วยงาน/แผนก</th>
+<th>คำวินิจฉัยโรค</th>
+</tr>
+</thead>
+<tbody id="desktop-history-table">
+<tr>
+<td colspan="4" class="text-center py-8 text-on-surface-variant">กำลังดึงประวัติข้อมูลย้อนหลังโปรดรอสักครู่...</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="md:hidden space-y-3" id="mobile-history-list">
+<p class="text-center text-on-surface-variant text-sm py-8">กำลังดึงข้อมูลประวัติย้อนหลัง...</p>
+</div>
+</div>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 border-t border-outline-variant/50 h-16 flex justify-around items-center w-full shadow-lg transition-colors">
+<button onclick="changeTab('view-form', this)" class="tab-btn flex flex-col items-center justify-center flex-1 text-primary dark:text-primary-fixed font-bold h-full transition-all">
+<span class="material-symbols-outlined text-2xl">edit_note</span><span class="text-xs mt-0.5">บันทึก</span>
+</button>
+<button onclick="changeTab('view-dashboard', this)" class="tab-btn flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-slate-400 h-full transition-all">
+<span class="material-symbols-outlined text-2xl">analytics</span><span class="text-xs mt-0.5">แดชบอร์ด</span>
+</button>
+<button onclick="changeTab('view-history', this)" class="tab-btn flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-slate-400 h-full transition-all">
+<span class="material-symbols-outlined text-2xl">history</span><span class="text-xs mt-0.5">ประวัติ</span>
+</button>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// บังคับใส่วันที่ปัจจุบันตอนโหลดหน้าเว็บบันทึกครั้งแรก
+document.getElementById('visit-date').valueAsDate = new Date();
 
-        <!-- ==================== Tab 1: หน้าบันทึกข้อมูล (Form View) ==================== -->
-        <div id="view-form" class="page-content active animate-fade-in">
-            <div class="header-banner">
-                <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">ระบบบันทึกข้อมูล HHC</h2>
-                <p class="text-blue-200 text-sm md:text-base">Home Health Care Data Entry System</p>
-            </div>
+let isSubmitting = false;
+let base64ImageString = "";
+let deptChartInstance = null;
+let diagChartInstance = null;
+let allRecordsData = [];
+// ลิงก์ Web App ล่าสุดของพี่พีทชี้ตรงเข้า Google Apps Script
+const scriptUrl = 'https://script.google.com/macros/s/AKfycbzTXnvh5FMJ34n7-PPuA2fhJ9EokOS8DpgaXAq8dSmbXA1rCm9LJzXWFiW74JTh-BttGA/exec';
+// ระบบสลับธีมโหมดมืด มู้ดสว่าง
+function toggleDarkMode() {
+const html = document.documentElement;
+if(html.classList.contains('dark')) {
+html.classList.remove('dark');
+html.classList.add('light');
+} else {
+html.classList.remove('light');
+html.classList.add('dark');
+}
+}
+// สลับแท็บสลับหน้าจอการใช้งาน
+function changeTab(targetId, btnElement) {
+document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('text-primary', 'dark:text-primary-fixed', 'font-bold'));
 
-            <form class="space-y-5 bg-white dark:bg-slate-800 p-5 md:p-6 rounded-xl shadow-md w-full border border-outline-variant/30" id="hhc-form">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="flex flex-col gap-1.5">
-                        <label class="font-label-md text-on-surface dark:text-slate-300 text-sm" for="visit-date">วันที่รับบริการ</label>
-                        <input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright dark:bg-slate-700 dark:text-white form-input-focus text-sm md:text-base" id="visit-date" required type="date"/>
-                    </div>
-                    <div class="flex flex-col gap-1.5">
-                        <label class="font-label-md text-on-surface dark:text-slate-300 text-sm" for="hn-number">เลขผู้ป่วย (HN)</label>
-                        <input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright dark:bg-slate-700 dark:text-white form-input-focus text-sm md:text-base" id="hn-number" placeholder="เช่น 66000123" required type="text"/>
-                    </div>
-                </div>
+document.getElementById(targetId).classList.add('active');
+btnElement.classList.add('text-primary', 'dark:text-primary-fixed', 'font-bold');
 
-                <div class="flex flex-col gap-1.5">
-                    <label class="font-label-md text-on-surface dark:text-slate-300 text-sm" for="department">หน่วยงาน/แผนกที่ส่งต่อ</label>
-                    <select class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright dark:bg-slate-700 dark:text-white form-input-focus cursor-pointer text-sm md:text-base" id="department" onchange="toggleOther(this.value)" required>
-                        <option disabled selected value="">เลือกหน่วยงาน</option>
-                        <option value="ER">ER</option><option value="OPD">OPD</option><option value="ICU">ICU</option>
-                        <option value="กุมาร">กุมาร</option><option value="ORT">ORT</option><option value="ศัลยกรรม">ศัลยกรรม</option>
-                        <option value="นรีเวช">นรีเวช</option><option value="จักษุ">จักษุ</option><option value="Stroke">Stroke</option>
-                        <option value="ฉ.2">ฉ.2</option><option value="ฉ.3">ฉ.3</option><option value="ฉ.4">ฉ.4</option>
-                        <option value="ฉ.5">ฉ.5</option><option value="ฉ.6">ฉ.6</option><option value="ฉ.7">ฉ.7</option>
-                        <option value="อายุรกรรม (ชาย)">อายุรกรรม (ชาย)</option><option value="อายุรกรรม (หญิง)">อายุรกรรม (หญิง)</option>
-                        <option value="อื่นๆ">อื่นๆ (ระบุเพิ่มเติม)</option>
-                    </select>
-                </div>
+if (targetId === 'view-dashboard' || targetId === 'view-history') {
+fetchRealtimeData();
+}
+}
+function toggleOther(val) {
+document.getElementById('other-dept-container').classList.toggle('hidden', val !== 'อื่นๆ');
+document.getElementById('other-dept').required = (val === 'อื่นๆ');
+}
+// จัดการอัปโหลดไฟล์รูปภาพ แปลงค่า และทำพรีวิวรูปภาพ
+document.getElementById('image-file').addEventListener('change', function(e) {
+if(e.target.files.length > 0) {
+const file = e.target.files[0];
+document.getElementById('upload-label').innerText = '✔️ เลือกรูปภาพสำเร็จ: ' + file.name;
 
-                <div class="hidden flex flex-col gap-1.5" id="other-dept-container">
-                    <label class="font-label-md text-on-surface dark:text-slate-300 text-sm" for="other-dept">ระบุแผนกเพิ่มเติม</label>
-                    <input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright dark:bg-slate-700 dark:text-white form-input-focus text-sm md:text-base" id="other-dept" placeholder="ระบุชื่อแผนก">
-                </div>
+const reader = new FileReader();
+reader.onload = function(event) {
+base64ImageString = event.target.result;
+document.getElementById('image-preview').src = base64ImageString;
+document.getElementById('image-preview-container').classList.remove('hidden');
+};
+reader.readAsDataURL(file);
+}
+});
+function resetImageSelection() {
+document.getElementById('image-file').value = "";
+base64ImageString = "";
+document.getElementById('image-preview').src = "";
+document.getElementById('image-preview-container').classList.add('hidden');
+document.getElementById('upload-label').innerText = 'คลิกที่นี่เพื่อถ่ายภาพหรือเลือกไฟล์รูปภาพ';
+}
+// 🛠️ ฟังก์ชันการส่งข้อมูลเข้า Google Sheets แบบ API No-CORS ทะลุกำแพงบล็อก
+document.getElementById('hhc-form').addEventListener('submit', function(e) {
+e.preventDefault();
 
-                <div class="flex flex-col gap-1.5">
-                    <label class="font-label-md text-on-surface dark:text-slate-300 text-sm" for="diagnosis">คำวินิจฉัย (Diagnosis)</label>
-                    <textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright dark:bg-slate-700 dark:text-white form-input-focus text-sm md:text-base" id="diagnosis" rows="4" placeholder="ระบุรายละเอียดการวินิจฉัยหรืออาการสำคัญของผู้ป่วย..." required></textarea>
-                </div>
+if (!base64ImageString) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'ลืมแนบรูปภาพ',
+        text: 'กรุณาใส่รูปถ่ายประกอบเคสด้วยครับ',
+        confirmButtonColor: '#ba1a1a'
+    });
+    return;
+}
+if (isSubmitting) return;
+isSubmitting = true;
+const submitBtn = document.getElementById('submit-btn');
+submitBtn.disabled = true;
+submitBtn.innerText = '⏳ ระบบกำลังอัปโหลดรูปภาพและบันทึกข้อมูล...';
+const finalDept = document.getElementById('department').value === 'อื่นๆ' ?
+document.getElementById('other-dept').value :
+document.getElementById('department').value;
 
-                <div class="flex flex-col gap-1.5">
-                    <label class="font-label-md text-on-surface dark:text-slate-300 text-sm">แนบรูปภาพประกอบเคส</label>
-                    <div class="border-2 border-dashed border-outline-variant rounded-lg py-6 text-center cursor-pointer bg-surface-bright dark:bg-slate-700 hover:bg-surface-container-low dark:hover:bg-slate-600 transition-all" onclick="document.getElementById('image-file').click()">
-                        <span class="material-symbols-outlined text-secondary text-4xl mb-1">add_a_photo</span>
-                        <p class="text-xs md:text-sm text-on-surface-variant dark:text-slate-300 px-2 font-medium" id="upload-label">คลิกที่นี่เพื่อถ่ายภาพหรือเลือกไฟล์รูปภาพ</p>
-                        <input type="file" id="image-file" accept="image/*" class="hidden">
-                    </div>
-                    <!-- ส่วนพรีวิวรูปภาพก่อนส่ง -->
-                    <div id="image-preview-container" class="hidden mt-3 flex justify-center relative">
-                        <img id="image-preview" src="" class="max-h-48 rounded-lg shadow-sm border border-outline-variant">
-                        <button type="button" onclick="resetImageSelection()" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 shadow-md hover:bg-red-700">
-                            <span class="material-symbols-outlined text-sm">close</span>
-                        </button>
-                    </div>
-                </div>
+const payload = {
+serviceDate: document.getElementById('visit-date').value,
+hn: document.getElementById('hn-number').value,
+department: finalDept,
+diagnosis: document.getElementById('diagnosis').value,
+image: base64ImageString
+};
+fetch(scriptUrl, {
+method: 'POST',
+mode: 'no-cors',
+headers: { 'Content-Type': 'text/plain' },
+body: JSON.stringify(payload)
+})
+.then(() => {
+    // แจ้งเตือนแบบ Popup SweetAlert2
+    Swal.fire({
+        icon: 'success',
+        title: 'บันทึกสำเร็จ!',
+        text: 'บันทึกข้อมูล HHC และภาพขึ้นระบบเรียบร้อยแล้ว',
+        confirmButtonColor: '#002753',
+        confirmButtonText: 'ตกลง'
+    });
+    document.getElementById('hhc-form').reset();
+    document.getElementById('visit-date').valueAsDate = new Date();
+    resetImageSelection();
+    toggleOther('');
+})
+.catch(err => {
+    console.error(err);
+    Swal.fire({
+        icon: 'error',
+        title: 'เกิดข้อผิดพลาด',
+        text: 'ไม่สามารถส่งข้อมูลเข้าสคริปต์ได้ โปรดลองอีกครั้ง',
+        confirmButtonColor: '#ba1a1a'
+    });
+})
+.finally(() => {
+    isSubmitting = false;
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<span class="material-symbols-outlined text-xl">save</span> บันทึกข้อมูลเข้าสู่ระบบ';
+});
+});
+// 📊 ฟังก์ชันดึงฐานข้อมูลแบบ Realtime จากแผ่นงานเพื่อทำประวัติและแดชบอร์ด
+function fetchRealtimeData() {
+fetch(scriptUrl)
+.then(res => res.json())
+.then(data => {
+if(!data || data.length === 0) {
+document.getElementById('mobile-history-list').innerHTML = '<p class="text-center py-8">ไม่มีข้อมูลในระบบ</p>';
+document.getElementById('desktop-history-table').innerHTML = '<tr><td colspan="4" class="text-center py-8">ไม่มีข้อมูลการบันทึกในระบบในขณะนี้</td></tr>';
+return;
+}
 
-                <button class="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-4 rounded-lg shadow-md transition-all flex items-center justify-center gap-2 text-sm md:text-base" type="submit" id="submit-btn">
-                    <span class="material-symbols-outlined text-xl">save</span> บันทึกข้อมูลเข้าสู่ระบบ
-                </button>
-            </form>
-        </div>
+allRecordsData = data;
+document.getElementById('dash-total-cases').innerText = data.length;
 
-        <!-- ==================== Tab 2: หน้าแดชบอร์ดสรุปสถิติ (Dashboard View) ==================== -->
-        <div id="view-dashboard" class="page-content animate-fade-in">
-            <div class="header-banner">
-                <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">แดชบอร์ดสรุปผลสถิติ</h2>
-                <p class="text-blue-200 text-sm md:text-base">รายงานภาพรวมข้อมูลประมวลผลอัตโนมัติ</p>
-            </div>
-            
-            <!-- Cards สรุปสถิติสี่ช่องยอดนิยม -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm text-center border-t-4 border-primary">
-                    <p class="text-on-surface-variant dark:text-slate-400 font-bold text-xs uppercase tracking-wider">เคสทั้งหมดในระบบ</p>
-                    <p class="text-3xl md:text-4xl font-bold text-primary dark:text-primary-fixed my-2" id="dash-total-cases">0</p>
-                </div>
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm text-center border-t-4 border-secondary">
-                    <p class="text-on-surface-variant dark:text-slate-400 font-bold text-xs uppercase tracking-wider">แผนกที่ส่งเคสสูงสุด</p>
-                    <p class="text-lg md:text-xl font-bold text-secondary my-3 truncate" id="dash-top-dept">-</p>
-                </div>
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm text-center border-t-4 border-emerald-600">
-                    <p class="text-on-surface-variant dark:text-slate-400 font-bold text-xs uppercase tracking-wider">บันทึกวันนี้</p>
-                    <p class="text-3xl md:text-4xl font-bold text-emerald-600 my-2" id="dash-today-cases">0</p>
-                </div>
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm text-center border-t-4 border-amber-500">
-                    <p class="text-on-surface-variant dark:text-slate-400 font-bold text-xs uppercase tracking-wider">อัตราการแนบรูป</p>
-                    <p class="text-3xl md:text-4xl font-bold text-amber-500 my-2" id="dash-image-rate">100%</p>
-                </div>
-            </div>
+// คำนวณเคสประจำวันนี้
+const todayStr = new Date().toISOString().split('T')[0];
+const todayCases = data.filter(item => item.serviceDate === todayStr).length;
+document.getElementById('dash-today-cases').innerText = todayCases;
+// ประมวลผลหาแผนกยอดนิยมส่งเคสสูงสุด
+const depts = data.map(item => item.department).filter(Boolean);
+const countMap = {};
+let maxDept = "-";
+let maxCount = 0;
 
-            <!-- ส่วนการแสดงผลกราฟสถิติแบบคู่ -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-outline-variant/30">
-                    <h3 class="text-sm font-bold text-primary dark:text-primary-fixed mb-3 flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm">bar_chart</span> เคสแยกตามหน่วยงาน (Department)
-                    </h3>
-                    <div class="relative h-[280px] w-full"><canvas id="deptChart"></canvas></div>
-                </div>
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-outline-variant/30">
-                    <h3 class="text-sm font-bold text-primary dark:text-primary-fixed mb-3 flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm">pie_chart</span> สัดส่วนกลุ่มโรค/คำวินิจฉัยหลัก (Top 5)
-                    </h3>
-                    <div class="relative h-[280px] w-full"><canvas id="diagChart"></canvas></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ==================== Tab 3: หน้าประวัติข้อมูลย้อนหลัง (History View) ==================== -->
-        <div id="view-history" class="page-content animate-fade-in">
-            <div class="header-banner">
-                <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">ประวัติการบันทึกข้อมูล</h2>
-                <p class="text-blue-200 text-sm md:text-base">รายการตรวจสอบสืบค้นและค้นหาเคสผู้ป่วยย้อนหลัง</p>
-            </div>
-
-            <!-- ตัวกรองการค้นหาอัจฉริยะ (Search Filter Bar) -->
-            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-outline-variant/30 mb-5 flex flex-col sm:flex-row gap-3">
-                <div class="flex-1 relative">
-                    <span class="material-symbols-outlined absolute left-3 top-3 text-on-surface-variant text-xl">search</span>
-                    <input type="text" id="search-input" oninput="filterHistory()" class="w-full pl-10 pr-4 py-2 rounded-lg border border-outline-variant dark:bg-slate-700 dark:text-white form-input-focus text-sm" placeholder="ค้นหาด้วยเลข HN, ชื่อแผนก, หรือคำวินิจฉัย...">
-                </div>
-                <div class="w-full sm:w-52">
-                    <select id="filter-dept" onchange="filterHistory()" class="w-full px-3 py-2 rounded-lg border border-outline-variant dark:bg-slate-700 dark:text-white form-input-focus text-sm cursor-pointer">
-                        <option value="">เลือกดูทุกแผนก</option>
-                        <option value="ER">ER</option><option value="OPD">OPD</option><option value="ICU">ICU</option>
-                        <option value="กุมาร">กุมาร</option><option value="ORT">ORT</option><option value="ศัลยกรรม">ศัลยกรรม</option>
-                        <option value="นรีเวช">นรีเวช</option><option value="จักษุ">จักษุ</option><option value="Stroke">Stroke</option>
-                    </select>
-                </div>
-                <button onclick="fetchRealtimeData()" class="bg-primary-container text-primary font-bold px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-1 hover:bg-opacity-80">
-                    <span class="material-symbols-outlined text-sm">refresh</span>รีเฟรชข้อมูล
-                </button>
-            </div>
-
-            <!-- แสดงผลแบบตาราง (สำหรับหน้าจอคอมพิวเตอร์ Desktop) -->
-            <div class="hidden md:block bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden border border-outline-variant/30">
-                <table class="w-full custom-table">
-                    <thead>
-                        <tr>
-                            <th>วันที่รับบริการ</th>
-                            <th>เลข HN ผู้ป่วย</th>
-                            <th>หน่วยงาน/แผนก</th>
-                            <th>คำวินิจฉัยโรค</th>
-                            <th>หลักฐานรูปภาพ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="desktop-history-table">
-                        <tr>
-                            <td colspan="5" class="text-center py-8 text-on-surface-variant">กำลังดึงประวัติข้อมูลย้อนหลังโปรดรอสักครู่...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- แสดงผลแบบการ์ดรายการ (สำหรับหน้าจอมือถือ Mobile) -->
-            <div class="md:hidden space-y-3" id="mobile-history-list">
-                <p class="text-center text-on-surface-variant text-sm py-8">กำลังดึงข้อมูลประวัติย้อนหลัง...</p>
-            </div>
-        </div>
-    </main>
-
-    <!-- 📱 แถบเมนูนำทางด้านล่าง (Bottom Navigation Bar) -->
-    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 border-t border-outline-variant/50 h-16 flex justify-around items-center w-full shadow-lg transition-colors">
-        <button onclick="changeTab('view-form', this)" class="tab-btn flex flex-col items-center justify-center flex-1 text-primary dark:text-primary-fixed font-bold h-full transition-all">
-            <span class="material-symbols-outlined text-2xl">edit_note</span><span class="text-xs mt-0.5">บันทึก</span>
-        </button>
-        <button onclick="changeTab('view-dashboard', this)" class="tab-btn flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-slate-400 h-full transition-all">
-            <span class="material-symbols-outlined text-2xl">analytics</span><span class="text-xs mt-0.5">แดชบอร์ด</span>
-        </button>
-        <button onclick="changeTab('view-history', this)" class="tab-btn flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-slate-400 h-full transition-all">
-            <span class="material-symbols-outlined text-2xl">history</span><span class="text-xs mt-0.5">ประวัติ</span>
-        </button>
-    </nav>
-
-    <!-- ⚙️ ส่วนควบคุมระบบ Logic, Chart และ API ทั้งหมด -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // บังคับใส่วันที่ปัจจุบันตอนโหลดหน้าเว็บบันทึกครั้งแรก
-        document.getElementById('visit-date').valueAsDate = new Date();
-        
-        let isSubmitting = false;
-        let base64ImageString = "";
-        let deptChartInstance = null; 
-        let diagChartInstance = null;
-        let allRecordsData = []; 
-
-        // ลิงก์ Web App ล่าสุดของพี่พีทชี้ตรงเข้า Google Apps Script
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbzTXnvh5FMJ34n7-PPuA2fhJ9EokOS8DpgaXAq8dSmbXA1rCm9LJzXWFiW74JTh-BttGA/exec';
-
-        // ระบบสลับธีมโหมดมืด มู้ดสว่าง
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            if(html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                html.classList.add('light');
-            } else {
-                html.classList.remove('light');
-                html.classList.add('dark');
-            }
-        }
-
-        // สลับแท็บสลับหน้าจอการใช้งาน
-        function changeTab(targetId, btnElement) {
-            document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('text-primary', 'dark:text-primary-fixed', 'font-bold'));
-            
-            document.getElementById(targetId).classList.add('active');
-            btnElement.classList.add('text-primary', 'dark:text-primary-fixed', 'font-bold');
-            
-            if (targetId === 'view-dashboard' || targetId === 'view-history') {
-                fetchRealtimeData();
-            }
-        }
-
-        function toggleOther(val) {
-            document.getElementById('other-dept-container').classList.toggle('hidden', val !== 'อื่นๆ');
-            document.getElementById('other-dept').required = (val === 'อื่นๆ');
-        }
-
-        // จัดการอัปโหลดไฟล์รูปภาพ แปลงค่า และทำพรีวิวรูปภาพ
-        document.getElementById('image-file').addEventListener('change', function(e) {
-            if(e.target.files.length > 0) {
-                const file = e.target.files[0];
-                document.getElementById('upload-label').innerText = '✔️ เลือกรูปภาพสำเร็จ: ' + file.name;
-                
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    base64ImageString = event.target.result;
-                    document.getElementById('image-preview').src = base64ImageString;
-                    document.getElementById('image-preview-container').classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        function resetImageSelection() {
-            document.getElementById('image-file').value = "";
-            base64ImageString = "";
-            document.getElementById('image-preview').src = "";
-            document.getElementById('image-preview-container').classList.add('hidden');
-            document.getElementById('upload-label').innerText = 'คลิกที่นี่เพื่อถ่ายภาพหรือเลือกไฟล์รูปภาพ';
-        }
-
-        // 🛠️ ฟังก์ชันการส่งข้อมูลเข้า Google Sheets แบบ API No-CORS ทะลุกำแพงบล็อก
-        document.getElementById('hhc-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if (!base64ImageString) { 
-                alert('⚠️ พี่พีทลืมแนบรูปภาพหรือเปล่าครับ? กรุณาใส่รูปถ่ายประกอบเคสด้วยครับ'); 
-                return; 
-            }
-            if (isSubmitting) return;
-            isSubmitting = true;
-
-            const submitBtn = document.getElementById('submit-btn');
-            submitBtn.disabled = true;
-            submitBtn.innerText = '⏳ ระบบกำลังอัปโหลดรูปภาพและบันทึกข้อมูล...';
-
-            const finalDept = document.getElementById('department').value === 'อื่นๆ' ? 
-                              document.getElementById('other-dept').value : 
-                              document.getElementById('department').value;
-            
-            const payload = {
-                serviceDate: document.getElementById('visit-date').value,
-                hn: document.getElementById('hn-number').value,
-                department: finalDept,
-                diagnosis: document.getElementById('diagnosis').value,
-                image: base64ImageString
-            };
-
-            fetch(scriptUrl, { 
-                method: 'POST', 
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify(payload)
-            })
-            .then(() => {
-                alert('🎉 เยี่ยมเลยครับพี่พีท! บันทึกข้อมูล HHC และภาพขึ้นระบบสำเร็จแล้ว');
-                document.getElementById('hhc-form').reset();
-                document.getElementById('visit-date').valueAsDate = new Date();
-                resetImageSelection();
-                toggleOther('');
-            })
-            .catch(err => {
-                console.error(err);
-                alert('❌ เกิดข้อผิดพลาดทางเทคนิค ไม่สามารถส่งข้อมูลเข้าสคริปต์ได้');
-            })
-            .finally(() => { 
-                isSubmitting = false; 
-                submitBtn.disabled = false; 
-                submitBtn.innerHTML = '<span class="material-symbols-outlined text-xl">save</span> บันทึกข้อมูลเข้าสู่ระบบ'; 
-            });
-        });
-
-        // 📊 ฟังก์ชันดึงฐานข้อมูลแบบ Realtime จากแผ่นงานเพื่อทำประวัติและแดชบอร์ด
-        function fetchRealtimeData() {
-            fetch(scriptUrl)
-            .then(res => res.json())
-            .then(data => {
-                if(!data || data.length === 0) {
-                    document.getElementById('mobile-history-list').innerHTML = '<p class="text-center py-8">ไม่มีข้อมูลในระบบ</p>';
-                    document.getElementById('desktop-history-table').innerHTML = '<tr><td colspan="5" class="text-center py-8">ไม่มีข้อมูลการบันทึกในระบบในขณะนี้</td></tr>';
-                    return;
-                }
-                
-                allRecordsData = data; 
-                document.getElementById('dash-total-cases').innerText = data.length;
-                
-                // คำนวณเคสประจำวันนี้
-                const todayStr = new Date().toISOString().split('T')[0];
-                const todayCases = data.filter(item => item.serviceDate === todayStr).length;
-                document.getElementById('dash-today-cases').innerText = todayCases;
-
-                // ประมวลผลหาแผนกยอดนิยมส่งเคสสูงสุด
-                const depts = data.map(item => item.department).filter(Boolean);
-                const countMap = {}; 
-                let maxDept = "-"; 
-                let maxCount = 0;
-                
-                depts.forEach(d => {
-                    countMap[d] = (countMap[d] || 0) + 1;
-                    if(countMap[d] > maxCount) { maxCount = countMap[d]; maxDept = d; }
-                });
-                document.getElementById('dash-top-dept').innerText = maxDept;
-
-                // วาดกราฟแท่งแยกแผนก (Department Bar Chart)
-                if (deptChartInstance) deptChartInstance.destroy();
-                const ctx = document.getElementById('deptChart').getContext('2d');
-                deptChartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: Object.keys(countMap),
-                        datasets: [{
-                            label: 'จำนวนเคสผู้ป่วย',
-                            data: Object.values(countMap),
-                            backgroundColor: '#1b3d6d',
-                            borderColor: '#002753',
-                            borderWidth: 1,
-                            borderRadius: 6
-                        }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-                });
-
-                // ประมวลผลคำวินิจฉัยโรคยอดนิยม (Diagnosis Pie Chart)
-                const diags = data.map(item => item.diagnosis ? item.diagnosis.split(' ')[0].substring(0,15) : "ไม่ระบุ");
-                const diagMap = {};
-                diags.forEach(d => diagMap[d] = (diagMap[d] || 0) + 1);
-
-                if (diagChartInstance) diagChartInstance.destroy();
-                const ctx2 = document.getElementById('diagChart').getContext('2d');
-                diagChartInstance = new Chart(ctx2, {
-                    type: 'doughnut',
-                    data: {
-                        labels: Object.keys(diagMap).slice(0, 5),
-                        datasets: [{
-                            data: Object.values(diagMap).slice(0, 5),
-                            backgroundColor: ['#002753', '#006a6a', '#747780', '#ba1a1a', '#6fd7d6']
-                        }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } } }
-                });
-
-                renderHistoryUI(allRecordsData);
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById('mobile-history-list').innerHTML = '<p class="text-center text-red-500 py-8">❌ เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
-            });
-        }
-
-        // 🔍 ตัวคัดกรองประวัติการค้นหาข้อมูล
-        function filterHistory() {
-            const searchText = document.getElementById('search-input').value.toLowerCase().trim();
-            const filterDept = document.getElementById('filter-dept').value;
-
-            const filtered = allRecordsData.filter(item => {
-                const matchSearch = (item.hn && item.hn.toLowerCase().includes(searchText)) || 
-                                    (item.department && item.department.toLowerCase().includes(searchText)) ||
-                                    (item.diagnosis && item.diagnosis.toLowerCase().includes(searchText));
-                const matchDept = filterDept === "" || item.department === filterDept;
-                return matchSearch && matchDept;
-            });
-
-            renderHistoryUI(filtered);
-        }
-
-        // เรนเดอร์การแสดงผลสลับระหว่างหน้าจอคอม (Table) กับ มือถือ (Cards)
-        function renderHistoryUI(dataList) {
-            const desktopBody = document.getElementById('desktop-history-table');
-            const mobileList = document.getElementById('mobile-history-list');
-            
-            desktopBody.innerHTML = '';
-            mobileList.innerHTML = '';
-
-            if(dataList.length === 0) {
-                desktopBody.innerHTML = '<tr><td colspan="5" class="text-center py-8">ไม่พบรายการข้อมูลที่ค้นหา</td></tr>';
-                mobileList.innerHTML = '<p class="text-center py-8">ไม่พบรายการข้อมูลที่ค้นหา</p>';
-                return;
-            }
-
-            // เรียงจากข้อมูลใหม่ล่าสุดขึ้นก่อน
-            const sortedList = [...dataList].reverse();
-
-            sortedList.forEach(item => {
-                const hasImg = item.imageUrl && item.imageUrl !== "ไม่มีรูปภาพ";
-                const imgLink = hasImg ? `<a href="${item.imageUrl}" target="_blank" class="text-blue-600 dark:text-blue-400 font-bold underline flex items-center gap-0.5"><span class="material-symbols-outlined text-sm">image</span>ดูรูปเคส</a>` : 'ไม่มีภาพ';
-                
-                // 1. เรนเดอร์ลงตาราง Desktop
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${item.serviceDate}</td>
-                    <td class="font-bold text-primary dark:text-primary-fixed">${item.hn}</td>
-                    <td><span class="bg-blue-100 dark:bg-slate-700 text-blue-800 dark:text-blue-200 text-xs px-2 py-1 rounded-full font-medium">${item.department}</span></td>
-                    <td class="max-w-xs truncate" title="${item.diagnosis}">${item.diagnosis}</td>
-                    <td>${imgLink}</td>
-                `;
-                desktopBody.appendChild(tr);
-
-                // 2. เรนเดอร์ลงตารางการ์ดมือถือ Mobile
-                const cardImgBtn = hasImg ? `<a href="${item.imageUrl}" target="_blank" class="mt-2 inline-flex items-center gap-1 text-xs text-primary dark:text-white font-bold bg-primary-container/30 hover:bg-opacity-80 px-3 py-1.5 rounded-lg transition-all">🖼️ เปิดรูปถ่ายหลักฐานคนไข้</a>` : '';
-                const card = document.createElement('div');
-                card.className = "bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border-l-4 border-secondary text-left animate-fade-in";
-                card.innerHTML = `
-                    <div class="text-[11px] text-on-surface-variant dark:text-slate-400 flex justify-between">
-                        <span>📅 รับบริการเมื่อ: ${item.serviceDate}</span>
-                        <span class="text-emerald-600 font-bold flex items-center gap-0.5"><span class="material-symbols-outlined text-sm">check_circle</span>คีย์เข้าระบบสำเร็จ</span>
-                    </div>
-                    <div class="font-bold text-primary dark:text-primary-fixed mt-1 text-sm">เลข HN คนไข้: ${item.hn}</div>
-                    <div class="text-xs text-on-surface-variant dark:text-slate-300 mt-0.5"><b>หน่วยงานส่งต่อ:</b> ${item.department}</div>
-                    <div class="text-xs text-on-surface-variant dark:text-slate-300 bg-slate-50 dark:bg-slate-700 p-2.5 rounded mt-2 border border-outline-variant/30"><b>คำวินิจฉัย:</b> ${item.diagnosis}</div>
-                    ${cardImgBtn}
-                `;
-                mobileList.appendChild(card);
-            });
-        }
-    </script>
-</body>
-</html>
+depts.forEach(d => {
+countMap[d] = (countMap[d] || 0) + 1;
+if(countMap[d] > maxCount) { maxCount = countMap[d]; maxDept = d; }
+});
+document.getElementById('dash-top-dept').innerText = maxDept;
+// วาดกราฟแท่งแยกแผนกแบบหลายสี (Department Bar Chart - Multicolor)
+if (deptChartInstance) deptChartInstance.destroy();
+const ctx = document.getElementById('deptChart').getContext('2d');
+deptChartInstance = new Chart(ctx, {
+type: 'bar',
+data: {
+labels: Object.keys(countMap),
+datasets: [{
+label: 'จำนวนเคสผู้ป่วย',
+data: Object.values(countMap),
+backgroundColor: [
+    'rgba(255, 99, 132, 0.8)',
+    'rgba(54, 162, 235, 0.8)',
+    'rgba(255, 206, 86, 0.8)',
+    'rgba(75, 192, 192, 0.8)',
+    'rgba(153, 102, 255, 0.8)',
+    'rgba(255, 159, 64, 0.8)',
+    'rgba(27, 61, 109, 0.8)',
+    'rgba(0, 106, 106, 0.8)'
+],
+borderColor: [
+    'rgba(255, 99, 132, 1)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(255, 206, 86, 1)',
+    'rgba(75, 192, 192, 1)',
+    'rgba(153, 102, 255, 1)',
+    'rgba(255, 159, 64, 1)',
+    'rgba(27, 61, 109, 1)',
+    'rgba(0, 106, 106, 1)'
+],
+borderWidth: 1,
+borderRadius: 6
+}]
+},
+options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+});
+// ประมวลผลคำวินิจฉัยโรคยอดนิยม (Diagnosis Pie Chart)
+const diags = data.map(item => item.diagnosis ? item.diagnosis.split(' ')[0].substring(0,15) : "ไม่ระบุ");
+const diagMap = {};
+diags.forEach(d => diagMap[d] = (diagMap[d] || 0) + 1);
+if (diagChartInstance) diagChartInstance.destroy();
+const ctx2 = document.getElementById('diagChart').getContext('2d');
+diagChartInstance = new Chart(ctx2, {
+type: 'doughnut',
+data: {
+labels: Object.keys(diagMap).slice(0, 5),
+datasets: [{
+data: Object.values(diagMap).slice(0, 5),
+backgroundColor: ['#002753', '#006a6a', '#747780', '#ba1a1a', '#6fd7d6']
+}]
+},
+options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } } }
+});
+renderHistoryUI(allRecordsData);
+})
+.catch(err => {
+console.error(err);
+document.getElementById('mobile-history-list').innerHTML = '<p class="text-center text-red-500 py-8">❌ เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+});
+}
+// 🔍 ตัวคัดกรองประวัติการค้นหาข้อมูล
+function filterHistory() {
+const searchText = document.getElementById('search-input').value.toLowerCase().trim();
+const filterDept = document.getElementById('filter-dept').value;
+const filtered = allRecordsData.filter(item => {
+const matchSearch = (item.hn && item.hn.toLowerCase().includes(searchText)) ||
+(item.department && item.department.toLowerCase().includes(searchText)) ||
+(item.diagnosis && item.diagnosis.toLowerCase().includes(searchText));
+const matchDept = filterDept === "" || item.department === filterDept;
+return matchSearch && matchDept;
+});
+renderHistoryUI(filtered);
+}
+// เรนเดอร์การแสดงผลสลับระหว่างหน้าจอคอม (Table) กับ มือถือ (Cards)
+function renderHistoryUI(
