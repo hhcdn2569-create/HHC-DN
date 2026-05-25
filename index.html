@@ -56,6 +56,7 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 
 <main class="w-full flex-1 px-4 md:px-6 py-6 mt-16 mx-auto max-w-full sm:max-w-[95%] md:max-w-[90%] lg:max-w-[1200px]">
     
+<!-- หน้าฟอร์มบันทึกข้อมูล -->
 <div id="view-form" class="page-content active animate-fade-in">
 <div class="header-banner">
 <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">ระบบบันทึกข้อมูล HHC</h2>
@@ -117,6 +118,7 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 </form>
 </div>
 
+<!-- หน้าแดชบอร์ด -->
 <div id="view-dashboard" class="page-content animate-fade-in">
 <div class="header-banner">
 <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">แดชบอร์ดสรุปผลสถิติ</h2>
@@ -163,6 +165,7 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 </div>
 </div>
 
+<!-- หน้าประวัติ -->
 <div id="view-history" class="page-content animate-fade-in">
 <div class="header-banner flex flex-col sm:flex-row justify-between items-start sm:items-center">
 <div>
@@ -237,7 +240,7 @@ let deptChartInstance = null;
 let diagChartInstance = null;
 let statusChartInstance = null;
 let allRecordsData = [];
-let isAdmin = false; // ตัวแปรเช็คสถานะแอดมิน
+let isAdmin = false;
 
 const scriptUrl = 'https://script.google.com/macros/s/AKfycbzTXnvh5FMJ34n7-PPuA2fhJ9EokOS8DpgaXAq8dSmbXA1rCm9LJzXWFiW74JTh-BttGA/exec';
 
@@ -253,7 +256,6 @@ html.classList.remove('light'); html.classList.add('dark');
 // ----------------- ระบบ Admin -----------------
 function toggleAdminAuth() {
     if(isAdmin) {
-        // Logout
         Swal.fire({
             title: 'ออกจากระบบ?',
             text: "คุณต้องการออกจากโหมดผู้ดูแลระบบใช่หรือไม่",
@@ -269,27 +271,26 @@ function toggleAdminAuth() {
                 document.getElementById('admin-auth-btn').classList.remove('text-yellow-500');
                 document.getElementById('admin-badge').classList.add('hidden');
                 Swal.fire('สำเร็จ', 'ออกจากระบบเรียบร้อยแล้ว', 'success');
-                filterHistory(); // Re-render to hide buttons
+                filterHistory();
             }
         });
     } else {
-        // Login
         Swal.fire({
             title: 'เข้าสู่ระบบ Admin',
             input: 'password',
-            inputPlaceholder: 'กรอกรหัสผ่าน (admin123)',
+            inputPlaceholder: 'กรอกรหัสผ่าน', // ลบคำใบ้ออกแล้ว
             showCancelButton: true,
             confirmButtonText: 'ตกลง',
             cancelButtonText: 'ยกเลิก',
             confirmButtonColor: '#002753'
         }).then((result) => {
-            if (result.value === 'admin123') { // รหัสผ่าน
+            if (result.value === 'admin123') { // รหัสผ่านซ่อนอยู่เฉพาะในโค้ด
                 isAdmin = true;
                 document.getElementById('admin-auth-btn').innerText = 'admin_panel_settings';
                 document.getElementById('admin-auth-btn').classList.add('text-yellow-500');
                 document.getElementById('admin-badge').classList.remove('hidden');
                 Swal.fire('สำเร็จ', 'เข้าสู่โหมดผู้ดูแลระบบแล้ว', 'success');
-                filterHistory(); // Re-render to show buttons
+                filterHistory(); 
             } else if (result.value) {
                 Swal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง', 'error');
             }
@@ -313,7 +314,6 @@ document.getElementById('other-dept-container').classList.toggle('hidden', val !
 document.getElementById('other-dept').required = (val === 'อื่นๆ');
 }
 
-// ----------------- จัดการอัปโหลดไฟล์ (รองรับ PDF) -----------------
 document.getElementById('image-file').addEventListener('change', function(e) {
 if(e.target.files.length > 0) {
 const file = e.target.files[0];
@@ -370,7 +370,7 @@ hn: document.getElementById('hn-number').value,
 department: finalDept,
 diagnosis: document.getElementById('diagnosis').value,
 image: base64ImageString,
-mimeType: fileType // ส่งชนิดไฟล์ไปด้วย
+mimeType: fileType
 };
 fetch(scriptUrl, {
 method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload)
@@ -380,8 +380,7 @@ document.getElementById('hhc-form').reset();
 document.getElementById('visit-date').valueAsDate = new Date();
 resetImageSelection();
 toggleOther('');
-// เพิ่มข้อมูลจำลองลงไปในระบบทันทีเพื่อไม่ต้องโหลดใหม่ (จำลองสถานะเป็น รอดำเนินการ)
-allRecordsData.push({...payload, status: 'pending', id: Date.now()}); 
+allRecordsData.push({...payload, status: 'pending', targetPcu: null, id: Date.now()}); 
 }).catch(err => {
 alert('❌ เกิดข้อผิดพลาดทางเทคนิค ไม่สามารถส่งข้อมูลเข้าสคริปต์ได้');
 }).finally(() => {
@@ -392,7 +391,6 @@ submitBtn.innerHTML = '<span class="material-symbols-outlined text-xl">save</spa
 
 // ----------------- อัปเดต Dashboard & Data -----------------
 function fetchRealtimeData() {
-// ถ้ามีข้อมูลแล้ว ให้ใช้ขอมูลเดิมประมวลผลเลย (เพื่อจำลองการจำสถานะฝั่ง Client)
 if(allRecordsData.length > 0 && isAdmin) {
     processDashboard(allRecordsData);
     filterHistory();
@@ -405,11 +403,11 @@ document.getElementById('mobile-history-list').innerHTML = '<p class="text-cente
 document.getElementById('desktop-history-table').innerHTML = '<tr><td colspan="5" class="text-center py-8">ไม่มีข้อมูลการบันทึกในระบบในขณะนี้</td></tr>';
 return;
 }
-// จำลองเพิ่ม field id และ status (หาก API ของคุณยังไม่มี)
 allRecordsData = data.map((item, index) => ({
     ...item, 
     id: index, 
-    status: item.status || 'pending' // ค่าเริ่มต้น
+    status: item.status || 'pending',
+    targetPcu: item.targetPcu || null
 }));
 processDashboard(allRecordsData);
 filterHistory();
@@ -421,7 +419,6 @@ document.getElementById('mobile-history-list').innerHTML = '<p class="text-cente
 function processDashboard(data) {
 document.getElementById('dash-total-cases').innerText = data.length;
 
-// นับสถานะส่งต่อ และ ตอบกลับ
 let forwardedCount = 0;
 let repliedCount = 0;
 let pendingCount = 0;
@@ -444,7 +441,6 @@ if(countMap[d] > maxCount) { maxCount = countMap[d]; maxDept = d; }
 });
 document.getElementById('dash-top-dept').innerText = maxDept;
 
-// กราฟ 1: แผนก
 if (deptChartInstance) deptChartInstance.destroy();
 const ctx = document.getElementById('deptChart').getContext('2d');
 deptChartInstance = new Chart(ctx, {
@@ -456,7 +452,6 @@ datasets: [{ data: Object.values(countMap), backgroundColor: 'rgba(54, 162, 235,
 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
 });
 
-// กราฟ 2: โรค
 const diags = data.map(item => item.diagnosis ? item.diagnosis.split(' ')[0].substring(0,15) : "ไม่ระบุ");
 const diagMap = {};
 diags.forEach(d => diagMap[d] = (diagMap[d] || 0) + 1);
@@ -471,7 +466,6 @@ datasets: [{ data: Object.values(diagMap).slice(0, 5), backgroundColor: ['#00275
 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } } }
 });
 
-// กราฟ 3: สถานะเคส (เพิ่มใหม่)
 if (statusChartInstance) statusChartInstance.destroy();
 const ctx3 = document.getElementById('statusChart').getContext('2d');
 statusChartInstance = new Chart(ctx3, {
@@ -495,13 +489,36 @@ return matchSearch && matchStatus;
 renderHistoryUI(filtered);
 }
 
-// ----------------- เปลี่ยนสถานะโดย Admin -----------------
-window.updateCaseStatus = function(recordId, newStatus) {
+// ----------------- เปลี่ยนสถานะโดย Admin (พร้อมกรอก รพสต.) -----------------
+window.updateCaseStatus = async function(recordId, newStatus) {
     if(!isAdmin) return;
     const index = allRecordsData.findIndex(r => r.id === recordId);
     if(index > -1) {
-        allRecordsData[index].status = newStatus;
-        // ทำการ render UI และ Dashboard ใหม่ทันที
+        // หากเป็นการกด 'ส่งต่อ' จะเด้งให้กรอกชื่อ รพสต.
+        if(newStatus === 'forwarded') {
+            const { value: pcuName } = await Swal.fire({
+                title: 'ระบุชื่อ รพสต. ปลายทาง',
+                input: 'text',
+                inputPlaceholder: 'เช่น รพสต.บ้านโพธิ์',
+                showCancelButton: true,
+                confirmButtonText: 'บันทึก',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#002753'
+            });
+            
+            if (pcuName) {
+                allRecordsData[index].targetPcu = pcuName;
+                allRecordsData[index].status = newStatus;
+            } else {
+                return; // ยกเลิกการทำรายการถ้าไม่ได้กรอก หรือกดยกเลิก
+            }
+        } else {
+            allRecordsData[index].status = newStatus;
+            // ถ้าย้อนกลับเป็นรอดำเนินการ ให้ล้างชื่อ รพสต. ทิ้ง
+            if(newStatus === 'pending') allRecordsData[index].targetPcu = null;
+        }
+
+        // อัปเดต UI และ Dashboard ด้วยสถานะใหม่ล่าสุด
         processDashboard(allRecordsData);
         filterHistory();
         
@@ -525,13 +542,11 @@ sortedList.forEach(item => {
 const originalHn = item.hn ? item.hn.toString().trim() : "";
 const maskedHn = originalHn.length > 2 ? originalHn.substring(0, 2) + "XXXX" : "XXXX";
 
-// จัดการการแสดงผลป้ายสถานะ
 let statusBadge = '';
 if(item.status === 'replied') statusBadge = '<span class="bg-emerald-100 text-emerald-800 text-xs px-2 py-1 rounded border border-emerald-200">รพสต. รับเคสแล้ว</span>';
 else if(item.status === 'forwarded') statusBadge = '<span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded border border-blue-200">ส่งต่อ รพสต. แล้ว</span>';
 else statusBadge = '<span class="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded border border-amber-200">รอดำเนินการ</span>';
 
-// ปุ่มจัดการสำหรับ Admin
 let adminControls = '';
 if(isAdmin) {
     adminControls = `
@@ -552,6 +567,7 @@ tr.innerHTML = `
 <td class="text-center">
     <div class="flex flex-col items-center gap-1.5">
         ${statusBadge}
+        ${item.targetPcu ? `<span class="text-[11px] text-blue-600 dark:text-blue-400 font-bold text-center leading-tight mt-0.5">ส่งต่อ: ${item.targetPcu}</span>` : ''}
         ${adminControls}
     </div>
 </td>
@@ -570,6 +586,7 @@ card.innerHTML = `
 </div>
 <div class="font-bold text-primary dark:text-primary-fixed mt-2 text-sm">เลข HN คนไข้: ${maskedHn}</div>
 <div class="text-xs text-on-surface-variant dark:text-slate-300 mt-0.5"><b>หน่วยงานที่ส่งต่อ:</b> ${item.department}</div>
+${item.targetPcu ? `<div class="text-xs text-blue-600 dark:text-blue-400 mt-0.5"><b>ปลายทาง รพสต.:</b> ${item.targetPcu}</div>` : ''}
 <div class="text-xs text-on-surface-variant dark:text-slate-300 bg-slate-50 dark:bg-slate-700 p-2.5 rounded mt-2 border border-outline-variant/30"><b>คำวินิจฉัย:</b> ${item.diagnosis}</div>
 ${isAdmin ? `<div class="mt-3 pt-3 border-t border-outline-variant/30 flex justify-end gap-2">${adminControls}</div>` : ''}
 `;
