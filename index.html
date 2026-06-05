@@ -359,7 +359,7 @@ mimeType: fileType
 fetch(scriptUrl, {
 method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload)
 }).then(() => {
-Swal.fire({ icon: 'success', title: 'บันทึกสำเร็จ!', text: 'บันทึกข้อมูล HHC ขึ้นระบบเรียบร้อยแล้ว', confirmButtonColor: '#002753' });
+Swal.fire({ icon: 'success', title: 'บันทึกข้อมูลสำเร็จแล้ว', confirmButtonColor: '#002753' });
 document.getElementById('hhc-form').reset();
 document.getElementById('visit-date').valueAsDate = new Date();
 resetImageSelection();
@@ -382,7 +382,7 @@ if(allRecordsData.length > 0 && !forceRefresh) {
     return;
 }
 if(forceRefresh) {
-    Swal.fire({ title: 'กำลังดึงข้อมูลล่าสุด...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
+    Swal.fire({ title: 'กำลังดึงข้อมูลล่าสุด...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
 }
 fetch(scriptUrl).then(res => res.json()).then(data => {
 if(!data || data.length === 0) {
@@ -551,7 +551,7 @@ return;
 const sortedList = [...dataList].reverse();
 sortedList.forEach(item => {
 const originalHn = item.hn ? item.hn.toString().trim() : "";
-const displayHn = isAdmin ? originalHn : (originalHn.length > 2 ? originalHn.substring(0, 2) + "XXXX" : "XXXX");
+const displayHn = isAdmin ? originalHn : (originalHn.length >= 2 ? originalHn.substring(0, 2) + "xxx" : originalHn + "xxx");
 let statusBadge = '';
 const pcuText = item.targetPcu ? ` (${item.targetPcu})` : '';
 if(item.status === 'replied') {
