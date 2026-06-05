@@ -359,7 +359,6 @@ mimeType: fileType
 fetch(scriptUrl, {
 method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload)
 }).then(() => {
-Swal.fire({ icon: 'success', title: 'บันทึกข้อมูลสำเร็จแล้ว', confirmButtonColor: '#002753' });
 document.getElementById('hhc-form').reset();
 document.getElementById('visit-date').valueAsDate = new Date();
 resetImageSelection();
@@ -367,7 +366,12 @@ toggleOther('');
 allRecordsData.push({...payload, status: 'pending', targetPcu: null, id: Date.now()}); 
 processDashboard(allRecordsData);
 filterHistory();
-fetchRealtimeData(true); 
+
+// เพิ่ม .then ตรงนี้เพื่อให้ระบบรอผู้ใช้กดปิดป๊อปอัพ "บันทึกสำเร็จ" เสียก่อน ถึงจะสั่งดึงข้อมูลล่าสุด
+Swal.fire({ icon: 'success', title: 'บันทึกข้อมูลสำเร็จแล้ว', confirmButtonColor: '#002753' }).then(() => {
+    fetchRealtimeData(true); 
+});
+
 }).catch(err => {
 alert('❌ เกิดข้อผิดพลาดทางเทคนิค ไม่สามารถส่งข้อมูลเข้าสคริปต์ได้');
 }).finally(() => {
