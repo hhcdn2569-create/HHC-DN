@@ -366,9 +366,12 @@ toggleOther('');
 allRecordsData.push({...payload, status: 'pending', targetPcu: null, id: Date.now()}); 
 processDashboard(allRecordsData);
 filterHistory();
+
+// เพิ่ม .then ตรงนี้เพื่อให้ระบบรอผู้ใช้กดปิดป๊อปอัพ "บันทึกสำเร็จ" เสียก่อน ถึงจะสั่งดึงข้อมูลล่าสุด
 Swal.fire({ icon: 'success', title: 'บันทึกข้อมูลสำเร็จแล้ว', confirmButtonColor: '#002753' }).then(() => {
     fetchRealtimeData(true); 
 });
+
 }).catch(err => {
 alert('❌ เกิดข้อผิดพลาดทางเทคนิค ไม่สามารถส่งข้อมูลเข้าสคริปต์ได้');
 }).finally(() => {
@@ -540,38 +543,6 @@ window.updateCaseStatus = async function(recordId, newStatus) {
         }
     }
 }
-
-window.viewAttachedFile = function(recordId) {
-    const record = allRecordsData.find(r => r.id === recordId);
-    if(!record || !record.image) {
-        Swal.fire('ไม่พบไฟล์แนบ', 'เคสนี้ไม่มีการแนบไฟล์หรือรูปภาพ', 'info');
-        return;
-    }
-
-    const isPdf = record.mimeType === 'application/pdf' || record.image.includes('application/pdf') || record.image.endsWith('.pdf');
-
-    if(isPdf) {
-        Swal.fire({
-            title: 'ไฟล์แนบ PDF',
-            html: `<iframe src="${record.image}" width="100%" height="400px" style="border: none;"></iframe>`,
-            width: '80%',
-            showCloseButton: true,
-            confirmButtonText: 'ปิด',
-            confirmButtonColor: '#002753'
-        });
-    } else {
-        Swal.fire({
-            title: 'รูปภาพเคส',
-            imageUrl: record.image,
-            imageAlt: 'รูปภาพแนบ',
-            width: 'auto',
-            showCloseButton: true,
-            confirmButtonText: 'ปิด',
-            confirmButtonColor: '#002753'
-        });
-    }
-};
-
 function renderHistoryUI(dataList) {
 const desktopBody = document.getElementById('desktop-history-table');
 const mobileList = document.getElementById('mobile-history-list');
@@ -598,10 +569,8 @@ if(item.status === 'replied') {
 }
 let adminControls = '';
 if(isAdmin) {
-    const viewFileBtn = item.image ? `<button onclick="viewAttachedFile(${item.id})" class="bg-slate-500 hover:bg-slate-600 text-white text-[13px] px-3 py-2 rounded shadow-sm w-full font-bold transition-colors flex items-center justify-center gap-1 mb-1"><span class="material-symbols-outlined text-sm">visibility</span> ดูรูปภาพ/ไฟล์แนบ</button>` : '';
     adminControls = `
     <div class="flex flex-col gap-2 w-full mt-3">
-        ${viewFileBtn}
         <button onclick="updateCaseStatus(${item.id}, 'accepted')" class="bg-indigo-500 hover:bg-indigo-600 text-white text-[13px] px-3 py-2 rounded shadow-sm w-full font-bold transition-colors">1. รับเคสแล้ว</button>
         <button onclick="updateCaseStatus(${item.id}, 'forwarded')" class="bg-blue-500 hover:bg-blue-600 text-white text-[13px] px-3 py-2 rounded shadow-sm w-full font-bold transition-colors">2. ส่งต่อ รพสต.แล้ว</button>
         <button onclick="updateCaseStatus(${item.id}, 'replied')" class="bg-emerald-500 hover:bg-emerald-600 text-white text-[13px] px-3 py-2 rounded shadow-sm w-full font-bold transition-colors">3. รพสต. รับเคสเรียบร้อย</button>
