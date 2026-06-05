@@ -8,7 +8,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-
 <script id="tailwind-config">
 tailwind.config = {
 darkMode: "class",
@@ -53,7 +52,6 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 <button onclick="toggleAdminAuth()" id="admin-auth-btn" class="material-symbols-outlined text-primary dark:text-primary-fixed p-2 hover:bg-surface-container-high dark:hover:bg-slate-800 rounded-full flex-shrink-0" title="เข้าสู่ระบบผู้ดูแล">account_circle</button>
 </div>
 </header>
-
 <main class="w-full flex-1 px-4 md:px-6 py-6 mt-16 mx-auto max-w-full sm:max-w-[95%] md:max-w-[90%] lg:max-w-[1200px]">
     
 <div id="view-form" class="page-content active animate-fade-in">
@@ -116,13 +114,11 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 </button>
 </form>
 </div>
-
 <div id="view-dashboard" class="page-content animate-fade-in">
 <div class="header-banner">
 <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">แดชบอร์ดสรุปผลสถิติ</h2>
 <p class="text-blue-200 text-sm md:text-base">รายงานภาพรวมข้อมูลประมวลผลอัตโนมัติ</p>
 </div>
-
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
 <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm text-center border-t-4 border-primary">
 <p class="text-on-surface-variant dark:text-slate-400 font-bold text-[10px] md:text-xs uppercase tracking-wider">เคสทั้งหมดในระบบ</p>
@@ -161,8 +157,16 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 <div class="relative h-[240px] w-full"><canvas id="statusChart"></canvas></div>
 </div>
 </div>
+<!-- ส่วนใหม่: เพิ่มรายชื่อ รพสต. ที่รับเคสแล้ว -->
+<div class="mt-6 bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-outline-variant/30">
+<h3 class="text-sm font-bold text-primary dark:text-primary-fixed mb-3 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">local_hospital</span> รายชื่อ รพสต. ที่รับเคสแล้ว
+</h3>
+<div id="dash-pcu-list" class="flex flex-wrap gap-2">
+<span class="text-on-surface-variant dark:text-slate-400 text-sm">ไม่มีข้อมูล</span>
 </div>
-
+</div>
+</div>
 <div id="view-history" class="page-content animate-fade-in">
 <div class="header-banner flex flex-col sm:flex-row justify-between items-start sm:items-center">
 <div>
@@ -178,12 +182,13 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 <span class="material-symbols-outlined absolute left-3 top-3 text-on-surface-variant text-xl">search</span>
 <input type="text" id="search-input" oninput="filterHistory()" class="w-full pl-10 pr-4 py-2 rounded-lg border border-outline-variant dark:bg-slate-700 dark:text-white form-input-focus text-sm" placeholder="ค้นหาด้วยเลข HN, ชื่อแผนก, หรือคำวินิจฉัย...">
 </div>
-<div class="w-full sm:w-48">
+<div class="w-full sm:w-56">
 <select id="filter-status" onchange="filterHistory()" class="w-full px-3 py-2 rounded-lg border border-outline-variant dark:bg-slate-700 dark:text-white form-input-focus text-sm cursor-pointer">
 <option value="">ทุกสถานะ</option>
 <option value="pending">รอดำเนินการ</option>
-<option value="forwarded">ส่งต่อ รพสต. แล้ว</option>
-<option value="replied">รพสต. รับเคสแล้ว</option>
+<option value="accepted">รับเคสแล้ว</option>
+<option value="forwarded">ส่งต่อ รพสต.แล้ว</option>
+<option value="replied">รพสต. รับเคสเรียบร้อย</option>
 </select>
 </div>
 <button onclick="fetchRealtimeData(true)" class="bg-primary-container text-primary font-bold px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-1 hover:bg-opacity-80">
@@ -197,8 +202,8 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 <th width="12%">วันที่</th>
 <th width="15%">เลข HN</th>
 <th width="15%">หน่วยงาน</th>
-<th width="30%">คำวินิจฉัย</th>
-<th width="28%" class="text-center">สถานะ / การจัดการ</th>
+<th width="28%">คำวินิจฉัย</th>
+<th width="30%" class="text-center">สถานะ / การจัดการ</th>
 </tr>
 </thead>
 <tbody id="desktop-history-table">
@@ -213,7 +218,6 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 </div>
 </div>
 </main>
-
 <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 border-t border-outline-variant/50 h-16 flex justify-around items-center w-full shadow-lg transition-colors">
 <button onclick="changeTab('view-form', this)" class="tab-btn flex flex-col items-center justify-center flex-1 text-primary dark:text-primary-fixed font-bold h-full transition-all">
 <span class="material-symbols-outlined text-2xl">edit_note</span><span class="text-xs mt-0.5">บันทึก</span>
@@ -225,11 +229,9 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 <span class="material-symbols-outlined text-2xl">history</span><span class="text-xs mt-0.5">ประวัติ</span>
 </button>
 </nav>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.getElementById('visit-date').valueAsDate = new Date();
-
 let isSubmitting = false;
 let base64ImageString = "";
 let fileType = "";
@@ -238,9 +240,7 @@ let diagChartInstance = null;
 let statusChartInstance = null;
 let allRecordsData = [];
 let isAdmin = false;
-
 const scriptUrl = 'https://script.google.com/macros/s/AKfycbzTXnvh5FMJ34n7-PPuA2fhJ9EokOS8DpgaXAq8dSmbXA1rCm9LJzXWFiW74JTh-BttGA/exec';
-
 function toggleDarkMode() {
 const html = document.documentElement;
 if(html.classList.contains('dark')) {
@@ -249,7 +249,6 @@ html.classList.remove('dark'); html.classList.add('light');
 html.classList.remove('light'); html.classList.add('dark');
 }
 }
-
 // ----------------- ระบบ Admin -----------------
 function toggleAdminAuth() {
     if(isAdmin) {
@@ -294,34 +293,28 @@ function toggleAdminAuth() {
         });
     }
 }
-
 function changeTab(targetId, btnElement) {
 document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
 document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('text-primary', 'dark:text-primary-fixed', 'font-bold'));
 document.getElementById(targetId).classList.add('active');
 btnElement.classList.add('text-primary', 'dark:text-primary-fixed', 'font-bold');
-
 if (targetId === 'view-dashboard' || targetId === 'view-history') {
 fetchRealtimeData();
 }
 }
-
 function toggleOther(val) {
 document.getElementById('other-dept-container').classList.toggle('hidden', val !== 'อื่นๆ');
 document.getElementById('other-dept').required = (val === 'อื่นๆ');
 }
-
 document.getElementById('image-file').addEventListener('change', function(e) {
 if(e.target.files.length > 0) {
 const file = e.target.files[0];
 fileType = file.type;
 document.getElementById('upload-label').innerText = '✔️ เลือกไฟล์สำเร็จ: ' + file.name;
-
 const reader = new FileReader();
 reader.onload = function(event) {
 base64ImageString = event.target.result;
 document.getElementById('image-preview-container').classList.remove('hidden');
-
 if(fileType === "application/pdf") {
     document.getElementById('image-preview').classList.add('hidden');
     document.getElementById('pdf-preview').classList.remove('hidden');
@@ -337,7 +330,6 @@ if(fileType === "application/pdf") {
 reader.readAsDataURL(file);
 }
 });
-
 function resetImageSelection() {
 document.getElementById('image-file').value = "";
 base64ImageString = "";
@@ -346,7 +338,6 @@ document.getElementById('image-preview').src = "";
 document.getElementById('image-preview-container').classList.add('hidden');
 document.getElementById('upload-label').innerText = 'คลิกที่นี่เพื่อแนบไฟล์ (รองรับรูปภาพ และ PDF)';
 }
-
 document.getElementById('hhc-form').addEventListener('submit', function(e) {
 e.preventDefault();
 if (!base64ImageString) {
@@ -358,9 +349,7 @@ isSubmitting = true;
 const submitBtn = document.getElementById('submit-btn');
 submitBtn.disabled = true;
 submitBtn.innerText = '⏳ ระบบกำลังบันทึกข้อมูล กรุณารอสักครู่...';
-
 const finalDept = document.getElementById('department').value === 'อื่นๆ' ? document.getElementById('other-dept').value : document.getElementById('department').value;
-
 const payload = {
 action: 'create', // เพิ่ม action สำหรับฝั่ง Script เพื่อใช้แยกว่าเป็นการสร้างใหม่
 serviceDate: document.getElementById('visit-date').value,
@@ -386,7 +375,6 @@ isSubmitting = false; submitBtn.disabled = false;
 submitBtn.innerHTML = '<span class="material-symbols-outlined text-xl">save</span> บันทึกข้อมูลเข้าสู่ระบบ';
 });
 });
-
 // ----------------- อัปเดต Dashboard & Data -----------------
 function fetchRealtimeData(forceRefresh = false) {
 // ถ้าไม่ได้บังคับรีเฟรช และมีข้อมูลแล้ว ให้ข้ามการดึงเพื่อลดการโหลดซ้ำ
@@ -395,11 +383,9 @@ if(allRecordsData.length > 0 && !forceRefresh) {
     filterHistory();
     return;
 }
-
 if(forceRefresh) {
     Swal.fire({ title: 'กำลังดึงข้อมูลล่าสุด...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
 }
-
 fetch(scriptUrl).then(res => res.json()).then(data => {
 if(!data || data.length === 0) {
 document.getElementById('mobile-history-list').innerHTML = '<p class="text-center py-8">ไม่มีข้อมูลในระบบ</p>';
@@ -421,23 +407,20 @@ document.getElementById('mobile-history-list').innerHTML = '<p class="text-cente
 if(forceRefresh) Swal.close();
 });
 }
-
 function processDashboard(data) {
 document.getElementById('dash-total-cases').innerText = data.length;
-
 let forwardedCount = 0;
 let repliedCount = 0;
+let acceptedCount = 0;
 let pendingCount = 0;
-
 data.forEach(item => {
     if(item.status === 'forwarded') forwardedCount++;
     else if(item.status === 'replied') repliedCount++;
+    else if(item.status === 'accepted') acceptedCount++;
     else pendingCount++;
 });
-
 document.getElementById('dash-forwarded-cases').innerText = forwardedCount;
 document.getElementById('dash-replied-cases').innerText = repliedCount;
-
 const depts = data.map(item => item.department).filter(Boolean);
 const countMap = {};
 let maxDept = "-"; let maxCount = 0;
@@ -446,7 +429,6 @@ countMap[d] = (countMap[d] || 0) + 1;
 if(countMap[d] > maxCount) { maxCount = countMap[d]; maxDept = d; }
 });
 document.getElementById('dash-top-dept').innerText = maxDept;
-
 if (deptChartInstance) deptChartInstance.destroy();
 const ctx = document.getElementById('deptChart').getContext('2d');
 deptChartInstance = new Chart(ctx, {
@@ -457,7 +439,6 @@ datasets: [{ data: Object.values(countMap), backgroundColor: 'rgba(54, 162, 235,
 },
 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
 });
-
 const diags = data.map(item => item.diagnosis ? item.diagnosis.split(' ')[0].substring(0,15) : "ไม่ระบุ");
 const diagMap = {};
 diags.forEach(d => diagMap[d] = (diagMap[d] || 0) + 1);
@@ -471,19 +452,30 @@ datasets: [{ data: Object.values(diagMap).slice(0, 5), backgroundColor: ['#00275
 },
 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } } }
 });
-
 if (statusChartInstance) statusChartInstance.destroy();
 const ctx3 = document.getElementById('statusChart').getContext('2d');
 statusChartInstance = new Chart(ctx3, {
 type: 'pie',
 data: {
-labels: ['รอดำเนินการ', 'ส่งต่อ รพสต.', 'รพสต. ตอบกลับ'],
-datasets: [{ data: [pendingCount, forwardedCount, repliedCount], backgroundColor: ['#f59e0b', '#3b82f6', '#10b981'] }]
+labels: ['รอดำเนินการ', 'รับเคสแล้ว', 'ส่งต่อ รพสต.', 'รพสต. ตอบกลับ'],
+datasets: [{ data: [pendingCount, acceptedCount, forwardedCount, repliedCount], backgroundColor: ['#f59e0b', '#6366f1', '#3b82f6', '#10b981'] }]
 },
 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 12 } } } } }
 });
+
+// อัปเดตรายชื่อ รพสต. ที่รับเคสแล้ว
+const pcuListDiv = document.getElementById('dash-pcu-list');
+if (pcuListDiv) {
+    const acceptedPcus = data.filter(item => item.status === 'replied' && item.targetPcu).map(item => item.targetPcu);
+    const uniquePcus = [...new Set(acceptedPcus)];
+    if(uniquePcus.length > 0) {
+        pcuListDiv.innerHTML = uniquePcus.map(pcu => `<span class="bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-full border border-emerald-200 text-sm font-bold shadow-sm">${pcu}</span>`).join('');
+    } else {
+        pcuListDiv.innerHTML = '<span class="text-on-surface-variant dark:text-slate-400 text-sm">ยังไม่มีข้อมูล</span>';
+    }
 }
 
+}
 function filterHistory() {
 const searchText = document.getElementById('search-input').value.toLowerCase().trim();
 const statusFilter = document.getElementById('filter-status').value;
@@ -494,7 +486,6 @@ return matchSearch && matchStatus;
 });
 renderHistoryUI(filtered);
 }
-
 // ----------------- เปลี่ยนสถานะโดย Admin (อัปเดตไปที่เซิร์ฟเวอร์ด้วย) -----------------
 window.updateCaseStatus = async function(recordId, newStatus) {
     if(!isAdmin) return;
@@ -502,13 +493,13 @@ window.updateCaseStatus = async function(recordId, newStatus) {
     if(index > -1) {
         let pcuName = allRecordsData[index].targetPcu;
         
-        // ถามชื่อ รพสต. เมื่อจะอัปเดตเป็นส่งต่อ
-        if(newStatus === 'forwarded') {
+        // ถามชื่อ รพสต. เมื่ออัปเดตเป็นสถานะเหล่านี้
+        if(newStatus === 'replied' || newStatus === 'forwarded') {
             const { value: inputName } = await Swal.fire({
-                title: 'ระบุชื่อ รพสต. ปลายทาง',
+                title: 'ระบุชื่อ รพสต.',
                 input: 'text',
                 inputValue: pcuName || '',
-                inputPlaceholder: 'เช่น รพสต.บ้านโพธิ์',
+                inputPlaceholder: 'ช่องนี้ให้พิมพ์ชื่อ รพสต...',
                 showCancelButton: true,
                 confirmButtonText: 'บันทึก',
                 cancelButtonText: 'ยกเลิก',
@@ -518,9 +509,9 @@ window.updateCaseStatus = async function(recordId, newStatus) {
             else { return; } // ยกเลิกการทำรายการถ้าไม่ได้กรอก หรือกดยกเลิก
         }
         
-        // ถ้าย้อนกลับเป็นรอดำเนินการ ให้ล้างชื่อ รพสต. ทิ้ง
-        if (newStatus === 'pending') pcuName = null;
-
+        // ถ้าย้อนกลับสถานะอื่นๆ ให้ล้างชื่อ รพสต. ทิ้ง
+        if (newStatus === 'pending' || newStatus === 'accepted') pcuName = null;
+        
         // เตรียม Payload ส่งไปอัปเดตที่ Google Sheet เพื่อให้ทุกคนเห็นตรงกัน
         const payload = {
             action: 'update_status',
@@ -528,9 +519,7 @@ window.updateCaseStatus = async function(recordId, newStatus) {
             status: newStatus,
             targetPcu: pcuName
         };
-
         Swal.fire({ title: 'กำลังอัปเดตระบบ...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
-
         try {
             // ยิงข้อมูลไปที่ Google Apps Script
             await fetch(scriptUrl, {
@@ -553,11 +542,9 @@ window.updateCaseStatus = async function(recordId, newStatus) {
         }
     }
 }
-
 function renderHistoryUI(dataList) {
 const desktopBody = document.getElementById('desktop-history-table');
 const mobileList = document.getElementById('mobile-history-list');
-
 desktopBody.innerHTML = ''; mobileList.innerHTML = '';
 if(dataList.length === 0) {
 desktopBody.innerHTML = '<tr><td colspan="5" class="text-center py-8">ไม่พบรายการข้อมูลที่ค้นหา</td></tr>';
@@ -568,29 +555,27 @@ const sortedList = [...dataList].reverse();
 sortedList.forEach(item => {
 const originalHn = item.hn ? item.hn.toString().trim() : "";
 const maskedHn = originalHn.length > 2 ? originalHn.substring(0, 2) + "XXXX" : "XXXX";
-
 // ปรับรูปแบบ Badge ป้ายให้แสดงชื่อ รพสต. ข้างในป้ายเสมอเพื่อให้ทุกคนเห็น
 let statusBadge = '';
 const pcuText = item.targetPcu ? ` (${item.targetPcu})` : '';
-
 if(item.status === 'replied') {
-    statusBadge = `<span class="bg-emerald-100 text-emerald-800 text-xs px-2 py-1 rounded border border-emerald-200">รับเคสแล้ว${pcuText}</span>`;
+    statusBadge = `<span class="bg-emerald-100 text-emerald-800 text-xs md:text-sm px-3 py-1 rounded-full border border-emerald-200 font-bold whitespace-nowrap">รพสต. รับเคสเรียบร้อย${pcuText}</span>`;
 } else if(item.status === 'forwarded') {
-    statusBadge = `<span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded border border-blue-200">ส่งต่อ${pcuText}</span>`;
+    statusBadge = `<span class="bg-blue-100 text-blue-800 text-xs md:text-sm px-3 py-1 rounded-full border border-blue-200 font-bold whitespace-nowrap">ส่งต่อ รพสต.แล้ว${pcuText}</span>`;
+} else if(item.status === 'accepted') {
+    statusBadge = `<span class="bg-indigo-100 text-indigo-800 text-xs md:text-sm px-3 py-1 rounded-full border border-indigo-200 font-bold whitespace-nowrap">รับเคสแล้ว</span>`;
 } else {
-    statusBadge = `<span class="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded border border-amber-200">รอดำเนินการ</span>`;
+    statusBadge = `<span class="bg-amber-100 text-amber-800 text-xs md:text-sm px-3 py-1 rounded-full border border-amber-200 font-bold whitespace-nowrap">รอดำเนินการ</span>`;
 }
-
 let adminControls = '';
 if(isAdmin) {
     adminControls = `
-    <div class="flex gap-1 justify-center mt-2 lg:mt-0">
-        <button onclick="updateCaseStatus(${item.id}, 'forwarded')" class="bg-blue-500 hover:bg-blue-600 text-white text-[11px] px-2 py-1 rounded shadow-sm flex items-center" title="อัปเดตเป็น: ส่งต่อให้ รพสต."><span class="material-symbols-outlined text-[14px]">send</span></button>
-        <button onclick="updateCaseStatus(${item.id}, 'replied')" class="bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] px-2 py-1 rounded shadow-sm flex items-center" title="อัปเดตเป็น: รพสต. ตอบรับแล้ว"><span class="material-symbols-outlined text-[14px]">check_circle</span></button>
-        <button onclick="updateCaseStatus(${item.id}, 'pending')" class="bg-amber-500 hover:bg-amber-600 text-white text-[11px] px-2 py-1 rounded shadow-sm flex items-center" title="อัปเดตเป็น: กลับเป็นรอดำเนินการ"><span class="material-symbols-outlined text-[14px]">undo</span></button>
+    <div class="flex flex-col gap-2 w-full mt-3">
+        <button onclick="updateCaseStatus(${item.id}, 'accepted')" class="bg-indigo-500 hover:bg-indigo-600 text-white text-[13px] px-3 py-2 rounded shadow-sm w-full font-bold transition-colors">1. รับเคสแล้ว</button>
+        <button onclick="updateCaseStatus(${item.id}, 'forwarded')" class="bg-blue-500 hover:bg-blue-600 text-white text-[13px] px-3 py-2 rounded shadow-sm w-full font-bold transition-colors">2. ส่งต่อ รพสต.แล้ว</button>
+        <button onclick="updateCaseStatus(${item.id}, 'replied')" class="bg-emerald-500 hover:bg-emerald-600 text-white text-[13px] px-3 py-2 rounded shadow-sm w-full font-bold transition-colors">3. รพสต. รับเคสเรียบร้อย</button>
     </div>`;
 }
-
 // 1. ตาราง Desktop
 const tr = document.createElement('tr');
 tr.innerHTML = `
@@ -606,10 +591,8 @@ tr.innerHTML = `
 </td>
 `;
 desktopBody.appendChild(tr);
-
 // 2. การ์ด Mobile
-let borderLeftColor = item.status === 'replied' ? 'border-emerald-500' : (item.status === 'forwarded' ? 'border-blue-500' : 'border-amber-400');
-
+let borderLeftColor = item.status === 'replied' ? 'border-emerald-500' : (item.status === 'forwarded' ? 'border-blue-500' : (item.status === 'accepted' ? 'border-indigo-500' : 'border-amber-400'));
 const card = document.createElement('div');
 card.className = `bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border-l-4 ${borderLeftColor} text-left animate-fade-in relative`;
 card.innerHTML = `
@@ -617,10 +600,10 @@ card.innerHTML = `
 <span>📅 ${item.serviceDate}</span>
 <div class="text-right">${statusBadge}</div>
 </div>
-<div class="font-bold text-primary dark:text-primary-fixed mt-2 text-sm">เลข HN คนไข้: ${maskedHn}</div>
-<div class="text-xs text-on-surface-variant dark:text-slate-300 mt-0.5"><b>หน่วยงานที่ส่งต่อ:</b> ${item.department}</div>
+<div class="font-bold text-primary dark:text-primary-fixed mt-3 text-sm">เลข HN คนไข้: ${maskedHn}</div>
+<div class="text-xs text-on-surface-variant dark:text-slate-300 mt-1"><b>หน่วยงานที่ส่งต่อ:</b> ${item.department}</div>
 <div class="text-xs text-on-surface-variant dark:text-slate-300 bg-slate-50 dark:bg-slate-700 p-2.5 rounded mt-2 border border-outline-variant/30"><b>คำวินิจฉัย:</b> ${item.diagnosis}</div>
-${isAdmin ? `<div class="mt-3 pt-3 border-t border-outline-variant/30 flex justify-end gap-2">${adminControls}</div>` : ''}
+${isAdmin ? `<div class="mt-3 pt-3 border-t border-outline-variant/30">${adminControls}</div>` : ''}
 `;
 mobileList.appendChild(card);
 });
