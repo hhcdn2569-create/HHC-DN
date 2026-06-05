@@ -28,8 +28,7 @@ body { background-color: #f8f9ff; min-height: 100vh; display: flex; flex-directi
 html.dark body { background-color: #0b1c30; color: #eaf1ff; }
 .page-content { display: none; }
 .page-content.active { display: block; }
-.header-banner { background: linear-gradient(135deg, #002753 0%, #1b3d6d 100%); color: #ffffff; padding: 24px; border-radius: 16px;
-box-shadow: 0 4px 20px rgba(0, 39, 83, 0.2); margin-bottom: 24px; }
+.header-banner { background: linear-gradient(135deg, #002753 0%, #1b3d6d 100%); color: #ffffff; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 39, 83, 0.2); margin-bottom: 24px; }
 .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 .custom-table th { background-color: #002753; color: white; padding: 12px; text-align: left; font-size: 14px; }
@@ -54,7 +53,7 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 </div>
 </header>
 <main class="w-full flex-1 px-4 md:px-6 py-6 mt-16 mx-auto max-w-full sm:max-w-[95%] md:max-w-[90%] lg:max-w-[1200px]">
-
+    
 <div id="view-form" class="page-content active animate-fade-in">
 <div class="header-banner">
 <h2 class="text-[24px] md:text-[28px] font-bold text-white mb-1">ระบบบันทึกข้อมูล HHC</h2>
@@ -153,9 +152,17 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 </div>
 <div class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-outline-variant/30">
 <h3 class="text-sm font-bold text-primary dark:text-primary-fixed mb-3 flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">bar_chart</span> รายชื่อ รพสต. ที่รับเคสแล้ว
+<span class="material-symbols-outlined text-sm">donut_large</span> สถานะการส่งต่อเคสปัจจุบัน
 </h3>
 <div class="relative h-[240px] w-full"><canvas id="statusChart"></canvas></div>
+</div>
+</div>
+<div class="mt-6 bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-outline-variant/30">
+<h3 class="text-sm font-bold text-primary dark:text-primary-fixed mb-3 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">local_hospital</span> รายชื่อ รพสต. ที่รับเคสแล้ว
+</h3>
+<div id="dash-pcu-list" class="flex flex-wrap gap-2">
+<span class="text-on-surface-variant dark:text-slate-400 text-sm">ไม่มีข้อมูล</span>
 </div>
 </div>
 </div>
@@ -174,12 +181,13 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 <span class="material-symbols-outlined absolute left-3 top-3 text-on-surface-variant text-xl">search</span>
 <input type="text" id="search-input" oninput="filterHistory()" class="w-full pl-10 pr-4 py-2 rounded-lg border border-outline-variant dark:bg-slate-700 dark:text-white form-input-focus text-sm" placeholder="ค้นหาด้วยเลข HN, ชื่อแผนก, หรือคำวินิจฉัย...">
 </div>
-<div class="w-full sm:w-48">
+<div class="w-full sm:w-56">
 <select id="filter-status" onchange="filterHistory()" class="w-full px-3 py-2 rounded-lg border border-outline-variant dark:bg-slate-700 dark:text-white form-input-focus text-sm cursor-pointer">
 <option value="">ทุกสถานะ</option>
 <option value="pending">รอดำเนินการ</option>
-<option value="forwarded">ส่งต่อ รพสต. แล้ว</option>
-<option value="replied">รพสต. รับเคสแล้ว</option>
+<option value="accepted">รับเคสแล้ว</option>
+<option value="forwarded">ส่งต่อ รพสต.แล้ว</option>
+<option value="replied">รพสต. รับเคสเรียบร้อย</option>
 </select>
 </div>
 <button onclick="fetchRealtimeData(true)" class="bg-primary-container text-primary font-bold px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-1 hover:bg-opacity-80">
@@ -193,8 +201,8 @@ html.dark .custom-table td { border-bottom: 1px solid #213145; }
 <th width="12%">วันที่</th>
 <th width="15%">เลข HN</th>
 <th width="15%">หน่วยงาน</th>
-<th width="30%">คำวินิจฉัย</th>
-<th width="28%" class="text-center">สถานะ / การจัดการ</th>
+<th width="28%">คำวินิจฉัย</th>
+<th width="30%" class="text-center">สถานะ / การจัดการ</th>
 </tr>
 </thead>
 <tbody id="desktop-history-table">
@@ -240,49 +248,48 @@ html.classList.remove('dark'); html.classList.add('light');
 html.classList.remove('light'); html.classList.add('dark');
 }
 }
-// ----------------- ระบบ Admin -----------------
 function toggleAdminAuth() {
-if(isAdmin) {
-Swal.fire({
-title: 'ออกจากระบบ?',
-text: "คุณต้องการออกจากโหมดผู้ดูแลระบบใช่หรือไม่",
-icon: 'warning',
-showCancelButton: true,
-confirmButtonText: 'ออกจากระบบ',
-cancelButtonText: 'ยกเลิก',
-confirmButtonColor: '#ba1a1a'
-}).then((result) => {
-if (result.isConfirmed) {
-isAdmin = false;
-document.getElementById('admin-auth-btn').innerText = 'account_circle';
-document.getElementById('admin-auth-btn').classList.remove('text-yellow-500');
-document.getElementById('admin-badge').classList.add('hidden');
-Swal.fire('สำเร็จ', 'ออกจากระบบเรียบร้อยแล้ว', 'success');
-filterHistory();
-}
-});
-} else {
-Swal.fire({
-title: 'เข้าสู่ระบบ Admin',
-input: 'password',
-inputPlaceholder: 'กรอกรหัสผ่าน',
-showCancelButton: true,
-confirmButtonText: 'ตกลง',
-cancelButtonText: 'ยกเลิก',
-confirmButtonColor: '#002753'
-}).then((result) => {
-if (result.value === 'admin123') {
-isAdmin = true;
-document.getElementById('admin-auth-btn').innerText = 'admin_panel_settings';
-document.getElementById('admin-auth-btn').classList.add('text-yellow-500');
-document.getElementById('admin-badge').classList.remove('hidden');
-Swal.fire('สำเร็จ', 'เข้าสู่โหมดผู้ดูแลระบบแล้ว', 'success');
-filterHistory();
-} else if (result.value) {
-Swal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง', 'error');
-}
-});
-}
+    if(isAdmin) {
+        Swal.fire({
+            title: 'ออกจากระบบ?',
+            text: "คุณต้องการออกจากโหมดผู้ดูแลระบบใช่หรือไม่",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ออกจากระบบ',
+            cancelButtonText: 'ยกเลิก',
+            confirmButtonColor: '#ba1a1a'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                isAdmin = false;
+                document.getElementById('admin-auth-btn').innerText = 'account_circle';
+                document.getElementById('admin-auth-btn').classList.remove('text-yellow-500');
+                document.getElementById('admin-badge').classList.add('hidden');
+                Swal.fire('สำเร็จ', 'ออกจากระบบเรียบร้อยแล้ว', 'success');
+                filterHistory();
+            }
+        });
+    } else {
+        Swal.fire({
+            title: 'เข้าสู่ระบบ Admin',
+            input: 'password',
+            inputPlaceholder: 'กรอกรหัสผ่าน',
+            showCancelButton: true,
+            confirmButtonText: 'ตกลง',
+            cancelButtonText: 'ยกเลิก',
+            confirmButtonColor: '#002753'
+        }).then((result) => {
+            if (result.value === 'admin123') { 
+                isAdmin = true;
+                document.getElementById('admin-auth-btn').innerText = 'admin_panel_settings';
+                document.getElementById('admin-auth-btn').classList.add('text-yellow-500');
+                document.getElementById('admin-badge').classList.remove('hidden');
+                Swal.fire('สำเร็จ', 'เข้าสู่โหมดผู้ดูแลระบบแล้ว', 'success');
+                filterHistory(); 
+            } else if (result.value) {
+                Swal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง', 'error');
+            }
+        });
+    }
 }
 function changeTab(targetId, btnElement) {
 document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
@@ -301,21 +308,21 @@ document.getElementById('image-file').addEventListener('change', function(e) {
 if(e.target.files.length > 0) {
 const file = e.target.files[0];
 fileType = file.type;
-document.getElementById('upload-label').innerText = ' ✔️  เลือกไฟล์สำเร็จ: ' + file.name;
+document.getElementById('upload-label').innerText = '✔️ เลือกไฟล์สำเร็จ: ' + file.name;
 const reader = new FileReader();
 reader.onload = function(event) {
 base64ImageString = event.target.result;
 document.getElementById('image-preview-container').classList.remove('hidden');
 if(fileType === "application/pdf") {
-document.getElementById('image-preview').classList.add('hidden');
-document.getElementById('pdf-preview').classList.remove('hidden');
-document.getElementById('pdf-preview').classList.add('flex');
-document.getElementById('pdf-name').innerText = file.name;
+    document.getElementById('image-preview').classList.add('hidden');
+    document.getElementById('pdf-preview').classList.remove('hidden');
+    document.getElementById('pdf-preview').classList.add('flex');
+    document.getElementById('pdf-name').innerText = file.name;
 } else {
-document.getElementById('pdf-preview').classList.add('hidden');
-document.getElementById('pdf-preview').classList.remove('flex');
-document.getElementById('image-preview').classList.remove('hidden');
-document.getElementById('image-preview').src = base64ImageString;
+    document.getElementById('pdf-preview').classList.add('hidden');
+    document.getElementById('pdf-preview').classList.remove('flex');
+    document.getElementById('image-preview').classList.remove('hidden');
+    document.getElementById('image-preview').src = base64ImageString;
 }
 };
 reader.readAsDataURL(file);
@@ -332,17 +339,17 @@ document.getElementById('upload-label').innerText = 'คลิกที่นี
 document.getElementById('hhc-form').addEventListener('submit', function(e) {
 e.preventDefault();
 if (!base64ImageString) {
-alert(' ⚠️  กรุณาแนบรูปถ่ายหรือ PDF ประกอบเคส  ⚠️ ');
+alert('⚠️ กรุณาแนบรูปถ่ายหรือ PDF ประกอบเคส ⚠️');
 return;
 }
 if (isSubmitting) return;
 isSubmitting = true;
 const submitBtn = document.getElementById('submit-btn');
 submitBtn.disabled = true;
-submitBtn.innerText = ' ⏳  ระบบกำลังบันทึกข้อมูล กรุณารอสักครู่...';
+submitBtn.innerText = '⏳ ระบบกำลังบันทึกข้อมูล กรุณารอสักครู่...';
 const finalDept = document.getElementById('department').value === 'อื่นๆ' ? document.getElementById('other-dept').value : document.getElementById('department').value;
 const payload = {
-action: 'create',
+action: 'create', 
 serviceDate: document.getElementById('visit-date').value,
 hn: document.getElementById('hn-number').value,
 department: finalDept,
@@ -358,23 +365,25 @@ document.getElementById('hhc-form').reset();
 document.getElementById('visit-date').valueAsDate = new Date();
 resetImageSelection();
 toggleOther('');
-allRecordsData.push({...payload, status: 'pending', targetPcu: null, id: Date.now()});
+allRecordsData.push({...payload, status: 'pending', targetPcu: null, id: Date.now()}); 
+processDashboard(allRecordsData);
+filterHistory();
+fetchRealtimeData(true); 
 }).catch(err => {
-alert(' ❌  เกิดข้อผิดพลาดทางเทคนิค ไม่สามารถส่งข้อมูลเข้าสคริปต์ได้');
+alert('❌ เกิดข้อผิดพลาดทางเทคนิค ไม่สามารถส่งข้อมูลเข้าสคริปต์ได้');
 }).finally(() => {
 isSubmitting = false; submitBtn.disabled = false;
 submitBtn.innerHTML = '<span class="material-symbols-outlined text-xl">save</span> บันทึกข้อมูลเข้าสู่ระบบ';
 });
 });
-// ----------------- อัปเดต Dashboard & Data -----------------
 function fetchRealtimeData(forceRefresh = false) {
 if(allRecordsData.length > 0 && !forceRefresh) {
-processDashboard(allRecordsData);
-filterHistory();
-return;
+    processDashboard(allRecordsData);
+    filterHistory();
+    return;
 }
 if(forceRefresh) {
-Swal.fire({ title: 'กำลังดึงข้อมูลล่าสุด...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
+    Swal.fire({ title: 'กำลังดึงข้อมูลล่าสุด...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
 }
 fetch(scriptUrl).then(res => res.json()).then(data => {
 if(!data || data.length === 0) {
@@ -384,30 +393,41 @@ if(forceRefresh) Swal.close();
 return;
 }
 allRecordsData = data.map((item, index) => ({
-...item,
-id: item.id || index,
-status: item.status || 'pending',
-targetPcu: item.targetPcu || null
+    ...item, 
+    id: item.id || index, 
+    status: item.status || 'pending',
+    targetPcu: item.targetPcu || null
 }));
 processDashboard(allRecordsData);
 filterHistory();
 if(forceRefresh) Swal.close();
 }).catch(err => {
-document.getElementById('mobile-history-list').innerHTML = '<p class="text-center text-red-500 py-8"> ❌  เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+document.getElementById('mobile-history-list').innerHTML = '<p class="text-center text-red-500 py-8">❌ เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
 if(forceRefresh) Swal.close();
 });
 }
 function processDashboard(data) {
 document.getElementById('dash-total-cases').innerText = data.length;
-let forwardedCount = 0;
+let totalForwarded = 0; 
 let repliedCount = 0;
+let acceptedCount = 0;
 let pendingCount = 0;
+let currentForwarded = 0; 
+
 data.forEach(item => {
-if(item.status === 'forwarded') forwardedCount++;
-else if(item.status === 'replied') repliedCount++;
-else pendingCount++;
+    if(item.status === 'forwarded') {
+        currentForwarded++;
+        totalForwarded++;
+    } else if(item.status === 'replied') {
+        repliedCount++;
+        totalForwarded++; 
+    } else if(item.status === 'accepted') {
+        acceptedCount++;
+    } else {
+        pendingCount++;
+    }
 });
-document.getElementById('dash-forwarded-cases').innerText = forwardedCount;
+document.getElementById('dash-forwarded-cases').innerText = totalForwarded;
 document.getElementById('dash-replied-cases').innerText = repliedCount;
 const depts = data.map(item => item.department).filter(Boolean);
 const countMap = {};
@@ -440,29 +460,26 @@ datasets: [{ data: Object.values(diagMap).slice(0, 5), backgroundColor: ['#00275
 },
 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } } }
 });
-// ส่วนที่แก้ไข: ปรับปรุงโครงสร้างการดึงสถิติของ รพสต. ที่รับเคสแล้ว (status = replied) และจัดทำเป็นกราฟแท่งแนวนอน (indexAxis: 'y')
 if (statusChartInstance) statusChartInstance.destroy();
-const pcuMap = {};
-data.forEach(item => {
-if(item.status === 'replied' && item.targetPcu) {
-pcuMap[item.targetPcu] = (pcuMap[item.targetPcu] || 0) + 1;
-}
-});
 const ctx3 = document.getElementById('statusChart').getContext('2d');
 statusChartInstance = new Chart(ctx3, {
-type: 'bar',
+type: 'pie',
 data: {
-labels: Object.keys(pcuMap),
-datasets: [{ data: Object.values(pcuMap), backgroundColor: 'rgba(16, 185, 129, 0.8)', borderRadius: 4 }]
+labels: ['รอดำเนินการ', 'รับเคสแล้ว', 'ส่งต่อ รพสต.แล้ว', 'รพสต. รับเคสเรียบร้อย'],
+datasets: [{ data: [pendingCount, acceptedCount, currentForwarded, repliedCount], backgroundColor: ['#f59e0b', '#6366f1', '#3b82f6', '#10b981'] }]
 },
-options: { 
-indexAxis: 'y', 
-responsive: true, 
-maintainAspectRatio: false, 
-plugins: { legend: { display: false } },
-scales: { x: { beginAtZero: true, ticks: { precision: 0 } } }
-}
+options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 12 } } } } }
 });
+const pcuListDiv = document.getElementById('dash-pcu-list');
+if (pcuListDiv) {
+    const acceptedPcus = data.filter(item => item.status === 'replied' && item.targetPcu).map(item => item.targetPcu);
+    const uniquePcus = [...new Set(acceptedPcus)];
+    if(uniquePcus.length > 0) {
+        pcuListDiv.innerHTML = uniquePcus.map(pcu => `<span class="bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-full border border-emerald-200 text-sm font-bold shadow-sm">${pcu}</span>`).join('');
+    } else {
+        pcuListDiv.innerHTML = '<span class="text-on-surface-variant dark:text-slate-400 text-sm">ยังไม่มีข้อมูล</span>';
+    }
+}
 }
 function filterHistory() {
 const searchText = document.getElementById('search-input').value.toLowerCase().trim();
@@ -474,50 +491,52 @@ return matchSearch && matchStatus;
 });
 renderHistoryUI(filtered);
 }
-// ----------------- เปลี่ยนสถานะโดย Admin (อัปเดตไปที่เซิร์ฟเวอร์ด้วย) -----------------
 window.updateCaseStatus = async function(recordId, newStatus) {
-if(!isAdmin) return;
-const index = allRecordsData.findIndex(r => r.id === recordId);
-if(index > -1) {
-let pcuName = allRecordsData[index].targetPcu;
-if(newStatus === 'forwarded') {
-const { value: inputName } = await Swal.fire({
-title: 'ระบุชื่อ รพสต. ปลายทาง',
-input: 'text',
-inputValue: pcuName || '',
-inputPlaceholder: 'เช่น รพสต.บ้านโพธิ์',
-showCancelButton: true,
-confirmButtonText: 'บันทึก',
-cancelButtonText: 'ยกเลิก',
-confirmButtonColor: '#002753'
-});
-if (inputName) { pcuName = inputName; }
-else { return; }
-}
-if (newStatus === 'pending') pcuName = null;
-const payload = {
-action: 'update_status',
-id: recordId,
-status: newStatus,
-targetPcu: pcuName
-};
-Swal.fire({ title: 'กำลังอัปเดตระบบ...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
-try {
-await fetch(scriptUrl, {
-method: 'POST',
-mode: 'no-cors',
-headers: { 'Content-Type': 'text/plain' },
-body: JSON.stringify(payload)
-});
-allRecordsData[index].status = newStatus;
-allRecordsData[index].targetPcu = pcuName;
-processDashboard(allRecordsData);
-filterHistory();
-Swal.fire({ icon: 'success', title: 'อัปเดตสถานะสำเร็จ', timer: 1500, showConfirmButton: false });
-} catch(err) {
-Swal.fire('ข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ ข้อมูลไม่ได้ถูกบันทึก', 'error');
-}
-}
+    if(!isAdmin) return;
+    const index = allRecordsData.findIndex(r => r.id === recordId);
+    if(index > -1) {
+        let pcuName = allRecordsData[index].targetPcu;
+        if(newStatus === 'replied' || newStatus === 'forwarded') {
+            const { value: inputName } = await Swal.fire({
+                title: 'ระบุชื่อ รพสต.',
+                input: 'text',
+                inputValue: pcuName || '',
+                inputPlaceholder: 'ช่องนี้ให้พิมพ์ชื่อ รพสต...',
+                showCancelButton: true,
+                confirmButtonText: 'บันทึก',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#002753'
+            });
+            if (inputName) { pcuName = inputName; } 
+            else if (inputName === '') { pcuName = ''; }
+            else { return; } 
+        }
+        if (newStatus === 'pending' || newStatus === 'accepted') pcuName = null;
+        const payload = {
+            action: 'update_status',
+            id: recordId,
+            hn: allRecordsData[index].hn,
+            status: newStatus,
+            targetPcu: pcuName
+        };
+        Swal.fire({ title: 'กำลังอัปเดตระบบ...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+        try {
+            await fetch(scriptUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payload)
+            });
+            allRecordsData[index].status = newStatus;
+            allRecordsData[index].targetPcu = pcuName;
+            processDashboard(allRecordsData);
+            filterHistory();
+            fetchRealtimeData(true); 
+            Swal.fire({ icon: 'success', title: 'อัปเดตสถานะสำเร็จ', timer: 1500, showConfirmButton: false });
+        } catch(err) {
+            Swal.fire('ข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ ข้อมูลไม่ได้ถูกบันทึก', 'error');
+        }
+    }
 }
 function renderHistoryUI(dataList) {
 const desktopBody = document.getElementById('desktop-history-table');
@@ -535,20 +554,22 @@ const maskedHn = originalHn.length > 2 ? originalHn.substring(0, 2) + "XXXX" : "
 let statusBadge = '';
 const pcuText = item.targetPcu ? ` (${item.targetPcu})` : '';
 if(item.status === 'replied') {
-statusBadge = `<span class="bg-emerald-100 text-emerald-800 text-xs px-2 py-1 rounded border border-emerald-200">รับเคสแล้ว${pcuText}</span>`;
+    statusBadge = `<span class="bg-emerald-100 text-emerald-800 text-xs md:text-sm px-3 py-1 rounded-full border border-emerald-200 font-bold whitespace-nowrap">รพสต. รับเคสเรียบร้อย${pcuText}</span>`;
 } else if(item.status === 'forwarded') {
-statusBadge = `<span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded border border-blue-200">ส่งต่อ${pcuText}</span>`;
+    statusBadge = `<span class="bg-blue-100 text-blue-800 text-xs md:text-sm px-3 py-1 rounded-full border border-blue-200 font-bold whitespace-nowrap">ส่งต่อ รพสต.แล้ว${pcuText}</span>`;
+} else if(item.status === 'accepted') {
+    statusBadge = `<span class="bg-indigo-100 text-indigo-800 text-xs md:text-sm px-3 py-1 rounded-full border border-indigo-200 font-bold whitespace-nowrap">รับเคสแล้ว</span>`;
 } else {
-statusBadge = `<span class="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded border border-amber-200">รอดำเนินการ</span>`;
+    statusBadge = `<span class="bg-amber-100 text-amber-800 text-xs md:text-sm px-3 py-1 rounded-full border border-amber-200 font-bold whitespace-nowrap">รอดำเนินการ</span>`;
 }
 let adminControls = '';
 if(isAdmin) {
-adminControls = `
-<div class="flex gap-1 justify-center mt-2 lg:mt-0">
-<button onclick="updateCaseStatus(${item.id}, 'forwarded')" class="bg-blue-500 hover:bg-blue-600 text-white text-[11px] px-2 py-1 rounded shadow-sm flex items-center" title="อัปเดตเป็น: ส่งต่อให้ รพสต."><span class="material-symbols-outlined text-[14px]">send</span></button>
-<button onclick="updateCaseStatus(${item.id}, 'replied')" class="bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] px-2 py-1 rounded shadow-sm flex items-center" title="อัปเดตเป็น: รพสต. ตอบรับแล้ว"><span class="material-symbols-outlined text-[14px]">check_circle</span></button>
-<button onclick="updateCaseStatus(${item.id}, 'pending')" class="bg-amber-500 hover:bg-amber-600 text-white text-[11px] px-2 py-1 rounded shadow-sm flex items-center" title="อัปเดตเป็น: กลับเป็นรอดำเนินการ"><span class="material-symbols-outlined text-[14px]">undo</span></button>
-</div>`;
+    adminControls = `
+    <div class="flex flex-col gap-2 w-full mt-3">
+        <button onclick="updateCaseStatus(${item.id}, 'accepted')" class="bg-indigo-500 hover:bg-indigo-600 text-white text-[13px] px-3 py-2 rounded shadow-sm w-full font-bold transition-colors">1. รับเคสแล้ว</button>
+        <button onclick="updateCaseStatus(${item.id}, 'forwarded')" class="bg-blue-500 hover:bg-blue-600 text-white text-[13px] px-3 py-2 rounded shadow-sm w-full font-bold transition-colors">2. ส่งต่อ รพสต.แล้ว</button>
+        <button onclick="updateCaseStatus(${item.id}, 'replied')" class="bg-emerald-500 hover:bg-emerald-600 text-white text-[13px] px-3 py-2 rounded shadow-sm w-full font-bold transition-colors">3. รพสต. รับเคสเรียบร้อย</button>
+    </div>`;
 }
 const tr = document.createElement('tr');
 tr.innerHTML = `
@@ -557,29 +578,30 @@ tr.innerHTML = `
 <td><span class="bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs px-2 py-1 rounded-full font-medium">${item.department}</span></td>
 <td class="max-w-xs truncate" title="${item.diagnosis}">${item.diagnosis}</td>
 <td class="text-center">
-<div class="flex flex-col items-center gap-1.5">
-${statusBadge}
-${adminControls}
-</div>
+    <div class="flex flex-col items-center gap-1.5">
+        ${statusBadge}
+        ${adminControls}
+    </div>
 </td>
 `;
 desktopBody.appendChild(tr);
-let borderLeftColor = item.status === 'replied' ? 'border-emerald-500' : (item.status === 'forwarded' ? 'border-blue-500' : 'border-amber-400');
+let borderLeftColor = item.status === 'replied' ? 'border-emerald-500' : (item.status === 'forwarded' ? 'border-blue-500' : (item.status === 'accepted' ? 'border-indigo-500' : 'border-amber-400'));
 const card = document.createElement('div');
 card.className = `bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border-l-4 ${borderLeftColor} text-left animate-fade-in relative`;
 card.innerHTML = `
 <div class="text-[11px] text-on-surface-variant dark:text-slate-400 flex justify-between items-start">
-<span> 📅  ${item.serviceDate}</span>
+<span>📅 ${item.serviceDate}</span>
 <div class="text-right">${statusBadge}</div>
 </div>
-<div class="font-bold text-primary dark:text-primary-fixed mt-2 text-sm">เลข HN คนไข้: ${maskedHn}</div>
-<div class="text-xs text-on-surface-variant dark:text-slate-300 mt-0.5"><b>หน่วยงานที่ส่งต่อ:</b> ${item.department}</div>
+<div class="font-bold text-primary dark:text-primary-fixed mt-3 text-sm">เลข HN คนไข้: ${maskedHn}</div>
+<div class="text-xs text-on-surface-variant dark:text-slate-300 mt-1"><b>หน่วยงานที่ส่งต่อ:</b> ${item.department}</div>
 <div class="text-xs text-on-surface-variant dark:text-slate-300 bg-slate-50 dark:bg-slate-700 p-2.5 rounded mt-2 border border-outline-variant/30"><b>คำวินิจฉัย:</b> ${item.diagnosis}</div>
-${isAdmin ? `<div class="mt-3 pt-3 border-t border-outline-variant/30 flex justify-end gap-2">${adminControls}</div>` : ''}
+${isAdmin ? `<div class="mt-3 pt-3 border-t border-outline-variant/30">${adminControls}</div>` : ''}
 `;
 mobileList.appendChild(card);
 });
 }
+fetchRealtimeData();
 </script>
 </body>
 </html>
